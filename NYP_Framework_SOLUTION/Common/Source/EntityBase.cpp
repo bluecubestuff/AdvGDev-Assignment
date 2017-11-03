@@ -45,3 +45,15 @@ void EntityBase::SetCollider(const bool _value)
 {
 	m_bCollider = _value;
 }
+
+// set the flag, m_bLaser
+void EntityBase::SetIsLaser(const bool _bLaser)
+{
+	this->m_bLaser = _bLaser;
+}
+
+// get the flag, m_bLaser
+bool EntityBase::GetIsLaser() const
+{
+	return m_bLaser;
+}

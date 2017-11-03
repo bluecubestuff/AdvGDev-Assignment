@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "EntityBase.h"
 #include "Collider/Collider.h"
+#include "Projectile\Laser.h"
 
 #include <iostream>
 using namespace std;
@@ -166,6 +167,47 @@ bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatE
 	return false;
 }
 
+bool EntityManager::GetIntersection(const float dist1, const float dist2, Vector3 pt1, Vector3 pt2, Vector3 & Hit)
+{
+	if((dist1 * dist2) >= 0.0f)
+		return false;
+	if (dist1 == dist2)
+		return false;
+	Hit = pt1 + (pt2 - pt1) * (-dist1 / (dist2 - dist1));
+	return true;
+}
+
+bool EntityManager::CheckLineSegmentPlane(Vector3 line_start, Vector3 line_end, Vector3 minAABB, Vector3 maxAABB, Vector3 & Hit)
+{
+	if ((GetIntersection(line_start.x - minAABB.x, line_end.x - minAABB.x,
+		line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 1))
+		|| (GetIntersection(line_start.y - minAABB.y, line_end.y -
+			minAABB.y, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 2))
+		|| (GetIntersection(line_start.z - minAABB.z, line_end.z -
+			minAABB.z, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 3))
+		|| (GetIntersection(line_start.x - maxAABB.x, line_end.x -
+			maxAABB.x, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 1))
+		|| (GetIntersection(line_start.y - maxAABB.y, line_end.y -
+			maxAABB.y, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 2))
+		|| (GetIntersection(line_start.z - maxAABB.z, line_end.z -
+			maxAABB.z, line_start, line_end, Hit) && InBox(Hit, minAABB, maxAABB, 3)))
+		return true;
+
+	return false;
+}
+
+bool EntityManager::InBox(Vector3 hit, Vector3 b1, Vector3 b2, const int axis)
+{
+	if (axis == 1 && hit.z > b1.z && hit.z < b2.z && hit.y > b1.y && hit.y < b2.y)
+		return true;
+	if (axis == 2 && hit.z > b1.z && hit.z < b2.z && hit.x > b1.x && hit.x < b2.x)
+		return true;
+	if (axis == 3 && hit.x > b1.x && hit.x < b2.x && hit.y > b1.y && hit.y < b2.y)
+		return true;
+
+	return false;
+}
+
 // Check if any Collider is colliding with another Collider
 bool EntityManager::CheckForCollision(void)
 {
@@ -176,7 +218,39 @@ bool EntityManager::CheckForCollision(void)
 	colliderThisEnd = entityList.end();
 	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
 	{
-		if ((*colliderThis)->HasCollider())
+		if ((*colliderThis)->GetIsLaser() == true)
+		{
+			CLaser* thisEntity = dynamic_cast<CLaser*>(*colliderThis);
+
+			//check for collision
+			colliderThatEnd = entityList.end();
+			int counter = 0;
+			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
+			{
+				if (colliderThat == colliderThis)
+					continue;
+
+				if ((*colliderThat)->HasCollider())
+				{
+					Vector3 hitPos = Vector3(0, 0, 0);
+
+					//get minAABB & maxAABB for (*colliderThat)
+					CCollider *thatCollider = dynamic_cast<CCollider*>(*colliderThat);
+					Vector3 thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
+					Vector3 thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
+
+					if (CheckLineSegmentPlane(thisEntity->GetPosition(),
+						thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
+						thatMinAABB, thatMaxAABB, hitPos))
+					{
+						(*colliderThis)->SetIsDone(true);
+						(*colliderThat)->SetIsDone(true);
+					}
+				}
+
+			}
+		}
+		else if ((*colliderThis)->HasCollider())
 		{
 			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
 
