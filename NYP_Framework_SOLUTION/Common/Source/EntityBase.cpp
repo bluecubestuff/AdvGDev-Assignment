@@ -5,6 +5,7 @@ EntityBase::EntityBase()
 	, scale(1.0f, 1.0f, 1.0f)
 	, isDone(false)
 	, m_bCollider(false)
+	, m_bLaser(false)
 {
 }
 
@@ -55,5 +56,5 @@ void EntityBase::SetIsLaser(const bool _bLaser)
 // get the flag, m_bLaser
 bool EntityBase::GetIsLaser() const
 {
-	return m_bLaser;
+	return this->m_bLaser;
 }

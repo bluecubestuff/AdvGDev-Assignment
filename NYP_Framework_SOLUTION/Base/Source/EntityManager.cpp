@@ -218,9 +218,12 @@ bool EntityManager::CheckForCollision(void)
 	colliderThisEnd = entityList.end();
 	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
 	{
-		if ((*colliderThis)->GetIsLaser() == true)
+		if ((*colliderThis)->GetIsLaser())
 		{
 			CLaser* thisEntity = dynamic_cast<CLaser*>(*colliderThis);
+
+			if (thisEntity == NULL)
+				break;
 
 			//check for collision
 			colliderThatEnd = entityList.end();
@@ -241,7 +244,7 @@ bool EntityManager::CheckForCollision(void)
 
 					if (CheckLineSegmentPlane(thisEntity->GetPosition(),
 						thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
-						thatMinAABB, thatMaxAABB, hitPos))
+						thatMinAABB, thatMaxAABB, hitPos) == true)
 					{
 						(*colliderThis)->SetIsDone(true);
 						(*colliderThat)->SetIsDone(true);
