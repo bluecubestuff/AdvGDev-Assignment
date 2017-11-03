@@ -121,6 +121,8 @@ void CProjectile::Update(double dt)
 	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
 					position.y + (float)(theDirection.y * dt * m_fSpeed),
 					position.z + (float)(theDirection.z * dt * m_fSpeed));
+
+	SetAABB(position + scale, position - scale);
 }
 
 

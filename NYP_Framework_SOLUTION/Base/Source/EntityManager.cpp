@@ -16,6 +16,9 @@ void EntityManager::Update(double _dt)
 		(*it)->Update(_dt);
 	}
 
+	//check all da collisions
+	CheckForCollision();
+
 	// Clean up entities that are done
 	it = entityList.begin();
 	while (it != end)
@@ -93,13 +96,47 @@ EntityManager::~EntityManager()
 
 // Check for overlap
 bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
-{	
+{
+	//check if this obj overlap that obj
+	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
+		||
+		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
+		return true;
+
+	if (((thisMinAABB >= thatMinAABB) && (thisMinAABB <= thatMaxAABB))
+		||
+		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
+		return true;
+
+	if (((thisMinAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB))
+		&&
+		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
+		return true;
+
+	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
+		&&
+		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
+		return true;
+
 	return false;
 }
 
 // Check if this entity's bounding sphere collided with that entity's bounding sphere 
 bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
 {
+	//get the collider for both entities
+	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
+	CCollider *thatCollider = dynamic_cast<CCollider*>(ThatEntity);
+
+	//get minAABB & maxAABB for entites
+	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
+	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
+	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
+	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+
+	if (DistanceSquaredBetween(thisMinAABB, thisMaxAABB) + DistanceSquaredBetween(thatMinAABB, thatMaxAABB)
+		> DistanceSquaredBetween(ThisEntity->GetPosition(), ThatEntity->GetPosition()))
+		return true;
 
 	return false;
 }
@@ -107,6 +144,24 @@ bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *Tha
 // Check if this entity collided with another entity, but both must have collider
 bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
 {
+	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
+	CCollider *thatCollider = dynamic_cast<CCollider*>(ThatEntity);
+
+	//get minAABB & maxAABB for entites
+	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
+	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
+	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
+	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+
+	//cehck for overlap
+	if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
+		return true;
+
+	Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMinAABB.z);
+	Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMaxAABB.z);
+
+	if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
+		return true;
 
 	return false;
 }
@@ -114,5 +169,40 @@ bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatE
 // Check if any Collider is colliding with another Collider
 bool EntityManager::CheckForCollision(void)
 {
+	//check da collisions
+	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
+	std::list<EntityBase*>::iterator colliderThat, colliderThatEnd;
+
+	colliderThisEnd = entityList.end();
+	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
+	{
+		if ((*colliderThis)->HasCollider())
+		{
+			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
+
+			//check collision with another 
+			colliderThatEnd = entityList.end();
+			int counter = 0;
+			for (colliderThat = colliderThis; colliderThat != colliderThatEnd; ++colliderThat)
+			{
+				if (colliderThat == colliderThis)
+					continue;
+
+				if ((*colliderThat)->HasCollider())
+				{
+					EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
+					if (CheckSphereCollision(thisEntity, thatEntity))
+					{
+						if (CheckAABBCollision(thisEntity, thatEntity))
+						{
+							thisEntity->SetIsDone(true);
+							thatEntity->SetIsDone(true);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return false;
 }
