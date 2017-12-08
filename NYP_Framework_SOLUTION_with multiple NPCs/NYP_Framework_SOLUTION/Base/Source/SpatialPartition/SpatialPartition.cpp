@@ -175,7 +175,7 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
 		for (int j = 0; j<zNumOfGrid; j++)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(xGridSize*i - (xSize >> 1), 0.0f, zGridSize*j - (zSize >> 1));
+			modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
 			modelStack.PushMatrix();
 			modelStack.Scale(xGridSize, 1.0f, zGridSize);
 			modelStack.Rotate(-90, 1, 0, 0);
@@ -237,6 +237,14 @@ int CSpatialPartition::GetzNumOfGrid(void) const
 CGrid CSpatialPartition::GetGrid(const int xIndex, const int yIndex) const
 {
 	return theGrid[ xIndex*zNumOfGrid + yIndex ];
+}
+
+CGrid CSpatialPartition::GetGrid(const Vector3 _pos) const
+{
+	int xIndex = (((int)_pos.x - (-xSize >> 1)) / (xSize / xNumOfGrid));
+	int zIndex = (((int)_pos.z - (-zSize >> 1)) / (zSize / zNumOfGrid));
+
+	return theGrid[xIndex * zNumOfGrid + zIndex];
 }
 
 /********************************************************************************

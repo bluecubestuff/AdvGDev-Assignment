@@ -78,6 +78,7 @@ public:
 
 	// Get a particular grid
 	CGrid GetGrid(const int xIndex, const int zIndex) const;
+	CGrid GetGrid(const Vector3 _pos) const;
 
 	// Get vector of objects from this Spatial Partition
 	vector<EntityBase*> GetObjects(Vector3 position, const float radius);

@@ -3,7 +3,7 @@
 #include "Collider/Collider.h"
 #include "Projectile/Laser.h"
 #include "SceneGraph\SceneGraph.h"
-
+#include "PlayerInfo\PlayerInfo.h"
 #include <iostream>
 using namespace std;
 
@@ -62,7 +62,7 @@ void EntityManager::Render()
 
 	// Render the Spatial Partition
 	if (theSpatialPartition)
-		theSpatialPartition->Render();
+		theSpatialPartition->Render(&CPlayerInfo::GetInstance()->GetPos());
 }
 
 // Render the UI entities
