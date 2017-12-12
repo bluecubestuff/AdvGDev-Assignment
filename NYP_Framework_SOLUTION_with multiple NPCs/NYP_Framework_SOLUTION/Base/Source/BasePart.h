@@ -3,18 +3,12 @@
 
 #include "GenericEntity.h"
 
+//base part class for all the mech parts entity
 class BasePart : public GenericEntity {
 public:
-	enum PART_TYPE {
-		P_NONE,
-		P_ARM,
-		P_HEAD,
-		P_TORSO,
-		P_LEG
-	}type;
-
-	BasePart(Mesh* _modelMesh) : GenericEntity(_modelMesh) {}
+	BasePart(Mesh* mesh) : GenericEntity(mesh) {}
 	virtual ~BasePart() {}
+private:
 };
 
 #endif

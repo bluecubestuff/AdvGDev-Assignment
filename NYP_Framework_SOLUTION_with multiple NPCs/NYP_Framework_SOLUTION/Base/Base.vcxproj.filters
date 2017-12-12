@@ -141,6 +141,9 @@
     <ClCompile Include="Source\Head.cpp">
       <Filter>AssignmentEntity</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Mech.cpp">
+      <Filter>AssignmentEntity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneGraph\SceneNode.h">
       <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mech.h">
+      <Filter>AssignmentEntity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

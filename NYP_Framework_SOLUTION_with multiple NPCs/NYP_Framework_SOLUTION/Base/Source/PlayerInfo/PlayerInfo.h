@@ -4,6 +4,8 @@
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
 
+class Mech;
+
 class CPlayerInfo
 {
 protected:
@@ -117,4 +119,6 @@ private:
 
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
+
+	Mech* mech;
 };

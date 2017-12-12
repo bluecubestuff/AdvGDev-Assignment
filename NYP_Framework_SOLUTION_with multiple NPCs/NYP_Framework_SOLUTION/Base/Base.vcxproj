@@ -24,6 +24,7 @@
     <ClCompile Include="Source\LevelOfDetails\LevelOfDetails.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Mech.cpp" />
     <ClCompile Include="Source\OBJMesh.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
     <ClCompile Include="Source\Projectile\Grenade.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="Source\Leg.h" />
     <ClInclude Include="Source\LevelOfDetails\LevelOfDetails.h" />
     <ClInclude Include="Source\Light.h" />
+    <ClInclude Include="Source\Mech.h" />
     <ClInclude Include="Source\OBJMesh.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Projectile\Grenade.h" />

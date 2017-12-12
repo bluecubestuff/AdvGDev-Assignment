@@ -1,23 +1,17 @@
 #ifndef CHASSIS_H
 #define CHASSIS_H
 
-#include "GenericEntity.h"
-#include "SceneGraph\SceneNode.h"
+class Mech;
 
-//scenenode for the body of the mech, shld not have a mesh
-class Chassis : public CSceneNode {
-private:
-	//pos of the mech
-	Chassis(Vector3 pos);
+//class to move everything tgt, respond to controls
+class Chassis {
 public:
-	virtual ~Chassis(void);
+	Chassis();
+	~Chassis();
 
-	virtual void Update(double dt);
-	virtual void Render();
+private:
+	//the chassis is attached to a mech, will update according to the mech
+	Mech* parent;
 };
-
-namespace Create {
-
-}
 
 #endif
