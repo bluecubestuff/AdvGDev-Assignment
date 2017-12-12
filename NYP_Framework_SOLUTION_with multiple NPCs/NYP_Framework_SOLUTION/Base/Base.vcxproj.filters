@@ -37,6 +37,9 @@
     <Filter Include="Enemy">
       <UniqueIdentifier>{f5fb02ce-b59a-403f-b90f-1e6eba658755}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AssignmentEntity">
+      <UniqueIdentifier>{9eab60fb-5443-4312-a8c0-e2753172596b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -123,6 +126,21 @@
     <ClCompile Include="Source\Enemy\Enemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Chassis.cpp">
+      <Filter>AssignmentEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Torso.cpp">
+      <Filter>AssignmentEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Arm.cpp">
+      <Filter>AssignmentEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Leg.cpp">
+      <Filter>AssignmentEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Head.cpp">
+      <Filter>AssignmentEntity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -182,9 +200,6 @@
     <ClInclude Include="Source\SceneGraph\Transform.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneGraph\SceneNode.h">
-      <Filter>SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneGraph\UpdateTransformation.h">
       <Filter>SceneGraph</Filter>
     </ClInclude>
@@ -205,6 +220,27 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy\Enemy.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Chassis.h">
+      <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Leg.h">
+      <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Torso.h">
+      <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Arm.h">
+      <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Head.h">
+      <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BasePart.h">
+      <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGraph\SceneNode.h">
+      <Filter>SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

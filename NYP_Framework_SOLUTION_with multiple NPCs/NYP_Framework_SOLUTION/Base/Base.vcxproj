@@ -12,11 +12,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Arm.cpp" />
+    <ClCompile Include="Source\Chassis.cpp" />
     <ClCompile Include="Source\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
     <ClCompile Include="Source\GenericEntity.cpp" />
     <ClCompile Include="Source\GroundEntity.cpp" />
+    <ClCompile Include="Source\Head.cpp" />
+    <ClCompile Include="Source\Leg.cpp" />
     <ClCompile Include="Source\LevelOfDetails\LevelOfDetails.cpp" />
     <ClCompile Include="Source\Light.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -35,6 +39,7 @@
     <ClCompile Include="Source\SpatialPartition\SpatialPartition.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
+    <ClCompile Include="Source\Torso.cpp" />
     <ClCompile Include="Source\WeaponInfo\GrenadeThrow.cpp" />
     <ClCompile Include="Source\WeaponInfo\LaserBlaster.cpp" />
     <ClCompile Include="Source\WeaponInfo\Pistol.cpp" />
@@ -42,11 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Arm.h" />
+    <ClInclude Include="Source\BasePart.h" />
+    <ClInclude Include="Source\Chassis.h" />
     <ClInclude Include="Source\Enemy\Enemy.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
     <ClInclude Include="Source\GenericEntity.h" />
     <ClInclude Include="Source\GroundEntity.h" />
+    <ClInclude Include="Source\Head.h" />
+    <ClInclude Include="Source\Leg.h" />
     <ClInclude Include="Source\LevelOfDetails\LevelOfDetails.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\OBJMesh.h" />
@@ -64,6 +74,7 @@
     <ClInclude Include="Source\SpatialPartition\SpatialPartition.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\TextEntity.h" />
+    <ClInclude Include="Source\Torso.h" />
     <ClInclude Include="Source\WeaponInfo\GrenadeThrow.h" />
     <ClInclude Include="Source\WeaponInfo\LaserBlaster.h" />
     <ClInclude Include="Source\WeaponInfo\Pistol.h" />
