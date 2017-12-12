@@ -87,7 +87,6 @@ void Mech::PlayerControl(double dt)
 		// Update the target
 		CPlayerInfo::GetInstance()->SetTarget(_pos + viewVector.Normalized());
 		CPlayerInfo::GetInstance()->SetPos(_pos);
-		std::cout << viewVector << '\n';
 	}
 
 	_pos = CPlayerInfo::GetInstance()->GetPos();
