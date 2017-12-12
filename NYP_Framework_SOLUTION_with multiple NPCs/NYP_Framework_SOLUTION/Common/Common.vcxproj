@@ -35,6 +35,7 @@
     <ClCompile Include="Source\Win32Input.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Base\Source\WeaponInfo\WeaponInfo.h" />
     <ClInclude Include="Source\CameraBase.h" />
     <ClInclude Include="Source\Collider\Collider.h" />
     <ClInclude Include="Source\EntityBase.h" />

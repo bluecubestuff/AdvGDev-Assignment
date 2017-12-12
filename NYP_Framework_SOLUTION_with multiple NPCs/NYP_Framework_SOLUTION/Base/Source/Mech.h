@@ -1,10 +1,10 @@
 #ifndef MECH_H
 #define MECH_H
 
-#include "Chassis.h"
 #include "Vector3.h"
 
 class GenericEntity;
+class Chassis;
 
 //main class for the mechs, all controls happen here
 class Mech {
@@ -19,6 +19,8 @@ public:
 	void Render();
 
 	GenericEntity* attachedEntity;
+	//position for the mech	
+	Vector3 position;
 	//rotation of the torso and leg, should make it a quaternion next time
 	Vector3 torsoDirection;
 	Vector3 legDirection;
@@ -30,7 +32,7 @@ public:
 	float sensitivity;
 
 private:
-	Chassis chassis;
+	Chassis* chassis;
 
 	//control for player
 	void PlayerControl(double dt);
