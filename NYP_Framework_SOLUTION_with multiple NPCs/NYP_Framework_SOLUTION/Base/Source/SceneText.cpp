@@ -177,7 +177,7 @@ void SceneText::Init()
 
 	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
 	aCube->SetCollider(true);
-	aCube->SetAABB(Vector3(-20.0f + 0.5f, -20.0f + 0.5f, -20.0f + 0.5f), Vector3(-20.0f -0.5f, -0.5f, -20.0f -0.5f));
+	aCube->SetAABB(Vector3(-20.0f + 5.f, -20.0f + 5.f, -20.0f + 5.f), Vector3(-20.0f - 5.f, -5.f, -20.0f - 5.f));
 	//aCube->InitLOD("cube", "sphere", "cubeSG");
 
 	// Add the pointer to this new entity to the Scene Graph
