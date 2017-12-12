@@ -182,9 +182,6 @@
     <ClInclude Include="Source\WeaponInfo\Pistol.h">
       <Filter>WeaponInfo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WeaponInfo\WeaponInfo.h">
-      <Filter>WeaponInfo</Filter>
-    </ClInclude>
     <ClInclude Include="Source\WeaponInfo\LaserBlaster.h">
       <Filter>WeaponInfo</Filter>
     </ClInclude>

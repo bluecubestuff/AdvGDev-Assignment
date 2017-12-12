@@ -112,16 +112,6 @@ void SceneText::Init()
 
 	currProg->UpdateInt("numLights", 1);
 	currProg->UpdateInt("textEnabled", 0);
-	
-	// Create the playerinfo instance, which manages all information about the player
-	playerInfo = CPlayerInfo::GetInstance();
-	playerInfo->Init();
-
-	// Create and attach the camera to the scene
-	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
-	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
-	playerInfo->AttachCamera(&camera);
-	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
@@ -163,6 +153,7 @@ void SceneText::Init()
 
 	//Mech mesh generation
 	MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 0, 0), 10.f);
+	MeshBuilder::GetInstance()->GenerateCube("leg", Color(1, 0, 0), 10.f);
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
@@ -216,6 +207,16 @@ void SceneText::Init()
 	aRotateMtx->ApplyUpdate(1.0f, 0.0f, 0.0f, 1.0f);
 	aRotateMtx->SetSteps(-120, 60);
 	grandchildNode->SetUpdateTransformation(aRotateMtx);*/
+
+	// Create the playerinfo instance, which manages all information about the player
+	playerInfo = CPlayerInfo::GetInstance();
+	playerInfo->Init();
+
+	// Create and attach the camera to the scene
+	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(playerInfo->GetPos(), playerInfo->GetTarget(), playerInfo->GetUp());
+	playerInfo->AttachCamera(&camera);
+	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
