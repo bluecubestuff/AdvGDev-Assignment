@@ -4,6 +4,8 @@
 #include "../EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "../SpatialPartition/SpatialPartition.h"
+#include "../SceneGraph/SceneGraph.h"
 
 CProjectile::CProjectile(void)
 	: modelMesh(NULL)
@@ -121,6 +123,27 @@ void CProjectile::Update(double dt)
 	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
 					position.y + (float)(theDirection.y * dt * m_fSpeed),
 					position.z + (float)(theDirection.z * dt * m_fSpeed));
+
+	SetAABB(Vector3(position.x + 0.5f, position.y + 0.5f, position.z + 0.5f),
+		Vector3(position.x - 0.5f, position.y - 0.5f, position.z - 0.5f));
+
+	// Check the SpatialPartition to destroy nearby objects
+	//vector<EntityBase*> ExportList = CSpatialPartition::GetInstance()->GetObjects(position, 1.0f);
+	//for (int i = 0; i < ExportList.size(); ++i)
+	//{
+	//	if (this == ExportList[i])
+	//		continue;
+
+	//	if (ExportList[i]->HasCollider())
+	//	{
+	//		if (EntityManager::GetInstance()->CheckAABBCollision(this, ExportList[i]))
+	//		{
+	//			isDone = true;
+	//			ExportList[i]->SetIsDone(true);
+	//			return;
+	//		}
+	//	}
+	//}
 }
 
 
@@ -158,7 +181,7 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 	result->SetStatus(true);
 	result->SetCollider(true);
 	result->SetSource(_source);
-	EntityManager::GetInstance()->AddEntity(result);
+	EntityManager::GetInstance()->AddEntity(result, true);
 
 	return result;
 }

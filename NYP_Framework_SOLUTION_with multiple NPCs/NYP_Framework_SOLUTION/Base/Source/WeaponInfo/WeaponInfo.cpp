@@ -149,7 +149,7 @@ void CWeaponInfo::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _sour
 			CProjectile* aProjectile = Create::Projectile("cube", 
 															position, 
 															(target - position).Normalized(), 
-															2.0f, 
+															5.0f, 
 															10.0f,
 															_source);
 			aProjectile->SetCollider(true);
