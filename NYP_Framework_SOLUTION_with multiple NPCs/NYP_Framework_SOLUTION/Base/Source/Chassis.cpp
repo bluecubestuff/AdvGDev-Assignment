@@ -34,8 +34,7 @@ bool Chassis::GetMovability()
 
 void Chassis::Update(double dt)
 {
+	Vector3 displacement = parent->position - torso->GetPosition();
+	torsoNode->ApplyTranslate(displacement.x, displacement.y, displacement.z);
 	torso->SetPosition(parent->position);
-	CUpdateTransformation* mtx = new CUpdateTransformation();
-	mtx->ApplyUpdate(torso->GetPosition().x, torso->GetPosition().y, torso->GetPosition().z);
-	torsoNode->SetUpdateTransformation(mtx);
 }
