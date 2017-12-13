@@ -5,6 +5,9 @@
 #include "PlayerInfo\PlayerInfo.h"
 #include "GenericEntity.h"
 #include "Chassis.h"
+#include "MeshBuilder.h"
+#include "GraphicsManager.h"
+#include "RenderHelper.h"
 
 void Mech::Init(GenericEntity* attach)
 {
@@ -43,6 +46,16 @@ void Mech::Update(double dt)
 
 void Mech::Render()
 {
+	//just to render the direction and shit
+	Mesh* legLine = MeshBuilder::GetInstance()->GenerateLine(Vector3(0, 0, 0), legDirection, Color(1, 1, 0));
+	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(position.x, position.y - 1, position.z);
+	modelStack.Scale(10, 10, 10);
+	RenderHelper::RenderMesh(legLine);
+	modelStack.PopMatrix();
+	delete legLine;
 }
 
 void Mech::PlayerControl(double dt)
@@ -125,6 +138,10 @@ void Mech::PlayerControl(double dt)
 			viewUV = rotation * viewUV;
 			_tar = _pos + viewUV;
 		}
+		//update mech torso rotation
+		torsoDirection = viewUV;
+		torsoDirection.y = 0;
+		torsoDirection.Normalize();
 	}
 	CPlayerInfo::GetInstance()->SetTarget(_tar);
 

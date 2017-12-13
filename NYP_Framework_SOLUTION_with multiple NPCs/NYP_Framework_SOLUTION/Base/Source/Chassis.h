@@ -24,8 +24,8 @@ public:
 private:
 	Torso* torso;
 	CSceneNode* torsoNode;
-	Leg* leftLeg;
-	Leg* rightLeg;
+	Leg* leg;
+	CSceneNode* legNode;
 };
 
 #endif

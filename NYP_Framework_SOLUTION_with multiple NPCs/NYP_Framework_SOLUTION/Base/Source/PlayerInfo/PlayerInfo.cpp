@@ -405,6 +405,7 @@ void CPlayerInfo::Update(double dt)
 	//	}
 	//}
 	mech->Update(dt);
+	mech->Render();
 
 	// If the user presses SPACEBAR, then make him jump
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE) &&

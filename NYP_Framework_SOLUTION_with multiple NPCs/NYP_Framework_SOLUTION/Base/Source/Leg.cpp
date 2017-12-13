@@ -7,7 +7,9 @@ Leg::Leg()
 {
 	MeshBuilder::GetInstance()->GetMesh("leg");
 	hp = 100;
-	size = 100;
+	size = 5;
+	scale.Set(size, size, size);
+	m_bCollider = false;
 }
 
 Leg::~Leg()
