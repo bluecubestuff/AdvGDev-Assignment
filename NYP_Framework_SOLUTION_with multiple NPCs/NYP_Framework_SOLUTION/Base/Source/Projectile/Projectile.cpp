@@ -126,24 +126,6 @@ void CProjectile::Update(double dt)
 
 	SetAABB(Vector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5),
 		Vector3(-scale.x * 0.5, -scale.x * 0.5, -scale.z * 0.5));
-
-	// Check the SpatialPartition to destroy nearby objects
-	//vector<EntityBase*> ExportList = CSpatialPartition::GetInstance()->GetObjects(position, 1.0f);
-	//for (int i = 0; i < ExportList.size(); ++i)
-	//{
-	//	if (this == ExportList[i])
-	//		continue;
-
-	//	if (ExportList[i]->HasCollider())
-	//	{
-	//		if (EntityManager::GetInstance()->CheckAABBCollision(this, ExportList[i]))
-	//		{
-	//			isDone = true;
-	//			ExportList[i]->SetIsDone(true);
-	//			return;
-	//		}
-	//	}
-	//}
 }
 
 
@@ -182,7 +164,7 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 	result->SetCollider(true);
 	result->SetSource(_source);
 	result->SetScale(Vector3(1, 1, 1));
-	EntityManager::GetInstance()->AddEntity(result);
+	EntityManager::GetInstance()->AddEntity(result,true);
 	
 	return result;
 }

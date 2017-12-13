@@ -93,11 +93,23 @@ RenderScene
 ********************************************************************************/
 void CGrid::Render(void)
 {
+	//mid pt formulae
+	// (x1 + x2)/2 , (y1 + y2)/2
+
+	Vector3 midPt;
+	midPt.Set((min.x + max.x)*0.5, 1, (min.z + max.z)*0.5);
+
 	if (theMesh)
 	{
+		MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+		modelStack.PushMatrix();
+		modelStack.Translate(midPt.x, 0.0f, midPt.z);
+		modelStack.Scale(size.x, size.y, size.z);
+		modelStack.Rotate(-90, 1, 0, 0);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		RenderHelper::RenderMesh(theMesh);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		modelStack.PopMatrix();
 	}
 }
 
@@ -158,6 +170,7 @@ bool CGrid::Remove(EntityBase* theObject)
 		if ((*it) == theObject)
 		{
 			it = ListOfObjects.erase(it);
+			std::cout << "object remove from Grid - " << index << "\n";
 			return true;
 		}
 		else
@@ -166,6 +179,7 @@ bool CGrid::Remove(EntityBase* theObject)
 			++it;
 		}
 	}
+	std::cout << "Failed to remove object from Grid - " << index << "\n";
 	return false;
 }
 

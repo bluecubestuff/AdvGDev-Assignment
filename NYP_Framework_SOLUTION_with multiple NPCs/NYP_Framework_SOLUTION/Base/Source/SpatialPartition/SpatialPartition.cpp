@@ -150,7 +150,7 @@ void CSpatialPartition::Update(void)
 	int xIndex = (((int)theCamera->GetCameraPos().x - (-xSize >> 1)) / (xSize / xNumOfGrid));
 	int zIndex = (((int)theCamera->GetCameraPos().z - (-zSize >> 1)) / (zSize / zNumOfGrid));
 
-	cout << zIndex << ":" << zIndex << endl;
+	//cout << zIndex << ":" << zIndex << endl;
 
 	// If there are objects due for migration, then process them
 	if (MigrationList.empty() == false)
@@ -168,29 +168,36 @@ void CSpatialPartition::Update(void)
 /********************************************************************************
 Render the spatial partition
 ********************************************************************************/
-void CSpatialPartition::Render(Vector3* theCameraPosition)
+void CSpatialPartition::Render(Vector3 playerPos)
 {
+	//cout << "playerPos: " << playerPos << endl;
+
+	int xIndex = (((int)playerPos.x - (-xSize >> 1)) / (xSize / xNumOfGrid));
+	int zIndex = (((int)playerPos.z - (-zSize >> 1)) / (zSize / zNumOfGrid));
+
+	//cout << "xIndex: " << xIndex << " zIndex: " << zIndex << endl;
+
 	// Render the Spatial Partitions
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
 	modelStack.Translate(0.0f, yOffset, 0.0f);
-
-	for (int i = 0; i<xNumOfGrid; i++)
-	{
-		for (int j = 0; j<zNumOfGrid; j++)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
-			modelStack.PushMatrix();
-			modelStack.Scale(xGridSize, 1.0f, zGridSize);
-			modelStack.Rotate(-90, 1, 0, 0);
-			theGrid[i*zNumOfGrid + j].Render();
-			modelStack.PopMatrix();
-			modelStack.PopMatrix();
-		}
-	}
-
+	theGrid[xIndex * xNumOfGrid + zIndex].Render();
 	modelStack.PopMatrix();
+
+	//for (int i = 0; i<xNumOfGrid; i++)
+	//	{
+	//for (int j = 0; j<zNumOfGrid; j++)
+	//{
+	//modelStack.PushMatrix();
+	//modelStack.Translate(xGridSize * i - (xSize >> 1), 0.0f, zGridSize * j - (zSize >> 1));
+	//modelStack.PushMatrix();
+	//modelStack.Scale(xGridSize, 1.0f, zGridSize);
+	//modelStack.Rotate(-90, 1, 0, 0);
+	//	theGrid[i * xNumOfGrid + j].Render();
+	//modelStack.PopMatrix();
+	//modelStack.PopMatrix();
+	//}
+	//}
 }
 
 /********************************************************************************
@@ -286,6 +293,18 @@ void CSpatialPartition::Add(EntityBase* theObject)
 // Remove but not delete object from this grid
 void CSpatialPartition::Remove(EntityBase* theObject)
 {
+	if (theObject)
+	{
+		int xIndex = (((int)theObject->GetPosition().x - (-xSize >> 1)) / (xSize / xNumOfGrid));
+		int zIndex = (((int)theObject->GetPosition().z - (-zSize >> 1)) / (zSize / zNumOfGrid));
+
+		if (((xIndex >= 0) && (xIndex<xNumOfGrid)) && ((zIndex >= 0) && (zIndex<zNumOfGrid)))
+		{
+			theGrid[xIndex*zNumOfGrid + zIndex].Remove(theObject);
+		}
+	}
+
+
 	/*
 	// Get the indices of the object's position
 	int xIndex = (((int)theObject->GetPosition().x - (-xSize >> 1)) / (xSize / xNumOfGrid));
