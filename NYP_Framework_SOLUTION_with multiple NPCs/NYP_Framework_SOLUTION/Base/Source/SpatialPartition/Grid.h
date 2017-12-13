@@ -72,4 +72,7 @@ public:
 
 	// Set the Level of Detail for objects in this CGrid
 	void SetDetailLevel(const CLevelOfDetails::DETAIL_LEVEL theDetailLevel);
+
+	// get index
+	Vector3 GetIndex() const;
 };

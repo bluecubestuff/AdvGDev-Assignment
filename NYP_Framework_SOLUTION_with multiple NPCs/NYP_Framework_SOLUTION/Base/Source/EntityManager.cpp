@@ -86,7 +86,7 @@ void EntityManager::AddEntity(EntityBase* _newEntity, bool bAddToSpatialPartitio
 	if (theSpatialPartition && bAddToSpatialPartition)
 		theSpatialPartition->Add(_newEntity);
 
-	if (_newEntity->HasCollider())
+	if (_newEntity->HasCollider() && !bAddToSpatialPartition) //add movable stuff
 		collisionList.push_back(_newEntity);
 }
 

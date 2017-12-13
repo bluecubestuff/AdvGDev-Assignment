@@ -169,7 +169,7 @@ void SceneText::Init()
 	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
 	aCube->SetCollider(true);
 	aCube->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3( -5.f, -5.f,  -5.f));
-	//aCube->InitLOD("cube", "sphere", "cubeSG");
+	aCube->InitLOD("cube", "sphere", "cubeSG");
 
 	// Add the pointer to this new entity to the Scene Graph
 	//CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
@@ -234,17 +234,17 @@ void SceneText::Init()
 
 	// Create a CEnemy instance
 	srand(time(NULL));
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	theEnemy = new CEnemy();
-	//	float x = 1.0f + (i * rand() % 1000 - 500.0f);
-	//	float y = 1.0f + (i * rand() % 1000 - 500.0f);
-	//	theEnemy->SetRandomSeed(rand());
-	//	theEnemy->Init(x, y);
-	//	theEnemy->SetTerrain(groundEntity);
-	//	theEnemy->SetTarget(theEnemy->GenerateTarget());
-	//	theEnemy = NULL;
-	//}
+	for (int i = 0; i < 10; i++)
+	{
+		theEnemy = new CEnemy();
+		float x = 1.0f + (i * rand() % 1000 - 500.0f);
+		float y = 1.0f + (i * rand() % 1000 - 500.0f);
+		theEnemy->SetRandomSeed(rand());
+		theEnemy->Init(x, y);
+		theEnemy->SetTerrain(groundEntity);
+		theEnemy->SetTarget(theEnemy->GenerateTarget());
+		theEnemy = NULL;
+	}
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;

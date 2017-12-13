@@ -170,6 +170,7 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0.0f, yOffset, 0.0f);
+
 	for (int i = 0; i<xNumOfGrid; i++)
 	{
 		for (int j = 0; j<zNumOfGrid; j++)
