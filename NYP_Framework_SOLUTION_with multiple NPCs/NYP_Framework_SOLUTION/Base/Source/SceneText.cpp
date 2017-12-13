@@ -152,8 +152,8 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
 
 	//Mech mesh generation
-	MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 0, 0), 10.f);
-	MeshBuilder::GetInstance()->GenerateCube("leg", Color(1, 0, 0), 10.f);
+	MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 1, 0), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("leg", Color(0, 0, 1), 1.f);
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
