@@ -47,15 +47,15 @@ void Mech::Update(double dt)
 void Mech::Render()
 {
 	//just to render the direction and shit
-	Mesh* legLine = MeshBuilder::GetInstance()->GenerateLine(Vector3(0, 0, 0), legDirection, Color(1, 1, 0));
-	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-	modelStack.Translate(position.x, position.y - 1, position.z);
-	modelStack.Scale(10, 10, 10);
-	RenderHelper::RenderMesh(legLine);
-	modelStack.PopMatrix();
-	delete legLine;
+	//Mesh* legLine = MeshBuilder::GetInstance()->GenerateLine(Vector3(0, 0, 0), legDirection, Color(1, 1, 0));
+	//MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+	//modelStack.PushMatrix();
+	//modelStack.LoadIdentity();
+	//modelStack.Translate(position.x, position.y - 1, position.z);
+	//modelStack.Scale(10, 10, 10);
+	//RenderHelper::RenderMesh(legLine);
+	//modelStack.PopMatrix();
+	//delete legLine;
 }
 
 void Mech::PlayerControl(double dt)

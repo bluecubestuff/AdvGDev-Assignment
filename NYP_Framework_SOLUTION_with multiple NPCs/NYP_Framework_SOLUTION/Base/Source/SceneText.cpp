@@ -166,9 +166,9 @@ void SceneText::Init()
 	Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
-	//GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
-	//aCube->SetCollider(true);
-	//aCube->SetAABB(Vector3(-20.0f + 5.f, -20.0f + 5.f, -20.0f + 5.f), Vector3(-20.0f - 5.f, -5.f, -20.0f - 5.f));
+	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	aCube->SetCollider(true);
+	aCube->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3( -5.f, -5.f,  -5.f));
 	//aCube->InitLOD("cube", "sphere", "cubeSG");
 
 	// Add the pointer to this new entity to the Scene Graph

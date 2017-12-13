@@ -124,8 +124,8 @@ void CProjectile::Update(double dt)
 					position.y + (float)(theDirection.y * dt * m_fSpeed),
 					position.z + (float)(theDirection.z * dt * m_fSpeed));
 
-	SetAABB(Vector3(position.x + scale.x * 0.5, position.y + scale.y * 0.5, position.z + scale.z * 0.5),
-		Vector3(position.x - scale.x * 0.5, position.y - scale.x * 0.5, position.z - scale.z * 0.5));
+	SetAABB(Vector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5),
+		Vector3( -scale.x * 0.5, -scale.x * 0.5, -scale.z * 0.5));
 
 	// Check the SpatialPartition to destroy nearby objects
 	//vector<EntityBase*> ExportList = CSpatialPartition::GetInstance()->GetObjects(position, 1.0f);

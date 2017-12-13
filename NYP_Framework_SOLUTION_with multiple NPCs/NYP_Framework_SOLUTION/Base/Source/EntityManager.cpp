@@ -327,109 +327,126 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 }
 
 
-//bool EntityManager::CheckForCollision(void)
-//{
-//	//for (std::list<EntityBase*>::iterator it = collisionList.begin(); it != collisionList.end(); ++it)
-//	//{
-//	//	EntityBase* entity = (EntityBase*)*it;
-//
-//	//	vector<EntityBase*> objList = CSpatialPartition::GetInstance()->GetObjects(entity->GetPosition(), 1.0f);
-//	//	std::cout << objList.size() << endl;
-//	//	//for (std::vector<EntityBase*>::iterator it2 = objList.begin(); it2 != objList.end(); ++it2)
-//	//	//{
-//	//	//	EntityBase* entity2 = (EntityBase*)*it2;
-//	//	//}
-//	//}
-//
-//	return false;
-//}
-
-
-// Check if any Collider is colliding with another Collider
 bool EntityManager::CheckForCollision(void)
 {
-	// Check for Collision
-	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
-	std::list<EntityBase*>::iterator colliderThat, colliderThatEnd;
-
-	colliderThisEnd = entityList.end();
-	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
+	for (std::list<EntityBase*>::iterator it = collisionList.begin(); it != collisionList.end(); ++it)
 	{
-		// Check if this entity is a CLaser type
-		if ((*colliderThis)->GetIsLaser())
+		EntityBase* entity = (EntityBase*)*it;
+
+		vector<EntityBase*> objList = CSpatialPartition::GetInstance()->GetObjects(entity->GetPosition(), 1.0f);
+		std::cout << objList.size() << endl;
+		for (std::vector<EntityBase*>::iterator it2 = objList.begin(); it2 != objList.end(); ++it2)
 		{
-			// Dynamic cast it to a CLaser class
-			CLaser* thisEntity = dynamic_cast<CLaser*>(*colliderThis);
+			EntityBase* entity2 = (EntityBase*)*it2;
 
-			// Check for collision with another collider class
-			colliderThatEnd = entityList.end();
-			int counter = 0;
-			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
+			if (entity == entity2)
+				continue;
+
+			if (entity2->HasCollider())
 			{
-				if (colliderThat == colliderThis)
-					continue;
-
-				if ((*colliderThat)->HasCollider())
+				if (CheckSphereCollision(entity, entity2))
 				{
-					Vector3 hitPosition = Vector3(0, 0, 0);
-
-					// Get the minAABB and maxAABB for (*colliderThat)
-					CCollider *thatCollider = dynamic_cast<CCollider*>(*colliderThat);
-					Vector3 thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
-					Vector3 thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
-
-					if (CheckLineSegmentPlane(	thisEntity->GetPosition(), 
-												thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
-												thatMinAABB, thatMaxAABB,
-												hitPosition) == true)
+					if (CheckAABBCollision(entity, entity2))
 					{
-						(*colliderThis)->SetIsDone(true);
-						(*colliderThat)->SetIsDone(true);
-
-
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
-						{
-							cout << "*** This Entity removed ***" << endl;
-						}
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
-						{
-							cout << "*** That Entity removed ***" << endl;
-						}
-
-					}
-				}
-			}
-		}
-		else if ((*colliderThis)->HasCollider())
-		{
-			// This object was derived from a CCollider class, then it will have Collision Detection methods
-			//CCollider *thisCollider = dynamic_cast<CCollider*>(*colliderThis);
-			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
-
-			// Check for collision with another collider class
-			colliderThatEnd = entityList.end();
-			int counter = 0;
-			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
-			{
-				if (colliderThat == colliderThis)
-					continue;
-
-				if ((*colliderThat)->HasCollider())
-				{
-					EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
-					if (CheckSphereCollision(thisEntity, thatEntity))
-					{
-						if (CheckAABBCollision(thisEntity, thatEntity))
-						{
-							thisEntity->SetIsDone(true);
-							thatEntity->SetIsDone(true);
-						}
+						entity->onHit();
+						entity2->onHit();
+					//	entity->SetIsDone(true);
+					//	entity2->SetIsDone(true);
 					}
 				}
 			}
 		}
 	}
+
 	return false;
 }
+
+
+// Check if any Collider is colliding with another Collider
+//bool EntityManager::CheckForCollision(void)
+//{
+//	// Check for Collision
+//	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
+//	std::list<EntityBase*>::iterator colliderThat, colliderThatEnd;
+//
+//	colliderThisEnd = entityList.end();
+//	for (colliderThis = entityList.begin(); colliderThis != colliderThisEnd; ++colliderThis)
+//	{
+//		// Check if this entity is a CLaser type
+//		if ((*colliderThis)->GetIsLaser())
+//		{
+//			// Dynamic cast it to a CLaser class
+//			CLaser* thisEntity = dynamic_cast<CLaser*>(*colliderThis);
+//
+//			// Check for collision with another collider class
+//			colliderThatEnd = entityList.end();
+//			int counter = 0;
+//			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
+//			{
+//				if (colliderThat == colliderThis)
+//					continue;
+//
+//				if ((*colliderThat)->HasCollider())
+//				{
+//					Vector3 hitPosition = Vector3(0, 0, 0);
+//
+//					// Get the minAABB and maxAABB for (*colliderThat)
+//					CCollider *thatCollider = dynamic_cast<CCollider*>(*colliderThat);
+//					Vector3 thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
+//					Vector3 thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
+//
+//					if (CheckLineSegmentPlane(	thisEntity->GetPosition(), 
+//												thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
+//												thatMinAABB, thatMaxAABB,
+//												hitPosition) == true)
+//					{
+//						(*colliderThis)->SetIsDone(true);
+//						(*colliderThat)->SetIsDone(true);
+//
+//
+//						// Remove from Scene Graph
+//						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)) == true)
+//						{
+//							cout << "*** This Entity removed ***" << endl;
+//						}
+//						// Remove from Scene Graph
+//						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)) == true)
+//						{
+//							cout << "*** That Entity removed ***" << endl;
+//						}
+//
+//					}
+//				}
+//			}
+//		}
+//		else if ((*colliderThis)->HasCollider())
+//		{
+//			// This object was derived from a CCollider class, then it will have Collision Detection methods
+//			//CCollider *thisCollider = dynamic_cast<CCollider*>(*colliderThis);
+//			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
+//
+//			// Check for collision with another collider class
+//			colliderThatEnd = entityList.end();
+//			int counter = 0;
+//			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
+//			{
+//				if (colliderThat == colliderThis)
+//					continue;
+//
+//				if ((*colliderThat)->HasCollider())
+//				{
+//					EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
+//					if (CheckSphereCollision(thisEntity, thatEntity))
+//					{
+//						if (CheckAABBCollision(thisEntity, thatEntity))
+//						{
+//							thisEntity->SetIsDone(true);
+//							thatEntity->SetIsDone(true);
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//	return false;
+//}

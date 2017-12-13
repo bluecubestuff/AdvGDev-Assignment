@@ -31,6 +31,9 @@ public:
 	// Get the flag, bLaser
 	virtual bool GetIsLaser(void) const;
 
+	//set what happens on collision
+	virtual void onHit(void);
+
 protected:
 	Vector3 position;
 	Vector3 scale;
