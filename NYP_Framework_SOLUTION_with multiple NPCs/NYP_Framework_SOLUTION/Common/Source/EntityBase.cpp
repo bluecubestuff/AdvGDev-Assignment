@@ -58,3 +58,8 @@ bool EntityBase::GetIsLaser(void) const
 {
 	return bLaser;
 }
+
+void EntityBase::onHit(void)
+{
+	std::cout << "collided ~!\n";
+}
