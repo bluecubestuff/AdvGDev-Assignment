@@ -28,21 +28,31 @@ void EntityManager::Update(double _dt)
 	// Check for Collision amongst entities with collider properties
 	CheckForCollision();
 
+	//remove obj from collisionList that are done
+	it = collisionList.begin();
+	while (it != collisionList.end()) {
+		if ((*it)->IsDone()) {
+			it = collisionList.erase(it);
+		}
+		else
+			++it;
+	}
+
 	// Clean up entities that are done
 	it = entityList.begin();
 	while (it != end)
 	{
 		if ((*it)->IsDone())
-		{
+		{	
+			// Remove the node
+			CSceneGraph::GetInstance()->DeleteNode((*it));
+
 			// Delete if done
 			delete *it;
 			it = entityList.erase(it);
 		}
-		else
-		{
-			// Move on otherwise
+		else // Move on otherwise
 			++it;
-		}
 	}
 }
 
@@ -162,15 +172,6 @@ EntityManager::~EntityManager()
 bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
 {	
 	// Check if this object is overlapping that object
-	/*
-	if (((thatMinAABB.x >= thisMinAABB.x) && (thatMinAABB.x <= thisMaxAABB.x) &&
-	(thatMinAABB.y >= thisMinAABB.y) && (thatMinAABB.y <= thisMaxAABB.y) &&
-	(thatMinAABB.z >= thisMinAABB.z) && (thatMinAABB.z <= thisMaxAABB.z))
-	||
-	((thatMaxAABB.x >= thisMinAABB.x) && (thatMaxAABB.x <= thisMaxAABB.x) &&
-	(thatMaxAABB.y >= thisMinAABB.y) && (thatMaxAABB.y <= thisMaxAABB.y) &&
-	(thatMaxAABB.z >= thisMinAABB.z) && (thatMaxAABB.z <= thisMaxAABB.z)))
-	*/
 	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
 		||
 		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
@@ -179,15 +180,6 @@ bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vecto
 	}
 
 	// Check if that object is overlapping this object
-	/*
-	if (((thisMinAABB.x >= thatMinAABB.x) && (thisMinAABB.x <= thatMaxAABB.x) &&
-	(thisMinAABB.y >= thatMinAABB.y) && (thisMinAABB.y <= thatMaxAABB.y) &&
-	(thisMinAABB.z >= thatMinAABB.z) && (thisMinAABB.z <= thatMaxAABB.z))
-	||
-	((thisMaxAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMaxAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMaxAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z)))
-	*/
 	if (((thisMinAABB >= thatMinAABB) && (thisMinAABB <= thatMaxAABB))
 		||
 		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
@@ -196,30 +188,12 @@ bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vecto
 	}
 
 	// Check if this object is within that object
-	/*
-	if (((thisMinAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMinAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMinAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z))
-	&&
-	((thisMaxAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMaxAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMaxAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z)))
-	*/
 	if (((thisMinAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB))
 		&&
 		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
 		return true;
 
 	// Check if that object is within this object
-	/*
-	if (((thatMinAABB.x >= thisMinAABB.x) && (thatMinAABB.x <= thisMaxAABB.x) &&
-	(thatMinAABB.y >= thisMinAABB.y) && (thatMinAABB.y <= thisMaxAABB.y) &&
-	(thatMinAABB.z >= thisMinAABB.z) && (thatMinAABB.z <= thisMaxAABB.z))
-	&&
-	((thatMaxAABB.x >= thisMinAABB.x) && (thatMaxAABB.x <= thisMaxAABB.x) &&
-	(thatMaxAABB.y >= thisMinAABB.y) && (thatMaxAABB.y <= thisMaxAABB.y) &&
-	(thatMaxAABB.z >= thisMinAABB.z) && (thatMaxAABB.z <= thisMaxAABB.z)))
-	*/
 	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
 		&&
 		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
@@ -344,14 +318,14 @@ bool EntityManager::CheckForCollision(void)
 
 			if (entity2->HasCollider())
 			{
-				if (CheckSphereCollision(entity, entity2))
+				if (CheckSphereCollision(entity, entity2)) //check via sphere
 				{
-					if (CheckAABBCollision(entity, entity2))
+					if (CheckAABBCollision(entity, entity2)) //if in sphere range check aabb 
 					{
 						entity->onHit();
 						entity2->onHit();
-					//	entity->SetIsDone(true);
-					//	entity2->SetIsDone(true);
+						entity->SetIsDone(true);
+						entity2->SetIsDone(true);
 					}
 				}
 			}

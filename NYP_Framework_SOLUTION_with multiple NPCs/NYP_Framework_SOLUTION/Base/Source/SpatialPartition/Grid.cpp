@@ -3,6 +3,8 @@
 #include "MeshBuilder.h"
 #include "RenderHelper.h"
 #include "../GenericEntity.h"
+#include "GraphicsManager.h"
+#include "RenderHelper.h"
 
 /********************************************************************************
 Constructor
@@ -185,7 +187,10 @@ Get list of objects in this grid
 ********************************************************************************/
 vector<EntityBase*> CGrid::GetListOfObject(void)
 {
-	return ListOfObjects;
+	if(this != nullptr)
+		return ListOfObjects;
+
+	return vector<EntityBase*>();
 }
 
 /********************************************************************************

@@ -147,6 +147,11 @@ void CSpatialPartition::Update(void)
 		}
 	}
 
+	int xIndex = (((int)theCamera->GetCameraPos().x - (-xSize >> 1)) / (xSize / xNumOfGrid));
+	int zIndex = (((int)theCamera->GetCameraPos().z - (-zSize >> 1)) / (zSize / zNumOfGrid));
+
+	cout << zIndex << ":" << zIndex << endl;
+
 	// If there are objects due for migration, then process them
 	if (MigrationList.empty() == false)
 	{
@@ -167,7 +172,6 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
 {
 	// Render the Spatial Partitions
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
-
 	modelStack.PushMatrix();
 	modelStack.Translate(0.0f, yOffset, 0.0f);
 
@@ -256,6 +260,9 @@ vector<EntityBase*> CSpatialPartition::GetObjects(Vector3 position, const float 
 	// Get the indices of the object's position
 	int xIndex = (((int)position.x - (-xSize >> 1)) / (xSize / xNumOfGrid));
 	int zIndex = (((int)position.z - (-zSize >> 1)) / (zSize / zNumOfGrid));
+
+	if (xIndex >= xNumOfGrid || zIndex >= zNumOfGrid)
+		return vector<EntityBase*>();
 
 	return theGrid[xIndex*zNumOfGrid + zIndex].GetListOfObject();
 }
