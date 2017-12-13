@@ -39,7 +39,7 @@ void Mech::Update(double dt)
 		PlayerControl(dt);
 		break;
 	case NPC:
-
+		NPCControl(dt);
 		break;
 	}
 }
@@ -153,4 +153,8 @@ void Mech::PlayerControl(double dt)
 
 void Mech::NPCControl(double dt)
 {
+	//update the mech position
+	position = attachedEntity->GetPosition();
+	//update chassis
+	chassis->Update(dt);
 }

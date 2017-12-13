@@ -22,6 +22,7 @@
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
 #include "SpatialPartition\SpatialPartition.h"
+#include "Mech.h"
 
 #include <iostream>
 using namespace std;
@@ -235,18 +236,25 @@ void SceneText::Init()
 	playerInfo->SetTerrain(groundEntity);
 
 	// Create a CEnemy instance
-	srand(time(NULL));
-	for (int i = 0; i < 10; i++)
-	{
-		theEnemy = new CEnemy();
-		float x = 1.0f + (i * rand() % 1000 - 500.0f);
-		float y = 1.0f + (i * rand() % 1000 - 500.0f);
-		theEnemy->SetRandomSeed(rand());
-		theEnemy->Init(x, y);
-		theEnemy->SetTerrain(groundEntity);
-		theEnemy->SetTarget(theEnemy->GenerateTarget());
-		theEnemy = NULL;
-	}
+	//srand(time(NULL));
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	theEnemy = new CEnemy();
+	//	float x = 1.0f + (i * rand() % 1000 - 500.0f);
+	//	float y = 1.0f + (i * rand() % 1000 - 500.0f);
+	//	theEnemy->SetRandomSeed(rand());
+	//	theEnemy->Init(x, y);
+	//	theEnemy->SetTerrain(groundEntity);
+	//	theEnemy->SetTarget(theEnemy->GenerateTarget());
+	//	theEnemy = NULL;
+	//}
+
+	CEnemy* test = new CEnemy();
+	test->Init(0, 0);
+	test->SetTerrain(groundEntity);
+	Mech* mech = new Mech();
+	mech->Init(test);
+	enemyMechList.push_back(mech);
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -341,6 +349,10 @@ void SceneText::Update(double dt)
 	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
 
 	GraphicsManager::GetInstance()->UpdateLights(dt);
+
+	for (auto it : enemyMechList) {
+		it->Update(dt);
+	}
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
 	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
