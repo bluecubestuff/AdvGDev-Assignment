@@ -22,6 +22,17 @@ Chassis::Chassis(Mech* parent)
 	CSceneNode* torsoNodetest = CSceneGraph::GetInstance()->AddNode(torso);
 	leg = new Leg();
 	legNode = torsoNodetest->AddChild(leg);
+
+	if (parent->controlType == Mech::PLAYER)
+	{
+		torso->setObjectType(EntityBase::PLAYER_MECH);
+		leg->setObjectType(EntityBase::PLAYER_MECH);
+	}
+	else if (parent->controlType == Mech::NPC)
+	{
+		torso->setObjectType(EntityBase::ENEMY_MECH);
+		leg->setObjectType(EntityBase::ENEMY_MECH);
+	}
 }
 
 Chassis::~Chassis()
@@ -40,6 +51,8 @@ void Chassis::Update(double dt)
 	torso->SetPosition(parent->position);
 	leg->SetPosition(Vector3(torso->GetPosition().x, torso->GetPosition().y - 7.5, torso->GetPosition().z));
 
+	//cout << "TorsePos: " << torso->GetPosition() << endl;
+	//cout << "LegPos: " << leg->GetPosition() << endl;
 	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 	ms.PushMatrix();
 	ms.LoadIdentity();

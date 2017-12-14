@@ -41,6 +41,16 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 	this->minAABB = minAABB;
 }
 
+void GenericEntity::onHit(EntityBase * other)
+{
+	if (other->obj_type == PLAYER_MECH ||
+		other->obj_type == ENEMY_MECH)
+		return;
+
+	isDone = true;
+	other->SetIsDone(true);
+}
+
 GenericEntity* Create::Entity(	const std::string& _meshName, 
 								const Vector3& _position,
 								const Vector3& _scale)
@@ -54,6 +64,7 @@ GenericEntity* Create::Entity(	const std::string& _meshName,
 	result->SetScale(_scale);
 	result->SetCollider(false);
 	EntityManager::GetInstance()->AddEntity(result, true);
+	result->obj_type = EntityBase::GENERIC;
 	return result;
 }
 

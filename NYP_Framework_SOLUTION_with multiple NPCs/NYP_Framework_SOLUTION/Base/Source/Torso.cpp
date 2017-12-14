@@ -1,6 +1,7 @@
 #include "Torso.h"
 
 #include "MeshBuilder.h"
+#include "EntityManager.h"
 
 Torso::Torso()
 	:BasePart(MeshBuilder::GetInstance()->GetMesh("torso"))
@@ -8,7 +9,11 @@ Torso::Torso()
 	hp = 100;
 	size = 10;
 	scale.Set(size, size, size);
-	m_bCollider = false;
+
+	//add da aabb
+	m_bCollider = true;
+	SetAABB(scale, -scale);
+	EntityManager::GetInstance()->AddEntity(this, true);
 }
 
 Torso::~Torso()

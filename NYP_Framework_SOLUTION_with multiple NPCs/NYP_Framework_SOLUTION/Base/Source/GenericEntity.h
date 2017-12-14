@@ -19,7 +19,8 @@ public:
 
 	// Set the maxAABB and minAABB
 	void SetAABB(Vector3 maxAABB, Vector3 minAABB);
-
+	// on hit for generic entity(set to isDone)
+	virtual void onHit(EntityBase* other);
 private:
 	Mesh* modelMesh;
 };

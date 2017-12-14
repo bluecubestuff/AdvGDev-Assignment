@@ -14,6 +14,7 @@ public:
 	inline void SetHP(int _hp) { hp = _hp; }
 	inline void SetSize(int _size) { size = _size; }
 
+	virtual void onHit(EntityBase* other) {};
 protected:
 	int hp;
 	float size;

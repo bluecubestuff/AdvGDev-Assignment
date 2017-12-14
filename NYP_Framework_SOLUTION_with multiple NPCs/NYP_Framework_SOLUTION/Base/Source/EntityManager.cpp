@@ -308,6 +308,11 @@ bool EntityManager::CheckCollisionInPartition(void)
 	for (std::list<EntityBase*>::iterator it = collisionList.begin(); it != collisionList.end(); ++it)
 	{
 		EntityBase* entity = (EntityBase*)*it;
+		if (entity->IsDone())
+			continue;
+
+		//if (entity == nullptr)
+		//	continue;
 
 		if (entity->GetIsLaser()) //for raycasting collision check 
 			CheckLaserCollision(entity);
@@ -345,6 +350,9 @@ bool EntityManager::CheckLaserCollision(EntityBase* _entity)
 		{
 			EntityBase* entity2 = (EntityBase*)(*it);
 
+			if (entity2->obj_type == EntityBase::PLAYER_MECH)
+				continue;
+
 			if (entity2->HasCollider())
 			{
 				Vector3 hitPosition = Vector3(0, 0, 0);
@@ -379,7 +387,6 @@ bool EntityManager::CheckLaserCollision(EntityBase* _entity)
 
 bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 {
-
 	/*
 		Check in multiple grid if aabb in another grid
 		e.g
@@ -416,6 +423,8 @@ bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 		{
 			EntityBase* entity2 = (EntityBase*)*it2;
 
+			//if (entity2->obj_type == _entity->obj_type)
+			//	continue;
 			if (entity2 == nullptr)
 				continue;
 			if (_entity == entity2)
@@ -427,12 +436,12 @@ bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 				{
 					if (CheckAABBCollision(_entity, entity2)) //if in sphere range check aabb 
 					{
-						_entity->onHit();
-						entity2->onHit();
+						_entity->onHit(entity2);
+						entity2->onHit(_entity);
 
 						//temp set to delete
-						_entity->SetIsDone(true);
-						entity2->SetIsDone(true);
+						//_entity->SetIsDone(true);
+						//entity2->SetIsDone(true);
 					}
 				}
 			}
@@ -441,7 +450,7 @@ bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 	}
 	else //in more than 1 grid
 	{
-		cout << "in more than one grid boi~\n";
+		//cout << "in more than one grid boi~\n";
 		for (int i = 0; i <= rangeY; ++i) //y
 		{
 			for (int j = 0; j <= rangeX; ++j) //x
@@ -451,6 +460,8 @@ bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 				{
 					EntityBase* entity2 = (EntityBase*)*it2;
 
+					//if (entity2->obj_type == _entity->obj_type)
+					//	continue;
 					if (entity2 == nullptr)
 						continue;
 					if (_entity == entity2)
@@ -462,12 +473,12 @@ bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 						{
 							if (CheckAABBCollision(_entity, entity2)) //if in sphere range check aabb 
 							{
-								_entity->onHit();
-								entity2->onHit();
+								_entity->onHit(entity2);
+								entity2->onHit(_entity);
 
 								//temp set to delete
-								_entity->SetIsDone(true);
-								entity2->SetIsDone(true);
+								//_entity->SetIsDone(true);
+								//entity2->SetIsDone(true);
 							}
 						}
 					}

@@ -51,8 +51,8 @@ void CEnemy::Init(void)
 	InitLOD("cube", "sphere", "cubeSG");
 
 	// Initialise the Collider
-	this->SetCollider(true);
-	this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
+	//this->SetCollider(true);
+	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this, true);
@@ -84,8 +84,8 @@ void CEnemy::Init(float x, float y)
 	InitLOD("cube", "sphere", "cubeSG");
 
 	// Initialise the Collider
-	this->SetCollider(true);
-	this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
+	//this->SetCollider(true);
+	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this, true);
@@ -160,7 +160,7 @@ void CEnemy::Update(double dt)
 {
 	Vector3 viewVector = (target - position).Normalized();
 	position += viewVector * (float)m_dSpeed * (float)dt;
-//	cout << position << " - " << target << "..." << viewVector << endl;
+	//cout << position << " - " << target << "..." << viewVector << endl;
 
 	// Constrain the position
 	Constrain();

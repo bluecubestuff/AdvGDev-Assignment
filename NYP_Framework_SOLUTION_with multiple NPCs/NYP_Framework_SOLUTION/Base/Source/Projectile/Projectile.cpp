@@ -146,6 +146,39 @@ void CProjectile::Render(void)
 	modelStack.PopMatrix();
 }
 
+void CProjectile::onHit(EntityBase * other)
+{
+	if (other->obj_type == GENERIC)
+	{
+		other->SetIsDone(true);
+		isDone = true;
+	}
+
+	if (theSource)
+	{
+		if (other->obj_type == PLAYER_MECH)
+			return;
+
+		if (other->obj_type == ENEMY_MECH)
+		{
+			isDone = true;
+			other->SetIsDone(true);
+		}
+	}
+	else
+	{
+		if (other->obj_type == ENEMY_MECH)
+			return;
+
+		if (other->obj_type == PLAYER_MECH)
+		{
+			isDone = true;
+			other->SetIsDone(true);
+		}
+	}
+
+}
+
 // Create a projectile and add it into EntityManager
 CProjectile* Create::Projectile(const std::string& _meshName, 
 								const Vector3& _position, 
@@ -165,6 +198,6 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 	result->SetSource(_source);
 	result->SetScale(Vector3(1, 1, 1));
 	EntityManager::GetInstance()->AddEntity(result,true);
-	
+
 	return result;
 }

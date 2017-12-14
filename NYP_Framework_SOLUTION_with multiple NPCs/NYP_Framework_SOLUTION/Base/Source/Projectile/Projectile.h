@@ -42,6 +42,10 @@ public:
 	virtual void Update(double dt = 0.0333f);
 	// Render this projectile
 	virtual void Render(void);
+
+	//on hit
+	virtual void onHit(EntityBase* other);
+
 protected:
 	// The model mesh for this projectile
 	Mesh* modelMesh;
