@@ -355,6 +355,18 @@ void SceneText::Update(double dt)
 
 	for (auto it : enemyMechList) {
 		it->Update(dt);
+		if (it->isDead == true)
+			it->bDelete = true;
+	}
+
+	std::vector<Mech*>::iterator it;
+	it = enemyMechList.begin();
+	while (it != enemyMechList.end()) {
+		if ((*it)->bDelete == true) {
+			it = enemyMechList.erase(it);
+		}
+		else
+			++it;
 	}
 
 	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
