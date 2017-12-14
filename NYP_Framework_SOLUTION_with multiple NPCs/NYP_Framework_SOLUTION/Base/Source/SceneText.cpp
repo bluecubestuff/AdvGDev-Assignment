@@ -255,14 +255,6 @@ void SceneText::Init()
 	//	theEnemy = NULL;
 	//}
 
-	CEnemy* test = new CEnemy();
-	test->Init(0, 0);
-	test->SetTerrain(groundEntity);
-	test->SetTarget(test->GenerateTarget());
-	Mech* mech = new Mech();
-	mech->Init(test);
-	enemyMechList.push_back(mech);
-
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
@@ -378,6 +370,29 @@ void SceneText::Update(double dt)
 	ss1.precision(4);
 	ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
 	textObj[2]->SetText(ss1.str());
+
+	static float timer = 0.f;
+	timer += dt;
+	if (timer > 5.f) {
+		if (enemyMechList.size() < 10) {
+			//generate a random pos a certain dist away
+			float dist = Math::RandFloatMinMax(80, 100);
+			//generate a random direction;
+			Vector3 dir;
+			dir.Set(Math::RandFloatMinMax(-1, 1), 0, Math::RandFloatMinMax(-1, 1));
+			dir.Normalize();
+			Vector3 newPos = dir * dist;
+			CEnemy* test = new CEnemy();
+			test->Init(newPos.x, newPos.z);
+			test->SetTerrain(groundEntity);
+			test->SetTarget(test->GenerateTarget());
+			Mech* mech = new Mech();
+			mech->Init(test);
+			enemyMechList.push_back(mech);
+			std::cout << "spawn enemy\n";
+			timer = 0;
+		}
+	}
 }
 
 void SceneText::Render()
@@ -393,7 +408,7 @@ void SceneText::Render()
 	//testing if the stupid line working
 	Vector3 lineEnd = CPlayerInfo::GetInstance()->GetMech()->legDirection;
 	Vector3 playerPos = CPlayerInfo::GetInstance()->GetPos();
-	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(1, 1, 0));
+	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(0, 0, 1));
 	RenderHelper::RenderMesh(line);
 	delete line;
 	//render mech
@@ -433,6 +448,13 @@ void SceneText::Render()
 		ms.Scale(it->chassis->GetTorso()->GetSize(), it->chassis->GetTorso()->GetSize(), it->chassis->GetTorso()->GetSize());
 		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("torso"));
 		ms.PopMatrix();
+
+		//render a line to enemy
+		lineEnd = it->position;
+		playerPos = CPlayerInfo::GetInstance()->GetPos();
+		line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), lineEnd, Color(1, 0, 0));
+		RenderHelper::RenderMesh(line);
+		delete line;
 	}
 
 	// Setup 2D pipeline then render 2D
