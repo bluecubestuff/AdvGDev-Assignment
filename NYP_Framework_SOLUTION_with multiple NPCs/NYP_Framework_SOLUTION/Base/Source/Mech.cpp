@@ -9,6 +9,7 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "Enemy\Enemy.h"
+#include "leg.h"
 
 void Mech::Init(GenericEntity* attach)
 {
@@ -160,5 +161,9 @@ void Mech::NPCControl(double dt)
 		position = attachedEntity->GetPosition();
 		//update chassis
 		chassis->Update(dt);
+	}
+
+	if (chassis->GetLeg()->GetHP() <= 0) {
+		legMesh = MeshBuilder::GetInstance()->GetMesh("destroyedLeg");
 	}
 }
