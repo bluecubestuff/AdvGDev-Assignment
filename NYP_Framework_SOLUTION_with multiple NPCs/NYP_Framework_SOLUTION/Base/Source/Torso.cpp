@@ -12,7 +12,7 @@ Torso::Torso()
 
 	//add da aabb
 	m_bCollider = true;
-	SetAABB(scale, -scale);
+	SetAABB(scale * 0.5, -scale  * 0.5);
 	EntityManager::GetInstance()->AddEntity(this, true);
 }
 
