@@ -161,6 +161,7 @@ void SceneText::Init()
 	//MeshBuilder::GetInstance()->GenerateCube("leg", Color(0, 0, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateOBJ("torso", "OBJ//cube.obj")->textureID = LoadTGA("Image//Yellow.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("leg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("destroyedLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//boom.tga");
 
 	//random stuff mesh 
 	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 1.0f);
@@ -366,11 +367,16 @@ void SceneText::Update(double dt)
 	ss.precision(5);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
+	textObj[0]->SetText(ss.str());
+
+	std::ostringstream ss2;
+	ss2.precision(4);
+	ss2 << "Player Leg HP:" << playerInfo->GetMech()->chassis->GetLeg()->GetHP();
+	textObj[1]->SetText(ss2.str());
 
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Player:" << playerInfo->GetPos();
+	ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
 	textObj[2]->SetText(ss1.str());
 }
 
@@ -414,7 +420,10 @@ void SceneText::Render()
 		ms.Translate(it->chassis->GetLeg()->GetPosition().x, it->chassis->GetLeg()->GetPosition().y, it->chassis->GetLeg()->GetPosition().z);
 		ms.Rotate(-rotate, 0, 1, 0);
 		ms.Scale(it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize());
-		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+		if (it->chassis->GetLeg()->GetHP() > 0)
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+		else
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("destroyedLeg"));
 		ms.PopMatrix();
 
 		rotate = Math::RadianToDegree(atan2(it->torsoDirection.z, it->torsoDirection.x));
