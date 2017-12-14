@@ -191,6 +191,10 @@ void CEnemy::Update(double dt)
 		position += moveDir.Normalized() * (float)m_dSpeed * (float)dt;
 		//cout << position << " - " << target << "..." << viewVector << endl;
 	}
+	else {
+		
+	}
+
 
 	// Constrain the position
 	Constrain();
