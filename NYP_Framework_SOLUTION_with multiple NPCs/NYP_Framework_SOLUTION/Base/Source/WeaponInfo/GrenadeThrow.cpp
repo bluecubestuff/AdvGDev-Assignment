@@ -26,7 +26,7 @@ void CGrenadeThrow::Init(void)
 	maxTotalRounds = 100;
 
 	// The time between shots
-	timeBetweenShots = 0.3333;
+	timeBetweenShots = 0.333;
 	// The elapsed time (between shots)
 	elapsedTime = 0.0;
 	// Boolean flag to indicate if weapon can fire now
@@ -51,7 +51,7 @@ void CGrenadeThrow::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 														_source);
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
-			bFire = false;
+			bFire = true;
 			magRounds--;
 		}
 	}

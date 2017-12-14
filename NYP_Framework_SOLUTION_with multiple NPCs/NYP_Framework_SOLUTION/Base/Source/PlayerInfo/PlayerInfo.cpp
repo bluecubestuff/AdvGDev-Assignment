@@ -450,11 +450,10 @@ void CPlayerInfo::Update(double dt)
 			secondaryWeapon->Discharge(position, target, this);
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyDown('G'))
+	if (KeyboardController::GetInstance()->IsKeyPressed('G'))
 	{
 		if (grenade)
 			grenade->Discharge(position, target, this);
-
 	}
 
 	// If the user presses R key, then reset the view to default values
