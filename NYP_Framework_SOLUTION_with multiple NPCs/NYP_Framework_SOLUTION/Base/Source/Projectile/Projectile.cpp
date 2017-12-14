@@ -174,17 +174,26 @@ void CProjectile::onHit(EntityBase * other)
 			//other->SetIsDone(true);
 		}
 	}
-	//else
-	//{
-	//	if (other->obj_type == ENEMY_MECH)
-	//		return;
+	else
+	{
+		if (other->obj_type == ENEMY_MECH)
+			return;
 
-	//	if (other->obj_type == PLAYER_MECH)
-	//	{
-	//		isDone = true;
-	//		other->SetIsDone(true);
-	//	}
-	//}
+		if (other->obj_type == PLAYER_MECH)
+		{
+
+			BasePart* part = dynamic_cast<BasePart*>(other);
+			part->SetHP(part->GetHP() - 10);
+			isDone = true;
+
+			if (part->GetHP() <= 0)
+			{
+				if (part->partType == BasePart::LEG)
+					other->SetIsDone(true);
+			}
+			//other->SetIsDone(true);
+		}
+	}
 
 }
 
