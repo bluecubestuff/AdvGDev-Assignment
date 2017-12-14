@@ -53,6 +53,9 @@ void CEnemy::Init(void)
 	// Initialise the LOD meshes
 	InitLOD("cube", "sphere", "cubeSG");
 
+	rotateSpeed = 45.f;
+	moveDir.Set(1, 0, 0);
+
 	// Initialise the Collider
 	//this->SetCollider(true);
 	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
@@ -171,6 +174,7 @@ void CEnemy::Update(double dt)
 	else {
 		
 	}
+
 
 	// Constrain the position
 	Constrain();
