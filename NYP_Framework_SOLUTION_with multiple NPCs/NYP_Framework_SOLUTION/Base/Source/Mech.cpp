@@ -8,6 +8,7 @@
 #include "MeshBuilder.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "Enemy\Enemy.h"
 
 void Mech::Init(GenericEntity* attach)
 {
@@ -27,6 +28,8 @@ void Mech::Init(GenericEntity* attach)
 	else {
 		controlType = NPC;
 		attachedEntity = attach;
+		CEnemy* enemy = dynamic_cast<CEnemy*>(attach);
+		enemy->attached = this;
 		position = attachedEntity->GetPosition();
 	}
 	chassis = new Chassis(this);

@@ -25,6 +25,7 @@
 #include "Mech.h"
 #include "Chassis.h"
 #include "Leg.h"
+#include "Torso.h"
 #include "RenderHelper.h"
 
 #include <iostream>
@@ -156,8 +157,10 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 1.f);
 
 	//Mech mesh generation
-	MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 1, 0), 1.f);
-	MeshBuilder::GetInstance()->GenerateCube("leg", Color(0, 0, 1), 1.f);
+	//MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 1, 0), 1.f);
+	//MeshBuilder::GetInstance()->GenerateCube("leg", Color(0, 0, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateOBJ("torso", "OBJ//cube.obj")->textureID = LoadTGA("Image//Yellow.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("leg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
 
 	//random stuff mesh 
 	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 1.0f);
@@ -387,7 +390,7 @@ void SceneText::Render()
 	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(1, 1, 0));
 	RenderHelper::RenderMesh(line);
 	delete line;
-	//render legs
+	//render mech
 	float rotate = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetMech()->legDirection.z, CPlayerInfo::GetInstance()->GetMech()->legDirection.x));
 	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
 	ms.PushMatrix();
@@ -397,6 +400,14 @@ void SceneText::Render()
 	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
 	ms.PopMatrix();
 
+	rotate = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetMech()->torsoDirection.z, CPlayerInfo::GetInstance()->GetMech()->torsoDirection.x));
+	ms.PushMatrix();
+	ms.Translate(CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetPosition().x, CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetPosition().y, CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetPosition().z);
+	ms.Rotate(-rotate, 0, 1, 0);
+	ms.Scale(CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetSize());
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("torso"));
+	ms.PopMatrix();
+
 	for (auto it : enemyMechList) {
 		rotate = Math::RadianToDegree(atan2(it->legDirection.z, it->legDirection.x));
 		ms.PushMatrix();
@@ -404,6 +415,14 @@ void SceneText::Render()
 		ms.Rotate(-rotate, 0, 1, 0);
 		ms.Scale(it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize());
 		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+		ms.PopMatrix();
+
+		rotate = Math::RadianToDegree(atan2(it->torsoDirection.z, it->torsoDirection.x));
+		ms.PushMatrix();
+		ms.Translate(it->chassis->GetTorso()->GetPosition().x, it->chassis->GetTorso()->GetPosition().y, it->chassis->GetTorso()->GetPosition().z);
+		ms.Rotate(-rotate, 0, 1, 0);
+		ms.Scale(it->chassis->GetTorso()->GetSize(), it->chassis->GetTorso()->GetSize(), it->chassis->GetTorso()->GetSize());
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("torso"));
 		ms.PopMatrix();
 	}
 

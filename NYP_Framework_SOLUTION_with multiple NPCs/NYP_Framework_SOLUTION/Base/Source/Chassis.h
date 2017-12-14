@@ -20,6 +20,7 @@ public:
 	void Update(double dt);
 
 	Leg* GetLeg() { return leg; }
+	Torso* GetTorso() { return torso; }
 
 	//the chassis is attached to a mech, will update according to the mech
 	Mech* parent;

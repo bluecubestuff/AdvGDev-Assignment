@@ -3,6 +3,7 @@
 #include "../GroundEntity.h"
 
 class Mesh;
+class Mech;
 
 class CEnemy :
 	public GenericEntity
@@ -21,6 +22,8 @@ protected:
 public:
 	CEnemy(void);
 	virtual ~CEnemy();
+
+	Mech* attached;
 
 	void Init(void);
 	void Init(float x, float y);
