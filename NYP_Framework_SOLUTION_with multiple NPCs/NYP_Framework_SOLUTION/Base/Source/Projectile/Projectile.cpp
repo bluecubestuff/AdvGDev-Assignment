@@ -165,17 +165,17 @@ void CProjectile::onHit(EntityBase * other)
 			other->SetIsDone(true);
 		}
 	}
-	//else
-	//{
-	//	if (other->obj_type == ENEMY_MECH)
-	//		return;
+	else
+	{
+		if (other->obj_type == ENEMY_MECH)
+			return;
 
-	//	if (other->obj_type == PLAYER_MECH)
-	//	{
-	//		isDone = true;
-	//		other->SetIsDone(true);
-	//	}
-	//}
+		if (other->obj_type == PLAYER_MECH)
+		{
+			isDone = true;
+			other->SetIsDone(true);
+		}
+	}
 
 }
 

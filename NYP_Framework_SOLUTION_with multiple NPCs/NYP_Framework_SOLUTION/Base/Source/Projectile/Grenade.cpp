@@ -53,7 +53,7 @@ void CGrenade::Update(double dt)
 			SetIsDone(true);	// This method informs EntityManager to remove this instance
 		}
 
-		SetAABB(Vector3(15, 15, 15),Vector3(-15, -15, -15));
+		SetAABB(Vector3(10, 10, 10),Vector3(-10, -10, -10));
 
 		// Check the SpatialPartition to destroy nearby objects
 		//vector<EntityBase*> ExportList = CSpatialPartition::GetInstance()->GetObjects(position, 1.0f);
