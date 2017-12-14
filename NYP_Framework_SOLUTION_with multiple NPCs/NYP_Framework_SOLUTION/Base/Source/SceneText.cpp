@@ -162,9 +162,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("lowTorso", "OBJ//cube.obj")->textureID = LoadTGA("Image//Yellow.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("lowLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("mediumTorso", "OBJ//mediumEnemy.obj")->textureID = LoadTGA("Image//mEnemy.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("mediumLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("mediumLeg", "OBJ//mediumLeg.obj")->textureID = LoadTGA("Image//mLeg.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("highTorso", "OBJ//highEnemy.obj")->textureID = LoadTGA("Image//hEnemy.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("highLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("highLeg", "OBJ//highLeg.obj")->textureID = LoadTGA("Image//hLeg.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("destroyedLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//boom.tga");
 
 	//random stuff mesh 
@@ -422,7 +422,7 @@ void SceneText::Render()
 		rotate = Math::RadianToDegree(atan2(it->legDirection.z, it->legDirection.x));
 		ms.PushMatrix();
 		ms.Translate(it->chassis->GetLeg()->GetPosition().x, it->chassis->GetLeg()->GetPosition().y, it->chassis->GetLeg()->GetPosition().z);
-		ms.Rotate(-rotate, 0, 1, 0);
+		ms.Rotate(-rotate + 90, 0, 1, 0);
 		ms.Scale(it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize());
 		RenderHelper::RenderMesh(it->legMesh);
 		ms.PopMatrix();
