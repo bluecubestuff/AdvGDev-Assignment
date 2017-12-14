@@ -46,9 +46,14 @@ void CGrenade::Update(double dt)
 	m_fLifetime -= (float)dt;
 	if (m_fLifetime < 0.0f)
 	{
-		SetStatus(false);
-		SetIsDone(true);	// This method informs EntityManager to remove this instance
 
+		if (m_fLifetime <= -1.5f)
+		{
+			SetStatus(false);
+			SetIsDone(true);	// This method informs EntityManager to remove this instance
+		}
+
+		SetAABB(Vector3(10, 10, 10),Vector3(-10, -10, -10));
 
 		// Check the SpatialPartition to destroy nearby objects
 		//vector<EntityBase*> ExportList = CSpatialPartition::GetInstance()->GetObjects(position, 1.0f);
@@ -88,6 +93,39 @@ void CGrenade::SetTerrain(GroundEntity* m_pTerrain)
 	this->m_pTerrain = m_pTerrain;
 }
 
+void CGrenade::onHit(EntityBase * other)
+{
+	if (other->obj_type == GENERIC) 
+	{
+		other->SetIsDone(true);
+		isDone = true;
+	}
+
+	if (theSource) // if shot by player
+	{
+		if (other->obj_type == PLAYER_MECH)
+			return;
+
+		if (other->obj_type == ENEMY_MECH)
+		{
+			isDone = true;
+			other->SetIsDone(true);
+		}
+	}
+	else //not by player
+	{
+		if (other->obj_type == ENEMY_MECH)
+			return;
+
+		if (other->obj_type == PLAYER_MECH)
+		{
+			isDone = true;
+			other->SetIsDone(true);
+		}
+	}
+
+}
+
 // Create a projectile and add it into EntityManager
 CGrenade* Create::Grenade(	const std::string& _meshName,
 							const Vector3& _position, 
@@ -106,6 +144,7 @@ CGrenade* Create::Grenade(	const std::string& _meshName,
 	result->SetCollider(true);
 	result->SetSource(_source);
 	result->SetTerrain(_source->GetTerrain());
+	result->obj_type = EntityBase::GRENADE;
 	EntityManager::GetInstance()->AddEntity(result, true);
 	return result;
 }

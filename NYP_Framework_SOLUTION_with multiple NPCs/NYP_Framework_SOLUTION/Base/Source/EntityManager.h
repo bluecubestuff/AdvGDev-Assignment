@@ -57,6 +57,8 @@ private:
 	bool CheckLaserCollision(EntityBase* _entity);
 	//aabb to aabb check
 	bool CheckAABBCollision(EntityBase* _entity);
+	//explosion/spher check
+	bool CheckSphereCollision(EntityBase* _entity);
 
 	//helper functions
 	//to get spatial partition index

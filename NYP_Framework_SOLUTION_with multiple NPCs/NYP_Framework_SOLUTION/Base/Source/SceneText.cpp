@@ -159,6 +159,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 1, 0), 1.f);
 	MeshBuilder::GetInstance()->GenerateCube("leg", Color(0, 0, 1), 1.f);
 
+	//random stuff mesh 
+	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 1.0f);
+
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
@@ -171,26 +174,22 @@ void SceneText::Init()
 	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
 	//============================================================================
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f));
+	GenericEntity* aCube = Create::Entity("bluecube", Vector3(-20.0f, 0.0f, -20.0f));
 	aCube->SetCollider(true);
 	aCube->SetAABB(Vector3(1.f, 1.f, 1.f), Vector3( -1.f, -1.f,  -1.f));
-	aCube->InitLOD("cube", "sphere", "cubeSG");
+	aCube->InitLOD("bluecube", "cubeSG", "quad");
 
 	 //Add the pointer to this new entity to the Scene Graph
 	CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
 	if (theNode == NULL)
-	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
 
 	GenericEntity* anotherCube = Create::Entity("cube", Vector3(-20.0f, 1.1f, -20.0f));
 	anotherCube->SetCollider(true);
 	anotherCube->SetAABB(Vector3(1.f, 1.f, 1.f), Vector3(-1.f, -1.f, -1.f));
 	CSceneNode* anotherNode = theNode->AddChild(anotherCube);
 	if (anotherNode == NULL)
-	{
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
 	//============================================================================
 
 	/*

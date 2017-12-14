@@ -316,6 +316,8 @@ bool EntityManager::CheckCollisionInPartition(void)
 
 		if (entity->GetIsLaser()) //for raycasting collision check 
 			CheckLaserCollision(entity);
+		else if (entity->obj_type == EntityBase::GRENADE)
+			CheckSphereCollision(entity);
 		else //not a laser
 			CheckAABBCollision(entity);
 	}
@@ -489,6 +491,83 @@ bool EntityManager::CheckAABBCollision(EntityBase * _entity)
 	}
 
 	
+	return false;
+}
+
+bool EntityManager::CheckSphereCollision(EntityBase * _entity)
+{
+	int xMinIndex, zMinIndex, xMaxIndex, zMaxIndex;
+	int rangeX, rangeY;
+
+	CCollider* collider = dynamic_cast<CCollider*>(_entity);
+	//get min index
+	GetGridIndex((int)(collider->GetMinAABB().x), (int)(collider->GetMinAABB().z), xMinIndex, zMinIndex);
+	//get max index
+	GetGridIndex((int)(collider->GetMaxAABB().x), (int)(collider->GetMaxAABB().z), xMaxIndex, zMaxIndex);
+
+	rangeX = abs(xMaxIndex - xMinIndex);
+	rangeY = abs(zMaxIndex - zMinIndex);
+
+	if (rangeX == 0 && rangeY == 0)
+	{
+		//if aabb is only in this grid
+		vector<EntityBase*> objList = CSpatialPartition::GetInstance()->GetObjects(_entity->GetPosition(), 1.0f);
+		for (std::vector<EntityBase*>::iterator it2 = objList.begin(); it2 != objList.end(); ++it2)
+		{
+			EntityBase* entity2 = (EntityBase*)*it2;
+
+			//if (entity2->obj_type == _entity->obj_type)
+			//	continue;
+			if (entity2 == nullptr)
+				continue;
+			if (_entity == entity2)
+				continue;
+
+			if (entity2->HasCollider()) //aabb to aabb(check)
+			{
+				if (CheckSphereCollision(_entity, entity2)) //check via sphere
+				{
+					_entity->onHit(entity2);
+					entity2->onHit(_entity);
+				}
+			}
+		}
+		return false;
+	}
+	else //in more than 1 grid
+	{
+		//cout << "in more than one grid boi~\n";
+		for (int i = 0; i <= rangeY; ++i) //y
+		{
+			for (int j = 0; j <= rangeX; ++j) //x
+			{
+				vector<EntityBase*> objList = CSpatialPartition::GetInstance()->GetObjects(j + xMinIndex, i + zMinIndex, 1.0f);
+				for (std::vector<EntityBase*>::iterator it2 = objList.begin(); it2 != objList.end(); ++it2)
+				{
+					EntityBase* entity2 = (EntityBase*)*it2;
+
+					//if (entity2->obj_type == _entity->obj_type)
+					//	continue;
+					if (entity2 == nullptr)
+						continue;
+					if (_entity == entity2)
+						continue;
+
+					if (entity2->HasCollider()) //aabb to aabb(check)
+					{
+						if (CheckSphereCollision(_entity, entity2)) //check via sphere
+						{
+							_entity->onHit(entity2);
+							entity2->onHit(_entity);
+						}
+					}
+				} //end of check for loop
+				objList.clear();
+			} //end of x for loop
+		} //end of y for loop
+	}
+
+
 	return false;
 }
 
