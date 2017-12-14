@@ -14,6 +14,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Arm.cpp" />
     <ClCompile Include="Source\Chassis.cpp" />
+    <ClCompile Include="Source\enemygun.cpp" />
     <ClCompile Include="Source\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Source\Arm.h" />
     <ClInclude Include="Source\BasePart.h" />
     <ClInclude Include="Source\Chassis.h" />
+    <ClInclude Include="Source\enemygun.h" />
     <ClInclude Include="Source\Enemy\Enemy.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
