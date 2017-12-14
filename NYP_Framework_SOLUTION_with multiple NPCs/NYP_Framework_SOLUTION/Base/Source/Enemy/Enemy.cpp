@@ -53,6 +53,9 @@ void CEnemy::Init(void)
 	// Initialise the LOD meshes
 	InitLOD("cube", "sphere", "cubeSG");
 
+	rotateSpeed = 45.f;
+	moveDir.Set(1, 0, 0);
+
 	// Initialise the Collider
 	//this->SetCollider(true);
 	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
@@ -167,9 +170,6 @@ void CEnemy::Update(double dt)
 	if (viewVector.LengthSquared() > AGRO_DIST) {
 		position += viewVector.Normalized() * (float)m_dSpeed * (float)dt;
 		//cout << position << " - " << target << "..." << viewVector << endl;
-	}
-	else {
-		
 	}
 
 	// Constrain the position

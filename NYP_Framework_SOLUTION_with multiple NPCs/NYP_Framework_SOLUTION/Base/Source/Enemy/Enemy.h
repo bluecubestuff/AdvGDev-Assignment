@@ -19,6 +19,9 @@ protected:
 
 	int m_iSeed;
 
+	Vector3 moveDir;
+	float rotateSpeed;
+
 public:
 	CEnemy(void);
 	virtual ~CEnemy();
@@ -40,6 +43,8 @@ public:
 	void SetBoundary(Vector3 max, Vector3 min);
 	// Set the terrain for the player info
 	void SetTerrain(GroundEntity* m_pTerrain);
+
+	Vector3 GetMoveDir() { return moveDir; }
 
 	// Get position
 	Vector3 GetPos(void) const;
