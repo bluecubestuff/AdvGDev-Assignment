@@ -369,12 +369,14 @@ bool EntityManager::CheckLaserCollision(EntityBase* _entity)
 					thatMinAABB, thatMaxAABB,
 					hitPosition) == true)
 				{
-					entity2->SetIsDone(true);
-					laserEntity->SetIsDone(true);
+					//entity2->SetIsDone(true);
+					//laserEntity->SetIsDone(true);
+					entity2->onHit(laserEntity);
+					laserEntity->onHit(entity2);
 
 					// Remove from Scene Graph
-					if (CSceneGraph::GetInstance()->DeleteNode(entity2) == true)
-						cout << "*** This Entity removed ***" << endl;
+					//if (CSceneGraph::GetInstance()->DeleteNode(entity2) == true)
+					//	cout << "*** This Entity removed ***" << endl;
 					
 				}
 			}

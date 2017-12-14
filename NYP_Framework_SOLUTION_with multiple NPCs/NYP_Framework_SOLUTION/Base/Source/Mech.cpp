@@ -150,12 +150,15 @@ void Mech::PlayerControl(double dt)
 
 void Mech::NPCControl(double dt)
 {
-	CEnemy* me = dynamic_cast<CEnemy*>(attachedEntity);
-	torsoDirection = me->GetTarget() - me->GetPos();
-	torsoDirection.Normalize();
-	legDirection = me->GetMoveDir();
-	//update the mech position
-	position = attachedEntity->GetPosition();
-	//update chassis
-	chassis->Update(dt);
+	if (chassis->GetMovability())
+	{
+		CEnemy* me = dynamic_cast<CEnemy*>(attachedEntity);
+		torsoDirection = me->GetTarget() - me->GetPos();
+		torsoDirection.Normalize();
+		legDirection = me->GetMoveDir();
+		//update the mech position
+		position = attachedEntity->GetPosition();
+		//update chassis
+		chassis->Update(dt);
+	}
 }

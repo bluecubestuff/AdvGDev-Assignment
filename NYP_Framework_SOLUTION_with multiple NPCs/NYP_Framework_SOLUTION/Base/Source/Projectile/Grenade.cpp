@@ -9,6 +9,7 @@
 #include "MyMath.h"
 #include "../SpatialPartition/SpatialPartition.h"
 #include "../SceneGraph/SceneGraph.h"
+#include "../BasePart.h"
 
 #include <iostream>
 using namespace std;
@@ -95,34 +96,42 @@ void CGrenade::SetTerrain(GroundEntity* m_pTerrain)
 
 void CGrenade::onHit(EntityBase * other)
 {
-	if (other->obj_type == GENERIC) 
+	if (other->obj_type == GENERIC)
 	{
 		other->SetIsDone(true);
 		isDone = true;
 	}
 
-	if (theSource) // if shot by player
+	if (theSource)
 	{
 		if (other->obj_type == PLAYER_MECH)
 			return;
 
 		if (other->obj_type == ENEMY_MECH)
 		{
+			BasePart* part = dynamic_cast<BasePart*>(other);
+			part->SetHP(part->GetHP() - 100);
 			isDone = true;
-			other->SetIsDone(true);
-		}
-	}
-	else //not by player
-	{
-		if (other->obj_type == ENEMY_MECH)
-			return;
 
-		if (other->obj_type == PLAYER_MECH)
-		{
-			isDone = true;
-			other->SetIsDone(true);
+			if (part->GetHP() <= 0)
+			{
+				if (part->partType == BasePart::LEG)
+					other->SetIsDone(true);
+			}
+			//other->SetIsDone(true);
 		}
 	}
+	//else //not by player
+	//{
+	//	if (other->obj_type == ENEMY_MECH)
+	//		return;
+
+	//	if (other->obj_type == PLAYER_MECH)
+	//	{
+	//		isDone = true;
+	//		other->SetIsDone(true);
+	//	}
+	//}
 
 }
 
