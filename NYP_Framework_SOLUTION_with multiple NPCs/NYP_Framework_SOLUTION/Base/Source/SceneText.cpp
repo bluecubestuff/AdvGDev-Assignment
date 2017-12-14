@@ -159,8 +159,13 @@ void SceneText::Init()
 	//Mech mesh generation
 	//MeshBuilder::GetInstance()->GenerateCube("torso", Color(0, 1, 0), 1.f);
 	//MeshBuilder::GetInstance()->GenerateCube("leg", Color(0, 0, 1), 1.f);
-	MeshBuilder::GetInstance()->GenerateOBJ("torso", "OBJ//cube.obj")->textureID = LoadTGA("Image//Yellow.tga");
-	MeshBuilder::GetInstance()->GenerateOBJ("leg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("lowTorso", "OBJ//cube.obj")->textureID = LoadTGA("Image//Yellow.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("lowLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("mediumTorso", "OBJ//mediumEnemy.obj")->textureID = LoadTGA("Image//mEnemy.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("mediumLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("highTorso", "OBJ//highEnemy.obj")->textureID = LoadTGA("Image//hEnemy.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("highLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//yee.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("destroyedLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//boom.tga");
 
 	//random stuff mesh 
 	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 1.0f);
@@ -253,14 +258,6 @@ void SceneText::Init()
 	//	theEnemy->SetTarget(theEnemy->GenerateTarget());
 	//	theEnemy = NULL;
 	//}
-
-	CEnemy* test = new CEnemy();
-	test->Init(0, 0);
-	test->SetTerrain(groundEntity);
-	test->SetTarget(test->GenerateTarget());
-	Mech* mech = new Mech();
-	mech->Init(test);
-	enemyMechList.push_back(mech);
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -378,12 +375,40 @@ void SceneText::Update(double dt)
 	ss.precision(5);
 	float fps = (float)(1.f / dt);
 	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
+	textObj[0]->SetText(ss.str());
+
+	std::ostringstream ss2;
+	ss2.precision(4);
+	ss2 << "Player Leg HP:" << playerInfo->GetMech()->chassis->GetLeg()->GetHP();
+	textObj[1]->SetText(ss2.str());
 
 	std::ostringstream ss1;
 	ss1.precision(4);
-	ss1 << "Player:" << playerInfo->GetPos();
+	ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
 	textObj[2]->SetText(ss1.str());
+
+	static float timer = 0.f;
+	timer += dt;
+	if (timer > 5.f) {
+		if (enemyMechList.size() < 5) {
+			//generate a random pos a certain dist away
+			float dist = Math::RandFloatMinMax(80, 100);
+			//generate a random direction;
+			Vector3 dir;
+			dir.Set(Math::RandFloatMinMax(-1, 1), 0, Math::RandFloatMinMax(-1, 1));
+			dir.Normalize();
+			Vector3 newPos = dir * dist;
+			CEnemy* test = new CEnemy();
+			test->Init(newPos.x, newPos.z);
+			test->SetTerrain(groundEntity);
+			test->SetTarget(test->GenerateTarget());
+			Mech* mech = new Mech();
+			mech->Init(test);
+			enemyMechList.push_back(mech);
+			std::cout << "spawn enemy\n";
+			timer = 0;
+		}
+	}
 }
 
 void SceneText::Render()
@@ -399,43 +424,49 @@ void SceneText::Render()
 	//testing if the stupid line working
 	Vector3 lineEnd = CPlayerInfo::GetInstance()->GetMech()->legDirection;
 	Vector3 playerPos = CPlayerInfo::GetInstance()->GetPos();
-	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(1, 1, 0));
+	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(0, 1, 0));
 	RenderHelper::RenderMesh(line);
 	delete line;
+	float rotate;
+	MS &ms = GraphicsManager::GetInstance()->GetModelStack();
 	//render mech
-	float rotate = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetMech()->legDirection.z, CPlayerInfo::GetInstance()->GetMech()->legDirection.x));
-	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
-	ms.PushMatrix();
-	ms.Translate(CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetPosition().x, CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetPosition().y, CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetPosition().z);
-	ms.Rotate(-rotate, 0, 1, 0);
-	ms.Scale(CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetSize());
-	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
-	ms.PopMatrix();
-
-	rotate = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetMech()->torsoDirection.z, CPlayerInfo::GetInstance()->GetMech()->torsoDirection.x));
-	ms.PushMatrix();
-	ms.Translate(CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetPosition().x, CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetPosition().y, CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetPosition().z);
-	ms.Rotate(-rotate, 0, 1, 0);
-	ms.Scale(CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetSize());
-	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("torso"));
-	ms.PopMatrix();
-
 	for (auto it : enemyMechList) {
 		rotate = Math::RadianToDegree(atan2(it->legDirection.z, it->legDirection.x));
 		ms.PushMatrix();
 		ms.Translate(it->chassis->GetLeg()->GetPosition().x, it->chassis->GetLeg()->GetPosition().y, it->chassis->GetLeg()->GetPosition().z);
 		ms.Rotate(-rotate, 0, 1, 0);
 		ms.Scale(it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize());
-		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+		RenderHelper::RenderMesh(it->legMesh);
 		ms.PopMatrix();
 
 		rotate = Math::RadianToDegree(atan2(it->torsoDirection.z, it->torsoDirection.x));
 		ms.PushMatrix();
 		ms.Translate(it->chassis->GetTorso()->GetPosition().x, it->chassis->GetTorso()->GetPosition().y, it->chassis->GetTorso()->GetPosition().z);
-		ms.Rotate(-rotate, 0, 1, 0);
+		ms.Rotate(-rotate + 90, 0, 1, 0);
 		ms.Scale(it->chassis->GetTorso()->GetSize(), it->chassis->GetTorso()->GetSize(), it->chassis->GetTorso()->GetSize());
-		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("torso"));
+		RenderHelper::RenderMesh(it->torsoMesh);
 		ms.PopMatrix();
+
+		//render a line to enemy
+		lineEnd = it->position;
+		playerPos = CPlayerInfo::GetInstance()->GetPos();
+		line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), lineEnd, Color(1, 0, 0));
+		RenderHelper::RenderMesh(line);
+		delete line;
+
+		float dist = (CPlayerInfo::GetInstance()->GetPos() - it->position).Length();
+		if (dist > 0 && dist < 200) {
+			it->legMesh = MeshBuilder::GetInstance()->GetMesh("highLeg");
+			it->torsoMesh = MeshBuilder::GetInstance()->GetMesh("highTorso");
+		}
+		else if (dist > 200 && dist < 400) {
+			it->legMesh = MeshBuilder::GetInstance()->GetMesh("mediumLeg");
+			it->torsoMesh = MeshBuilder::GetInstance()->GetMesh("mediumTorso");
+		}
+		else {
+			it->legMesh = MeshBuilder::GetInstance()->GetMesh("lowLeg");
+			it->torsoMesh = MeshBuilder::GetInstance()->GetMesh("lowTorso");
+		}
 	}
 
 	// Setup 2D pipeline then render 2D

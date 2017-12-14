@@ -8,6 +8,10 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
+#include "..\Leg.h"
+#include "..\Chassis.h"
+#include "..\Mech.h"
+
 #define AGRO_DIST 10000.f
 
 CEnemy::CEnemy()
@@ -175,25 +179,28 @@ void CEnemy::Update(double dt)
 	target = CPlayerInfo::GetInstance()->GetPos();
 	Vector3 viewVector = (target - position);
 	if (viewVector.LengthSquared() > AGRO_DIST) {
-		//rotate enemy to move towards player
-		Mtx44 mtx;
-		//get angle between view and move
-		float dot = viewVector.x * moveDir.x + viewVector.z + moveDir.z;
-		float det = viewVector.x*moveDir.z - viewVector.z*moveDir.x;
-		float angle = Math::RadianToDegree(atan2(dot, det));
-		//positive is right
-		if (angle > -90 && angle < 90) {
-			mtx.SetToRotation(rotateSpeed * dt, 0, 1, 0);
-			moveDir = mtx * moveDir;
-		}
-		else {
-			//negative is left
-			mtx.SetToRotation(-rotateSpeed * dt, 0, 1, 0);
-			moveDir = mtx * moveDir;
-		}
+		//if the enemy leg still can move
+		if (attached->chassis->GetLeg()->GetHP() > 0) {
+			//rotate enemy to move towards player
+			Mtx44 mtx;
+			//get angle between view and move
+			float dot = viewVector.x * moveDir.x + viewVector.z + moveDir.z;
+			float det = viewVector.x*moveDir.z - viewVector.z*moveDir.x;
+			float angle = Math::RadianToDegree(atan2(dot, det));
+			//positive is right
+			if (angle > -90 && angle < 90) {
+				mtx.SetToRotation(rotateSpeed * dt, 0, 1, 0);
+				moveDir = mtx * moveDir;
+			}
+			else {
+				//negative is left
+				mtx.SetToRotation(-rotateSpeed * dt, 0, 1, 0);
+				moveDir = mtx * moveDir;
+			}
 
-		position += moveDir.Normalized() * (float)m_dSpeed * (float)dt;
-		//cout << position << " - " << target << "..." << viewVector << endl;
+			position += moveDir.Normalized() * (float)m_dSpeed * (float)dt;
+			//cout << position << " - " << target << "..." << viewVector << endl;
+		}
 	}
 	else {
 		

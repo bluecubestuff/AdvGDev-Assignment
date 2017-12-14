@@ -468,6 +468,8 @@ void CPlayerInfo::Update(double dt)
 		UpdateFreeFall(dt);
 	}
 
+	Constrain();
+
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
 	{
