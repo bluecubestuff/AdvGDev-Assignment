@@ -2,9 +2,12 @@
 #include "../EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "..\PlayerInfo\PlayerInfo.h"
 
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+
+#define AGRO_DIST 10000.f
 
 CEnemy::CEnemy()
 	: GenericEntity(NULL)
@@ -158,12 +161,21 @@ GroundEntity* CEnemy::GetTerrain(void)
 // Update
 void CEnemy::Update(double dt)
 {
-	Vector3 viewVector = (target - position).Normalized();
-	position += viewVector * (float)m_dSpeed * (float)dt;
-	//cout << position << " - " << target << "..." << viewVector << endl;
+	//enemy will just chase the player
+	target = CPlayerInfo::GetInstance()->GetPos();
+	Vector3 viewVector = (target - position);
+	if (viewVector.LengthSquared() > AGRO_DIST) {
+		position += viewVector.Normalized() * (float)m_dSpeed * (float)dt;
+		//cout << position << " - " << target << "..." << viewVector << endl;
+	}
+	else {
+		
+	}
 
 	// Constrain the position
 	Constrain();
+
+
 
 	//// Update the target
 	//if (position.z > 400.0f)
