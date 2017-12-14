@@ -31,9 +31,8 @@ public:
 	float rotationSpeed;
 	float sensitivity;
 
-private:
 	Chassis* chassis;
-
+private:
 	//control for player
 	void PlayerControl(double dt);
 	//control for npc
