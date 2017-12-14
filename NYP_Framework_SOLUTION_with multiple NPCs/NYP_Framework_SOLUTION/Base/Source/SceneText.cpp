@@ -408,7 +408,7 @@ void SceneText::Render()
 	//testing if the stupid line working
 	Vector3 lineEnd = CPlayerInfo::GetInstance()->GetMech()->legDirection;
 	Vector3 playerPos = CPlayerInfo::GetInstance()->GetPos();
-	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(0, 0, 1));
+	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(0, 1, 0));
 	RenderHelper::RenderMesh(line);
 	delete line;
 	//render mech
