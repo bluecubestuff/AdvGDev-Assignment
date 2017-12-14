@@ -10,6 +10,6 @@ public:
 	virtual ~CEnemyGun();
 
 	// Initialise this instance to default values
-	void Init(void);
+	virtual void Init(void);
 };
 

@@ -133,11 +133,11 @@ void CLaser::onHit(EntityBase * other)
 			part->SetHP(part->GetHP() - 50);
 			isDone = true;
 
-			if (part->GetHP() <= 0)
+	/*		if (part->GetHP() <= 0)
 			{
 				if (part->partType == BasePart::LEG)
 					other->SetIsDone(true);
-			}
+			}*/
 			//other->SetIsDone(true);
 		}
 	}

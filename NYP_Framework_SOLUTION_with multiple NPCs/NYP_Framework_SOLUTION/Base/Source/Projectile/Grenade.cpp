@@ -113,11 +113,11 @@ void CGrenade::onHit(EntityBase * other)
 			part->SetHP(part->GetHP() - 100);
 			isDone = true;
 
-			if (part->GetHP() <= 0)
+	/*		if (part->GetHP() <= 0)
 			{
 				if (part->partType == BasePart::LEG)
 					other->SetIsDone(true);
-			}
+			}*/
 			//other->SetIsDone(true);
 		}
 	}
