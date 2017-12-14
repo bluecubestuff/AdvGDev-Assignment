@@ -13,11 +13,12 @@ public:
 	enum OBJECT_TYPE
 	{
 		NONE = 0,
-		PLAYER_BULLET,
-		ENEMY_BULLET,
+		//PLAYER_BULLET,
+		//ENEMY_BULLET,
 		PLAYER_MECH,
 		ENEMY_MECH,
 		GENERIC,
+		GRENADE,
 	} obj_type;
 
 	virtual void Update(double _dt);

@@ -17,16 +17,16 @@ void CGrenadeThrow::Init(void)
 	CWeaponInfo::Init();
 
 	// The number of ammunition in a magazine for this weapon
-	magRounds = 1;
+	magRounds = 10;
 	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 1;
+	maxMagRounds = 10;
 	// The current total number of rounds currently carried by this player
-	totalRounds = 2;
+	totalRounds = 100;
 	// The max total number of rounds currently carried by this player
-	maxTotalRounds = 2;
+	maxTotalRounds = 100;
 
 	// The time between shots
-	timeBetweenShots = 1.0;
+	timeBetweenShots = 0.3333;
 	// The elapsed time (between shots)
 	elapsedTime = 0.0;
 	// Boolean flag to indicate if weapon can fire now
@@ -46,7 +46,7 @@ void CGrenadeThrow::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 			CProjectile* aProjectile = Create::Grenade("sphere",
 														position,
 														(target - position).Normalized(),
-														7.0f,
+														5.0f,
 														8.0f,
 														_source);
 			aProjectile->SetCollider(true);

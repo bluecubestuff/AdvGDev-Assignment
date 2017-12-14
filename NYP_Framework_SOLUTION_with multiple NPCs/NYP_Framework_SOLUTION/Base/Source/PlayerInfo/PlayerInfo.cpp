@@ -27,6 +27,7 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_pTerrain(NULL)
 	, primaryWeapon(NULL)
 	, secondaryWeapon(NULL)
+	, grenade(NULL)
 {
 }
 
@@ -41,6 +42,11 @@ CPlayerInfo::~CPlayerInfo(void)
 	{
 		delete primaryWeapon;
 		primaryWeapon = NULL;
+	}
+	if (grenade)
+	{
+		delete grenade;
+		grenade = NULL;
 	}
 	m_pTerrain = NULL;
 }
@@ -66,10 +72,12 @@ void CPlayerInfo::Init(void)
 	primaryWeapon = new CPistol();
 	primaryWeapon->Init();
 	// Set the laser blaster as the secondary weapon
-	//secondaryWeapon = new CLaserBlaster();
-	//secondaryWeapon->Init();
 	secondaryWeapon = new CLaserBlaster();
 	secondaryWeapon->Init();
+
+	//set grenade
+	grenade = new CGrenadeThrow();
+	grenade->Init();
 
 	mech = new Mech();
 	mech->Init();
@@ -418,15 +426,12 @@ void CPlayerInfo::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyReleased('R'))
 	{
 		if (primaryWeapon)
-		{
 			primaryWeapon->Reload();
-			//primaryWeapon->PrintSelf();
-		}
 		if (secondaryWeapon)
-		{
 			secondaryWeapon->Reload();
-			//secondaryWeapon->PrintSelf();
-		}
+		if (grenade)
+			grenade->Reload();
+		
 	}
 	if (primaryWeapon)
 		primaryWeapon->Update(dt);
@@ -443,6 +448,13 @@ void CPlayerInfo::Update(double dt)
 	{
 		if (secondaryWeapon)
 			secondaryWeapon->Discharge(position, target, this);
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyDown('G'))
+	{
+		if (grenade)
+			grenade->Discharge(position, target, this);
+
 	}
 
 	// If the user presses R key, then reset the view to default values

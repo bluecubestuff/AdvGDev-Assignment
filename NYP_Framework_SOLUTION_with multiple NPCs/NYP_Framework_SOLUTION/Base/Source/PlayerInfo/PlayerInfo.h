@@ -121,6 +121,7 @@ private:
 
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
+	CWeaponInfo* grenade;
 
 	Mech* mech;
 };
