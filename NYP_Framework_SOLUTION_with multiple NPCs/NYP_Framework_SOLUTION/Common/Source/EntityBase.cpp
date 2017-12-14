@@ -59,7 +59,14 @@ bool EntityBase::GetIsLaser(void) const
 	return bLaser;
 }
 
-void EntityBase::onHit(void)
+void EntityBase::onHit(EntityBase* other)
 {
-	std::cout << "collided ~!\n";
+	//isDone = true;
+	//other->SetIsDone(true);
+	//std::cout << "collided ~!\n";
+}
+
+void EntityBase::setObjectType(OBJECT_TYPE _type)
+{
+	obj_type = _type;
 }

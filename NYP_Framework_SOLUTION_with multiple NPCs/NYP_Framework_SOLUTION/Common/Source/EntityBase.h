@@ -9,6 +9,17 @@ public:
 	EntityBase();
 	virtual ~EntityBase();
 
+	//enum of type
+	enum OBJECT_TYPE
+	{
+		NONE = 0,
+		PLAYER_BULLET,
+		ENEMY_BULLET,
+		PLAYER_MECH,
+		ENEMY_MECH,
+		GENERIC,
+	} obj_type;
+
 	virtual void Update(double _dt);
 	virtual void Render();
 	virtual void RenderUI();
@@ -32,7 +43,10 @@ public:
 	virtual bool GetIsLaser(void) const;
 
 	//set what happens on collision
-	virtual void onHit(void);
+	virtual void onHit(EntityBase* other);
+
+	//set obj type
+	virtual void setObjectType(OBJECT_TYPE _type);
 
 protected:
 	Vector3 position;
