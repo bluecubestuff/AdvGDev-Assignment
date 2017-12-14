@@ -32,6 +32,8 @@ void Mech::Init(GenericEntity* attach)
 		enemy->attached = this;
 		position = attachedEntity->GetPosition();
 	}
+	legMesh = MeshBuilder::GetInstance()->GetMesh("lowLeg");
+	torsoMesh = MeshBuilder::GetInstance()->GetMesh("lowTorso");
 	chassis = new Chassis(this);
 }
 

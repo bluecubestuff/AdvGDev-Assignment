@@ -1,12 +1,6 @@
 ﻿  SceneText.cpp
 e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\basepart.h(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\scenetext.cpp(375): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-  Enemy.cpp
-e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\basepart.h(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\enemy\enemy.cpp(188): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\enemy\enemy.cpp(193): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\enemy\enemy.cpp(265): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
+e:\github repositories\advgdev-assignment\nyp_framework_solution_with multiple npcs\nyp_framework_solution\base\source\scenetext.cpp(379): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Base.vcxproj -> E:\Github Repositories\AdvGDev-Assignment\NYP_Framework_SOLUTION_with multiple NPCs\NYP_Framework_SOLUTION\Debug\Base.exe

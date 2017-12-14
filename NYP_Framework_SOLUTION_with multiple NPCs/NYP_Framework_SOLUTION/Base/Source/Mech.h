@@ -5,6 +5,7 @@
 
 class GenericEntity;
 class Chassis;
+class Mesh;
 
 //main class for the mechs, all controls happen here
 class Mech {
@@ -32,6 +33,9 @@ public:
 	float sensitivity;
 
 	Chassis* chassis;
+
+	Mesh* legMesh;
+	Mesh* torsoMesh;
 private:
 	//control for player
 	void PlayerControl(double dt);
