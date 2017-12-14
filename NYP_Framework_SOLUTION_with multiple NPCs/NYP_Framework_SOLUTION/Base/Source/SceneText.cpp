@@ -23,6 +23,9 @@
 #include "SceneGraph\SceneGraph.h"
 #include "SpatialPartition\SpatialPartition.h"
 #include "Mech.h"
+#include "Chassis.h"
+#include "Leg.h"
+#include "RenderHelper.h"
 
 #include <iostream>
 using namespace std;
@@ -91,7 +94,7 @@ void SceneText::Init()
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	lights[0]->position.Set(0, 20, 0);
+	lights[0]->position.Set(1, 1, 0);
 	lights[0]->color.Set(1, 1, 1);
 	lights[0]->power = 1;
 	lights[0]->kC = 1.f;
@@ -252,6 +255,7 @@ void SceneText::Init()
 	CEnemy* test = new CEnemy();
 	test->Init(0, 0);
 	test->SetTerrain(groundEntity);
+	test->SetTarget(test->GenerateTarget());
 	Mech* mech = new Mech();
 	mech->Init(test);
 	enemyMechList.push_back(mech);
@@ -378,6 +382,31 @@ void SceneText::Render()
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	EntityManager::GetInstance()->Render();
+	//testing if the stupid line working
+	Vector3 lineEnd = CPlayerInfo::GetInstance()->GetMech()->legDirection;
+	Vector3 playerPos = CPlayerInfo::GetInstance()->GetPos();
+	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(Vector3(playerPos.x, playerPos.y - 5, playerPos.z), Vector3(lineEnd.x + playerPos.x, lineEnd.y, lineEnd.z + playerPos.z), Color(1, 1, 0));
+	RenderHelper::RenderMesh(line);
+	delete line;
+	//render legs
+	float rotate = Math::RadianToDegree(atan2(CPlayerInfo::GetInstance()->GetMech()->legDirection.z, CPlayerInfo::GetInstance()->GetMech()->legDirection.x));
+	MS& ms = GraphicsManager::GetInstance()->GetModelStack();
+	ms.PushMatrix();
+	ms.Translate(CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetPosition().x, CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetPosition().y, CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetPosition().z);
+	ms.Rotate(-rotate, 0, 1, 0);
+	ms.Scale(CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetSize(), CPlayerInfo::GetInstance()->GetMech()->chassis->GetLeg()->GetSize());
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+	ms.PopMatrix();
+
+	for (auto it : enemyMechList) {
+		rotate = Math::RadianToDegree(atan2(it->legDirection.z, it->legDirection.x));
+		ms.PushMatrix();
+		ms.Translate(it->chassis->GetLeg()->GetPosition().x, it->chassis->GetLeg()->GetPosition().y, it->chassis->GetLeg()->GetPosition().z);
+		ms.Rotate(-rotate, 0, 1, 0);
+		ms.Scale(it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize(), it->chassis->GetLeg()->GetSize());
+		RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+		ms.PopMatrix();
+	}
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;

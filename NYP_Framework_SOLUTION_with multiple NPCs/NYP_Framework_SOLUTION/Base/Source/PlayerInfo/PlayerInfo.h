@@ -91,6 +91,8 @@ public:
 	// Update
 	void Update(double dt = 0.0333f);
 
+	inline Mech* GetMech() { return mech; }
+
 	// Constrain the position within the borders
 	void Constrain(void);
 

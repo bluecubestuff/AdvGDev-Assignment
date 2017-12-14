@@ -4,6 +4,9 @@
 #include "SceneGraph\UpdateTransformation.h"
 
 #include "EntityManager.h"
+#include "RenderHelper.h"
+#include "GraphicsManager.h"
+#include "MeshBuilder.h"
 
 #include "Mech.h"
 #include "Torso.h"
@@ -35,5 +38,14 @@ bool Chassis::GetMovability()
 void Chassis::Update(double dt)
 {
 	torso->SetPosition(parent->position);
-	leg->SetPosition(Vector3(torso->GetPosition().x, torso->GetPosition().y - 5, torso->GetPosition().z));
+	leg->SetPosition(Vector3(torso->GetPosition().x, torso->GetPosition().y - 7.5, torso->GetPosition().z));
+
+	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
+	ms.PushMatrix();
+	ms.LoadIdentity();
+	ms.Translate(leg->GetPosition().x, leg->GetPosition().y, leg->GetPosition().z);
+	float rotate = Math::RadianToDegree(atan2(parent->legDirection.y, parent->legDirection.x));
+	ms.Rotate(rotate, 0, 1, 0);
+	RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("leg"));
+	ms.PopMatrix();*/
 }

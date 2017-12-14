@@ -7,7 +7,7 @@ class Leg : public BasePart{
 public:
 	Leg();
 	virtual ~Leg();
-
+	virtual void Render() {}
 private:
 
 };
