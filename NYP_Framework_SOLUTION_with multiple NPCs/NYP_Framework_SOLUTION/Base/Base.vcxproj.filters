@@ -144,6 +144,9 @@
     <ClCompile Include="Source\Mech.cpp">
       <Filter>AssignmentEntity</Filter>
     </ClCompile>
+    <ClCompile Include="Source\enemygun.cpp">
+      <Filter>WeaponInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="Source\Mech.h">
       <Filter>AssignmentEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\enemygun.h">
+      <Filter>WeaponInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

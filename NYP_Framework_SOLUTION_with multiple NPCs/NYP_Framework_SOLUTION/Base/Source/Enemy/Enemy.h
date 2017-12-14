@@ -4,6 +4,7 @@
 
 class Mesh;
 class Mech;
+class CEnemyGun;
 
 class CEnemy :
 	public GenericEntity
@@ -21,6 +22,8 @@ protected:
 
 	Vector3 moveDir;
 	float rotateSpeed;
+
+	CEnemyGun* gunno;
 
 public:
 	CEnemy(void);

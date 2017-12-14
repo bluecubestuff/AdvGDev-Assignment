@@ -11,6 +11,7 @@
 #include "..\Leg.h"
 #include "..\Chassis.h"
 #include "..\Mech.h"
+#include "..\enemygun.h"
 
 #define AGRO_DIST 10000.f
 
@@ -61,6 +62,9 @@ void CEnemy::Init(void)
 	rotateSpeed = 45.f;
 	moveDir.Set(1, 0, 0);
 
+	gunno = new CEnemyGun();
+	gunno->Init();
+
 	// Initialise the Collider
 	//this->SetCollider(true);
 	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
@@ -96,6 +100,9 @@ void CEnemy::Init(float x, float y)
 
 	// Initialise the LOD meshes
 	InitLOD("cube", "sphere", "cubeSG");
+
+	gunno = new CEnemyGun();
+	gunno->Init();
 
 	// Initialise the Collider
 	//this->SetCollider(true);
@@ -202,10 +209,13 @@ void CEnemy::Update(double dt)
 			//cout << position << " - " << target << "..." << viewVector << endl;
 		}
 	}
-	else {
-		
-	}
-
+	//shooto
+	Vector3 shootDir = CPlayerInfo::GetInstance()->GetPos() - position;
+	shootDir.Normalize();
+	//shootDir.x += Math::RandFloatMinMax(-0.2, 0.2);
+	//shootDir.y += Math::RandFloatMinMax(-0.2, 0.2);
+	//shootDir.z += Math::RandFloatMinMax(-0.2, 0.2);
+	gunno->Discharge(position, position + shootDir);
 
 	// Constrain the position
 	Constrain();

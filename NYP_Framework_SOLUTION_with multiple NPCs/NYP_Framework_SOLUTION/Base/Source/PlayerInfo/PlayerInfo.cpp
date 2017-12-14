@@ -482,6 +482,7 @@ void CPlayerInfo::Update(double dt)
 // Constrain the position within the borders
 void CPlayerInfo::Constrain(void)
 {
+	Vector3 view = target - position;
 	// Constrain player within the boundary
 	if (position.x > maxBoundary.x - 1.0f)
 		position.x = maxBoundary.x - 1.0f;
@@ -495,6 +496,8 @@ void CPlayerInfo::Constrain(void)
 	//	position.y = minBoundary.y + 1.0f;
 	if (position.z < minBoundary.z + 1.0f)
 		position.z = minBoundary.z + 1.0f;
+
+	target = position + view;
 
 	// if the player is not jumping nor falling, then adjust his y position
 	if ((m_bJumpUpwards == false) && (m_bFallDownwards == false))
