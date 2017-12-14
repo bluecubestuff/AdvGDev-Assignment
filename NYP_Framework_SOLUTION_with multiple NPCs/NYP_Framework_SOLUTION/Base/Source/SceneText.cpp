@@ -387,6 +387,12 @@ void SceneText::Update(double dt)
 	ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
 	textObj[2]->SetText(ss1.str());
 
+	if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() <= 0) {
+		std::ostringstream ss3;
+		ss3 << "Deaded";
+		textObj[2]->SetText(ss3.str());
+	}
+
 	static float timer = 0.f;
 	timer += dt;
 	if (timer > 5.f) {

@@ -41,7 +41,7 @@ Chassis::~Chassis()
 
 bool Chassis::GetMovability()
 {
-	if (leg->GetHP() <= 0)
+	if (leg->GetHP() <= 0 && torso->GetHP() <= 0)
 		return false;
 	return true;
 }
