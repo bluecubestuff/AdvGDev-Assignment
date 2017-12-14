@@ -82,6 +82,7 @@ public:
 
 	// Get vector of objects from this Spatial Partition
 	vector<EntityBase*> GetObjects(Vector3 position, const float radius);
+	vector<EntityBase*> GetObjects(int xIndex, int zIndex, const float radius);
 
 	// Add a new object
 	void Add(EntityBase* theObject);

@@ -42,6 +42,7 @@ public:
 	bool CheckForCollision(void);
 	//check collision within spatial partition
 	bool CheckCollisionInPartition(void);
+
 private:
 	EntityManager();
 	virtual ~EntityManager();
@@ -51,6 +52,15 @@ private:
 
 	// Handler to Spatial Partition
 	CSpatialPartition* theSpatialPartition;
+
+	//laser check
+	bool CheckLaserCollision(EntityBase* _entity);
+	//aabb to aabb check
+	bool CheckAABBCollision(EntityBase* _entity);
+
+	//helper functions
+	//to get spatial partition index
+	void GetGridIndex(int posX, int posZ, int& xIndex, int& zIndex);
 };
 
 #endif // ENTITY_MANAGER_H

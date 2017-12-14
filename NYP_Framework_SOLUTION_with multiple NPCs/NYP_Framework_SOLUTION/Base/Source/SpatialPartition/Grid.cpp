@@ -255,7 +255,7 @@ void CGrid::SetDetailLevel(const CLevelOfDetails::DETAIL_LEVEL theDetailLevel)
 	}
 }
 
-Vector3 CGrid::GetIndex() const
+Vector3 CGrid::GetIndex()
 {
 	return index;
 }

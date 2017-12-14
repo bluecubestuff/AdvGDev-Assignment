@@ -274,6 +274,11 @@ vector<EntityBase*> CSpatialPartition::GetObjects(Vector3 position, const float 
 	return theGrid[xIndex*zNumOfGrid + zIndex].GetListOfObject();
 }
 
+vector<EntityBase*> CSpatialPartition::GetObjects(int xIndex, int zIndex, const float radius)
+{
+	return theGrid[xIndex*zNumOfGrid + zIndex].GetListOfObject();
+}
+
 /********************************************************************************
  Add a new object model
  ********************************************************************************/

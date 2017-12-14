@@ -74,5 +74,5 @@ public:
 	void SetDetailLevel(const CLevelOfDetails::DETAIL_LEVEL theDetailLevel);
 
 	// get index
-	Vector3 GetIndex() const;
+	Vector3 GetIndex();
 };
