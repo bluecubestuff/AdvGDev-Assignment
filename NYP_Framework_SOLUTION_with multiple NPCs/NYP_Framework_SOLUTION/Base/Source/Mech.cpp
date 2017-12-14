@@ -73,6 +73,7 @@ void Mech::PlayerControl(double dt)
 		KeyboardController::GetInstance()->IsKeyDown('S') ||
 		KeyboardController::GetInstance()->IsKeyDown('D'))
 	{
+		
 		if (chassis->GetMovability()) {
 			Vector3 viewVector = _tar - _pos;
 			Vector3 rightUV;

@@ -58,6 +58,8 @@ void Chassis::Update(double dt)
 			parent->attachedEntity->SetIsDone(true);
 			parent->isDead = true;
 		}
+		if (torso->obj_type == EntityBase::PLAYER_MECH)
+			leg->SetHP(0);
 
 	}
 
