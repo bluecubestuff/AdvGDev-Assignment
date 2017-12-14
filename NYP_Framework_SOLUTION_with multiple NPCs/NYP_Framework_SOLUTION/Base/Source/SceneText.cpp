@@ -269,6 +269,8 @@ void SceneText::Init()
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
 	textObj[0]->SetText("HELLO WORLD");
+
+	Math::InitRNG();
 }
 
 void SceneText::Update(double dt)
@@ -378,14 +380,27 @@ void SceneText::Update(double dt)
 	textObj[0]->SetText(ss.str());
 
 	std::ostringstream ss2;
-	ss2.precision(4);
-	ss2 << "Player Leg HP:" << playerInfo->GetMech()->chassis->GetLeg()->GetHP();
-	textObj[1]->SetText(ss2.str());
+	if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() > 0) {
+		ss2.precision(4);
+		ss2 << "Player Leg HP:" << playerInfo->GetMech()->chassis->GetLeg()->GetHP();
+		textObj[1]->SetText(ss2.str());
+	}
+	else {
+		ss2.precision(4);
+		ss2 << "Leg Deaded";
+		textObj[1]->SetText(ss2.str());
+	}
 
 	std::ostringstream ss1;
 	ss1.precision(4);
 	ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
 	textObj[2]->SetText(ss1.str());
+
+	if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() <= 0) {
+		std::ostringstream ss3;
+		ss3 << "Deaded";
+		textObj[2]->SetText(ss3.str());
+	}
 
 	static float timer = 0.f;
 	timer += dt;

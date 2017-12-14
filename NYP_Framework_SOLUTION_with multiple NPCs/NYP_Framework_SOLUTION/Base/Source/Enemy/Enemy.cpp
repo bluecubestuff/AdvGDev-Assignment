@@ -212,10 +212,11 @@ void CEnemy::Update(double dt)
 	//shooto
 	Vector3 shootDir = CPlayerInfo::GetInstance()->GetPos() - position;
 	shootDir.Normalize();
-	//shootDir.x += Math::RandFloatMinMax(-0.2, 0.2);
-	//shootDir.y += Math::RandFloatMinMax(-0.2, 0.2);
-	//shootDir.z += Math::RandFloatMinMax(-0.2, 0.2);
+	shootDir.x += Math::RandFloatMinMax(-0.1 , 0.1);
+	shootDir.y += Math::RandFloatMinMax(-0.1, 0.1);
+	shootDir.z += Math::RandFloatMinMax(-0.1, 0.1);
 	gunno->Discharge(position, position + shootDir);
+	gunno->Update(dt);
 
 	// Constrain the position
 	Constrain();
