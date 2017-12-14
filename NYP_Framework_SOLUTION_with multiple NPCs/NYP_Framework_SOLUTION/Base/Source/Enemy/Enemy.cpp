@@ -83,6 +83,9 @@ void CEnemy::Init(float x, float y)
 	maxBoundary.Set(1, 1, 1);
 	minBoundary.Set(-1, -1, -1);
 
+	rotateSpeed = 45.f;
+	moveDir.Set(1, 0, 0);
+
 	// Set speed
 	m_dSpeed = 10.0;
 
@@ -168,7 +171,24 @@ void CEnemy::Update(double dt)
 	target = CPlayerInfo::GetInstance()->GetPos();
 	Vector3 viewVector = (target - position);
 	if (viewVector.LengthSquared() > AGRO_DIST) {
-		position += viewVector.Normalized() * (float)m_dSpeed * (float)dt;
+		//rotate enemy to move towards player
+		Mtx44 mtx;
+		//get angle between view and move
+		float dot = viewVector.x * moveDir.x + viewVector.z + moveDir.z;
+		float det = viewVector.x*moveDir.z - viewVector.z*moveDir.x;
+		float angle = Math::RadianToDegree(atan2(dot, det));
+		//positive is right
+		if (angle > -90 && angle < 90) {
+			mtx.SetToRotation(rotateSpeed * dt, 0, 1, 0);
+			moveDir = mtx * moveDir;
+		}
+		else {
+			//negative is left
+			mtx.SetToRotation(-rotateSpeed * dt, 0, 1, 0);
+			moveDir = mtx * moveDir;
+		}
+
+		position += moveDir.Normalized() * (float)m_dSpeed * (float)dt;
 		//cout << position << " - " << target << "..." << viewVector << endl;
 	}
 
