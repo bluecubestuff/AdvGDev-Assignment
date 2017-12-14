@@ -9,6 +9,13 @@ public:
 	BasePart(Mesh* mesh) : GenericEntity(mesh) {}
 	virtual ~BasePart() {}
 
+	enum PART_TYPE
+	{
+		NONE = 0,
+		TORSO,
+		LEG,
+	} partType;
+
 	inline int GetHP() { return hp; }
 	inline float GetSize() { return size;}
 	inline void SetHP(int _hp) { hp = _hp; }

@@ -32,6 +32,10 @@ public:
 	float sensitivity;
 
 	Chassis* chassis;
+
+	bool isDead;
+	bool bDelete;
+
 private:
 	//control for player
 	void PlayerControl(double dt);
