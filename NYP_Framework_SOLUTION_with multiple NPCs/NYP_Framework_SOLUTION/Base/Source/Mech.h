@@ -34,6 +34,10 @@ public:
 
 	Chassis* chassis;
 
+
+	bool isDead;
+	bool bDelete;
+
 	Mesh* legMesh;
 	Mesh* torsoMesh;
 private:

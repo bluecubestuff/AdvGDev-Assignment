@@ -20,6 +20,8 @@ void Mech::Init(GenericEntity* attach)
 	speed = moveDistance / moveTimer;
 	rotationSpeed = 45.f;
 	sensitivity = 120.f;
+	isDead = false;
+	bDelete = false;
 	//if attach is nth, means that the user want to init as a player
 	if (attach == nullptr) {
 		controlType = PLAYER;

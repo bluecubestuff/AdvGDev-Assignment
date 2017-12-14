@@ -6,6 +6,7 @@
 #include "RenderHelper.h"
 #include "../SpatialPartition/SpatialPartition.h"
 #include "../SceneGraph/SceneGraph.h"
+#include "../BasePart.h"
 
 CProjectile::CProjectile(void)
 	: modelMesh(NULL)
@@ -161,8 +162,16 @@ void CProjectile::onHit(EntityBase * other)
 
 		if (other->obj_type == ENEMY_MECH)
 		{
+			BasePart* part = dynamic_cast<BasePart*>(other);
+			part->SetHP(part->GetHP() - 20);
 			isDone = true;
-			other->SetIsDone(true);
+
+			if (part->GetHP() <= 0)
+			{
+				if (part->partType == BasePart::LEG)
+					other->SetIsDone(true);
+			}
+			//other->SetIsDone(true);
 		}
 	}
 	//else

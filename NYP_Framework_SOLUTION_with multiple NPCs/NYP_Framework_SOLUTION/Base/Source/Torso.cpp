@@ -14,6 +14,7 @@ Torso::Torso()
 	m_bCollider = true;
 	SetAABB(scale * 0.5, -scale  * 0.5);
 	EntityManager::GetInstance()->AddEntity(this, true);
+	partType = BasePart::TORSO;
 }
 
 Torso::~Torso()

@@ -3,7 +3,8 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 #include "..\PlayerInfo\PlayerInfo.h"
-
+#include "../Mech.h"
+#include "../Chassis.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
@@ -171,6 +172,9 @@ GroundEntity* CEnemy::GetTerrain(void)
 // Update
 void CEnemy::Update(double dt)
 {
+	if (!attached->chassis->GetMovability())
+		return;
+
 	//enemy will just chase the player
 	target = CPlayerInfo::GetInstance()->GetPos();
 	Vector3 viewVector = (target - position);

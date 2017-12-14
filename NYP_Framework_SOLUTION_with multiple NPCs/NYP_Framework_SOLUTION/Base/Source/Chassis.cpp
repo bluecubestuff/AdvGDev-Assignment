@@ -51,6 +51,16 @@ void Chassis::Update(double dt)
 	torso->SetPosition(parent->position);
 	leg->SetPosition(Vector3(torso->GetPosition().x, torso->GetPosition().y - 7.5, torso->GetPosition().z));
 
+	if (torso->GetHP() <= 0)
+	{
+		if (torso->obj_type == EntityBase::ENEMY_MECH)
+		{
+			parent->attachedEntity->SetIsDone(true);
+			parent->isDead = true;
+		}
+
+	}
+
 	//cout << "TorsePos: " << torso->GetPosition() << endl;
 	//cout << "LegPos: " << leg->GetPosition() << endl;
 	/*MS& ms = GraphicsManager::GetInstance()->GetModelStack();
