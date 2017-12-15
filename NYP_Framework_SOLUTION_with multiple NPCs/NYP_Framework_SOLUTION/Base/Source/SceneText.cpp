@@ -435,7 +435,7 @@ void SceneText::Render()
 	// Setup 3D pipeline then render 3D
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
-	EntityManager::GetInstance()->Render();
+
 	//testing if the stupid line working
 	Vector3 lineEnd = CPlayerInfo::GetInstance()->GetMech()->legDirection;
 	Vector3 playerPos = CPlayerInfo::GetInstance()->GetPos();
@@ -483,6 +483,8 @@ void SceneText::Render()
 			it->torsoMesh = MeshBuilder::GetInstance()->GetMesh("lowTorso");
 		}
 	}
+
+	EntityManager::GetInstance()->Render();
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
