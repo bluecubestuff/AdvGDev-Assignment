@@ -177,7 +177,9 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("3", "OBJ//cube.obj")->textureID = LoadTGA("Image//uvmap.tga");
 
 	//random stuff mesh 
-	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("greencube", Color(0, 1, 0), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 0.9f);
+	MeshBuilder::GetInstance()->GenerateCube("blackcube", Color(0, 0, 0), 0.8f);
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
@@ -189,6 +191,12 @@ void SceneText::Init()
 	// Create entities into the scene
 	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
+
+	GenericEntity* wall = Create::Entity("bluecube", Vector3(-10.0f, 0.0f, -20.0f));
+	wall->SetScale(Vector3(10.f,10.f,0.5f));
+	wall->SetCollider(true);
+	wall->SetAABB(Vector3(10.f, 10.f, 0.5f), Vector3(-10.f, -10.f, -0.5f));
+	wall->InitLOD("greencube", "bluecube", "blackcube");
 
 	//============================================================================
 	GenericEntity* aCube = Create::Entity("bluecube", Vector3(-20.0f, 0.0f, -20.0f));
