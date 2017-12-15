@@ -10,7 +10,7 @@
 #include "RenderHelper.h"
 #include "Enemy\Enemy.h"
 #include "leg.h"
-
+#include "Torso.h"
 void Mech::Init(GenericEntity* attach)
 {
 	torsoDirection.Set(1, 0, 0);
@@ -152,6 +152,15 @@ void Mech::PlayerControl(double dt)
 
 void Mech::NPCControl(double dt)
 {
+	if (chassis->GetTorso()->obj_type == EntityBase::ENEMY_MECH)
+	{
+		if (chassis->GetTorso()->GetHP() <= 0)
+		{
+			attachedEntity->SetIsDone(true);
+			isDead = true;
+		}
+	}
+
 	if (chassis->GetMovability())
 	{
 		CEnemy* me = dynamic_cast<CEnemy*>(attachedEntity);
