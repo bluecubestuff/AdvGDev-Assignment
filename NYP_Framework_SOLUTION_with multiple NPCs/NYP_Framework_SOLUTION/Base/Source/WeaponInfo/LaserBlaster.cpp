@@ -23,7 +23,7 @@ void CLaserBlaster::Init(void)
 	// The maximum number of ammunition for this magazine for this weapon
 	maxMagRounds = 5;
 	// The current total number of rounds currently carried by this player
-	totalRounds = 10;
+	totalRounds = 10000;
 	// The max total number of rounds currently carried by this player
 	maxTotalRounds = 10;
 
@@ -50,7 +50,7 @@ void CLaserBlaster::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _so
 											_direction,
 											10.0f,
 											2.0f,
-											100.0f,
+											1000.f,
 											_source);
 			aLaser->SetIsLaser(true);
 			aLaser->SetCollider(false);

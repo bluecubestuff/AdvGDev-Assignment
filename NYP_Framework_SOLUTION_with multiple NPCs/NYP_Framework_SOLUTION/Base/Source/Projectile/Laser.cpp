@@ -80,6 +80,9 @@ void CLaser::Update(double dt)
 	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
 					position.y + (float)(theDirection.y * dt * m_fSpeed),
 					position.z + (float)(theDirection.z * dt * m_fSpeed));
+
+	if (position.x > 500 || position.x < -500 || position.z < -500 || position.z > 500)
+		isDone = true;
 }
 
 
