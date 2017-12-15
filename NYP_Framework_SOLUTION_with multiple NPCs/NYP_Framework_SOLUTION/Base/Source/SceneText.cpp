@@ -181,6 +181,12 @@ void SceneText::Init()
 	//Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
 	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
+	GenericEntity* wall = Create::Entity("bluecube", Vector3(-10.0f, 0.0f, -20.0f));
+	wall->SetScale(Vector3(10.f,10.f,0.5f));
+	wall->SetCollider(true);
+	wall->SetAABB(Vector3(10.f, 10.f, 1.f), Vector3(-10.f, -10.f, -1.f));
+	//wall->InitLOD()
+
 	//============================================================================
 	//GenericEntity* aCube = Create::Entity("bluecube", Vector3(-20.0f, 0.0f, -20.0f));
 	//aCube->SetCollider(true);
