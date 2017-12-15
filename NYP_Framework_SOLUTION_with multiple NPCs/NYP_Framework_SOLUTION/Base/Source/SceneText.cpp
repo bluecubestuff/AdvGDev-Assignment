@@ -168,9 +168,10 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("destroyedLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//boom.tga");
 
 	//random stuff mesh 
-	MeshBuilder::GetInstance()->GenerateCube("greencube", Color(0, 1, 0), 1.0f);
-	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 0.9f);
+	MeshBuilder::GetInstance()->GenerateCube("greencube", Color(0, 0.3, 0), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 0.5), 0.9f);
 	MeshBuilder::GetInstance()->GenerateCube("blackcube", Color(0, 0, 0), 0.8f);
+	MeshBuilder::GetInstance()->GenerateSphere("midsphere", Color(0.8, 0, 0), 18, 36, 0.4f);
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
@@ -189,6 +190,12 @@ void SceneText::Init()
 	wall->SetAABB(Vector3(10.f, 10.f, 0.5f), Vector3(-10.f, -10.f, -0.5f));
 	wall->InitLOD("greencube", "bluecube", "blackcube");
 
+
+	GenericEntity* sphere = Create::Entity("bluecube", Vector3(-30.0f, 0.0f, -20.0f));
+	sphere->SetScale(Vector3(2.f, 2.f, 2.f));
+	sphere->SetCollider(true);
+	sphere->SetAABB(Vector3(5.f, 5.f, 5.f), Vector3(-5.f, -5.f, -5.f));
+	sphere->InitLOD("sphere", "midsphere", "blackcube");
 	//============================================================================
 	//GenericEntity* aCube = Create::Entity("bluecube", Vector3(-20.0f, 0.0f, -20.0f));
 	//aCube->SetCollider(true);
