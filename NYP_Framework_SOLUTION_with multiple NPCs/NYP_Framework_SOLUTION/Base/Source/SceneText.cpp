@@ -167,6 +167,15 @@ void SceneText::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("highLeg", "OBJ//highLeg.obj")->textureID = LoadTGA("Image//hLeg.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("destroyedLeg", "OBJ//cube.obj")->textureID = LoadTGA("Image//boom.tga");
 
+	//for lod requirement
+	MeshBuilder::GetInstance()->GenerateOBJ("buildingLow", "OBJ//cube.obj")->textureID = LoadTGA("Image//front.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("buildingMedium", "OBJ//cube.obj")->textureID = LoadTGA("Image//yelow.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("buildingHigh", "OBJ//cube.obj")->textureID = LoadTGA("Image//white.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("1", "OBJ//cube.obj")->textureID = LoadTGA("Image//color.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("2", "OBJ//cube.obj")->textureID = LoadTGA("Image//suzanne.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("3", "OBJ//cube.obj")->textureID = LoadTGA("Image//uvmap.tga");
+
 	//random stuff mesh 
 	MeshBuilder::GetInstance()->GenerateCube("bluecube", Color(0, 0, 1), 1.0f);
 
@@ -182,10 +191,35 @@ void SceneText::Init()
 	//Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
 
 	//============================================================================
-	//GenericEntity* aCube = Create::Entity("bluecube", Vector3(-20.0f, 0.0f, -20.0f));
-	//aCube->SetCollider(true);
-	//aCube->SetAABB(Vector3(1.f, 1.f, 1.f), Vector3( -1.f, -1.f,  -1.f));
-	//aCube->InitLOD("bluecube", "cubeSG", "quad");
+	GenericEntity* aCube = Create::Entity("bluecube", Vector3(-20.0f, 0.0f, -20.0f));
+	aCube->SetScale(Vector3(5, 20, 5));
+	aCube->SetCollider(true);
+	aCube->SetAABB(Vector3(5, 20, 5), Vector3(-5, 0, -5));
+	aCube->InitLOD("buildingLow", "buildingMedium", "buildingHigh");
+
+	aCube = Create::Entity("bluecube", Vector3(-100.f, 0.0f, -100.f));
+	aCube->SetScale(Vector3(5, 20, 5));
+	aCube->SetCollider(true);
+	aCube->SetAABB(Vector3(5, 20, 5), Vector3(-5, 0, -5));
+	aCube->InitLOD("buildingLow", "buildingMedium", "buildingHigh");
+
+	aCube = Create::Entity("bluecube", Vector3(100.f, 0.0f, 100.f));
+	aCube->SetScale(Vector3(5, 20, 5));
+	aCube->SetCollider(true);
+	aCube->SetAABB(Vector3(5, 20, 5), Vector3(-5, 0, -5));
+	aCube->InitLOD("buildingLow", "buildingMedium", "buildingHigh");
+
+	aCube = Create::Entity("bluecube", Vector3(-200.0f, -5.f, -200.0f));
+	aCube->SetScale(Vector3(40, 5, 20));
+	aCube->SetCollider(true);
+	aCube->SetAABB(Vector3(20, 5, 10), Vector3(-20, 0, -10));
+	aCube->InitLOD("1", "2", "3");
+
+	aCube = Create::Entity("bluecube", Vector3(-50.f, -5.f, -10.f));
+	aCube->SetScale(Vector3(40, 5, 20));;
+	aCube->SetCollider(true);
+	aCube->SetAABB(Vector3(20, 5, 10), Vector3(-20, 0, -10));
+	aCube->InitLOD("1", "2", "3");
 
 	// //Add the pointer to this new entity to the Scene Graph
 	//CSceneNode* theNode = CSceneGraph::GetInstance()->AddNode(aCube);
