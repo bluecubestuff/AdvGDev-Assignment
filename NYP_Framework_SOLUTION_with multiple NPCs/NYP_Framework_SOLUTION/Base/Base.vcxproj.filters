@@ -40,6 +40,9 @@
     <Filter Include="AssignmentEntity">
       <UniqueIdentifier>{9eab60fb-5443-4312-a8c0-e2753172596b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua">
+      <UniqueIdentifier>{c7c3da98-e84a-4bc9-960e-3ad6fc3bf4f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -147,6 +150,9 @@
     <ClCompile Include="Source\enemygun.cpp">
       <Filter>WeaponInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Lua\LuaInterface.cpp">
+      <Filter>Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -250,6 +256,24 @@
     </ClInclude>
     <ClInclude Include="Source\enemygun.h">
       <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\lauxlib.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\lua.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\lua.hpp">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\luaconf.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\lualib.h">
+      <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lua\LuaInterface.h">
+      <Filter>Lua</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
