@@ -27,9 +27,14 @@
 #include "Leg.h"
 #include "Torso.h"
 #include "RenderHelper.h"
+#include "WaypointData.h"
+#include "Node.h"
+#include "Edge.h"
 
 #include <iostream>
 using namespace std;
+
+#define DIST_BETWEEN_NODES
 
 SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
@@ -313,11 +318,13 @@ void SceneText::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
 	textObj[0]->SetText("HELLO WORLD");
+
+	WaypointData::GetInstance()->Init();
 
 	Math::InitRNG();
 }
@@ -451,6 +458,10 @@ void SceneText::Update(double dt)
 		textObj[2]->SetText(ss3.str());
 	}
 
+	std::ostringstream ss4;
+	ss4 << '[' << playerInfo->GetPos().x << ' ' << playerInfo->GetPos().y << ' ' << playerInfo->GetPos().z << ']';
+	textObj[3]->SetText(ss4.str());
+
 	static float timer = 0.f;
 	timer += dt;
 	if (timer > 5.f) {
@@ -530,6 +541,27 @@ void SceneText::Render()
 		else {
 			it->legMesh = MeshBuilder::GetInstance()->GetMesh("lowLeg");
 			it->torsoMesh = MeshBuilder::GetInstance()->GetMesh("lowTorso");
+		}
+	}
+
+	//render all the path node spheres
+	for (auto it : WaypointData::GetInstance()->nodeList)
+	{
+		if (it->active)
+		{
+			ms.PushMatrix();
+			ms.Translate(it->x, -10, it->y);
+			ms.Scale(it->size, it->size, it->size);
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("sphere"));
+			ms.PopMatrix();
+
+			//for (auto it2 : it->Edges)
+			//{
+			//	ms.PushMatrix();
+			//	ms.LoadIdentity();
+			//	RenderHelper::RenderMesh(it2->mesh);
+			//	ms.PopMatrix();
+			//}
 		}
 	}
 

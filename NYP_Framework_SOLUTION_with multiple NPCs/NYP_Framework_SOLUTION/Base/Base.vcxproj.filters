@@ -43,6 +43,9 @@
     <Filter Include="Lua">
       <UniqueIdentifier>{c7c3da98-e84a-4bc9-960e-3ad6fc3bf4f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Waypoint">
+      <UniqueIdentifier>{7d428b4a-8db8-4f63-8575-1e1b1e49f8d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -152,6 +155,15 @@
     </ClCompile>
     <ClCompile Include="Source\Lua\LuaInterface.cpp">
       <Filter>Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Edge.cpp">
+      <Filter>Waypoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node.cpp">
+      <Filter>Waypoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WaypointData.cpp">
+      <Filter>Waypoint</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +286,15 @@
     </ClInclude>
     <ClInclude Include="Source\Lua\LuaInterface.h">
       <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Edge.h">
+      <Filter>Waypoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Node.h">
+      <Filter>Waypoint</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WaypointData.h">
+      <Filter>Waypoint</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
