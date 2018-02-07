@@ -10,6 +10,7 @@
 #include "../WeaponInfo/GrenadeThrow.h"
 #include "..\Mech.h"
 #include "..\KeyManager.h"
+#include "../SpatialPartition/SpatialPartition.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -477,6 +478,9 @@ void CPlayerInfo::Update(double dt)
 		attachedCamera->SetCameraTarget(target);
 		attachedCamera->SetCameraUp(up);
 	}
+
+	xIndex = (((int)position.x - (-CSpatialPartition::GetInstance()->GetxSize() >> 1)) / (CSpatialPartition::GetInstance()->GetxSize() / CSpatialPartition::GetInstance()->GetxNumOfGrid()));
+	zIndex = (((int)position.z - (-CSpatialPartition::GetInstance()->GetzSize() >> 1)) / (CSpatialPartition::GetInstance()->GetzSize() / CSpatialPartition::GetInstance()->GetzNumOfGrid()));
 }
 
 // Constrain the position within the borders

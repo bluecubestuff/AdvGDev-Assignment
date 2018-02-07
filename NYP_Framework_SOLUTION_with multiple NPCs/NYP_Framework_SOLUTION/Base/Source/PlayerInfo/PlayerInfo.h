@@ -100,6 +100,9 @@ public:
 	void AttachCamera(FPSCamera* _cameraPtr);
 	void DetachCamera(void);
 
+	int xIndex;
+	int zIndex;
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
