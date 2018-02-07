@@ -22,11 +22,10 @@ torsoHP = 100
 -- Weapons
 -- EG -> enemyGun
 EG_magRounds = 100000000
-EG_maxMagRounds
-
-
-
-
+EG_maxMagRounds = 100000000
+EG_totalRounds = 100000000
+EG_maxTotalRounds = 100000000
+EG_timeBetweenShots 
 
 
 
