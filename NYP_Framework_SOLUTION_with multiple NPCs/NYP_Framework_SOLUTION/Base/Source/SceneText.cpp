@@ -30,6 +30,7 @@
 #include "WaypointData.h"
 #include "Node.h"
 #include "Edge.h"
+#include "Lua\LuaInterface.h"
 
 #include <iostream>
 using namespace std;
@@ -325,7 +326,7 @@ void SceneText::Init()
 	textObj[0]->SetText("HELLO WORLD");
 
 	WaypointData::GetInstance()->Init();
-
+	max_enemies = CLuaInterface::GetInstance()->getIntValue("max_enemies");
 	Math::InitRNG();
 }
 
@@ -465,7 +466,7 @@ void SceneText::Update(double dt)
 	static float timer = 0.f;
 	timer += dt;
 	if (timer > 5.f) {
-		if (enemyMechList.size() < 5) {
+		if (enemyMechList.size() < max_enemies) {
 			//generate a random pos a certain dist away
 			float dist = Math::RandFloatMinMax(80, 100);
 			//generate a random direction;

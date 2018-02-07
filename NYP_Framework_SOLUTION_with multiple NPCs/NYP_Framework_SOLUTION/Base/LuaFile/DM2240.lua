@@ -1,7 +1,27 @@
-title = "DM2240 - Week 14 Scripting"
-width = 800
-height = 600
+title = "A2-Lua"
 
+-- APPLICATION
+width = 1024
+height = 720
+
+-- ENEMY
+max_enemies = 5
+
+
+-- PLAYER
+forward = "W"
+back = "S"
+right = "D"
+left = "A"
+
+reload = "R"
+grenade = "G"
+
+
+Services.Input:addEventListener(nil, onMouseMoveEvent, InputEvent.EVENT_MOUSEMOVE)
+Services.Input:addEventListener(nil, onMouseDownEvent, InputEvent.EVENT_MOUSEDOWN)
+
+--[[
 function SaveToLuaFile(outputString, overwrite)
 	print("SaveToLuaFile...")
 	local f;					-- The file
@@ -16,3 +36,4 @@ function SaveToLuaFile(outputString, overwrite)
 	f:close()
 	print("OK")
 end
+--]]

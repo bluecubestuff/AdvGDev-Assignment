@@ -18,10 +18,15 @@ public:
 	void Run();
 	// Drop Lua Interface class
 	void Drop();
+
+
 	// Get int value
 	int getIntValue(const char* name);
 	// Get a float value through the Lua Interface Class
 	float getFloatValue(const char* varName);
+	// Get a char value through lua interface
+	char getCharValue(const char* varName);
+
 	// Save an integer value through the Lua Interface Class
 	void saveIntValue(const char* varName, const int value, const bool bOverwrite = NULL);
 	// Save a float value through the Lua Interface Class

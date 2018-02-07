@@ -11,6 +11,9 @@
 #include "Enemy\Enemy.h"
 #include "leg.h"
 #include "Torso.h"
+
+#include "KeyManager.h"
+
 void Mech::Init(GenericEntity* attach)
 {
 	torsoDirection.Set(1, 0, 0);
@@ -68,32 +71,32 @@ void Mech::PlayerControl(double dt)
 	Vector3 _pos = CPlayerInfo::GetInstance()->GetPos();
 	Vector3 _tar = CPlayerInfo::GetInstance()->GetTarget();
 																// Update the position if the WASD buttons were activated
-	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
-		KeyboardController::GetInstance()->IsKeyDown('A') ||
-		KeyboardController::GetInstance()->IsKeyDown('S') ||
-		KeyboardController::GetInstance()->IsKeyDown('D'))
+	if (KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("forward")) ||
+		KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("back")) ||
+		KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("right")) ||
+		KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("left")))
 	{
 		
 		if (chassis->GetMovability()) {
 			Vector3 viewVector = _tar - _pos;
 			Vector3 rightUV;
-			if (KeyboardController::GetInstance()->IsKeyDown('W'))
+			if (KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("forward")))
 			{
 				_pos += legDirection.Normalized() * speed;
 				CPlayerInfo::GetInstance()->SetPos(_pos);
 			}
-			else if (KeyboardController::GetInstance()->IsKeyDown('S'))
+			else if (KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("back")))
 			{
 				_pos -= legDirection.Normalized() * speed;
 				CPlayerInfo::GetInstance()->SetPos(_pos);
 			}
-			if (KeyboardController::GetInstance()->IsKeyDown('A'))
+			if (KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("left")))
 			{
 				Mtx44 rotate;
 				rotate.SetToRotation(rotationSpeed * dt, 0, 1, 0);
 				legDirection = rotate * legDirection;
 			}
-			else if (KeyboardController::GetInstance()->IsKeyDown('D'))
+			else if (KeyboardController::GetInstance()->IsKeyDown(KeyManager::GetInstance()->GetKey("right")))
 			{
 				Mtx44 rotate;
 				rotate.SetToRotation(-rotationSpeed * dt, 0, 1, 0);

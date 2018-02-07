@@ -27,7 +27,7 @@ bool CLuaInterface::Init()
 		luaL_openlibs(theLuaState);
 
 		//Load lua script
-		luaL_dofile(theLuaState, "Image//DM2240.lua");
+		luaL_dofile(theLuaState, "LuaFile//DM2240.lua");
 
 		result = true;
 	}
@@ -80,6 +80,18 @@ float CLuaInterface::getFloatValue(const char* varName)
 	return (float)lua_tonumber(theLuaState, -1);
 }
 
+char CLuaInterface::getCharValue(const char * varName)
+{
+	lua_getglobal(theLuaState, varName);
+
+	size_t len;
+	const char* cstr = lua_tolstring(theLuaState, -1, &len);
+	if (len > 0)
+		return cstr[0];
+
+	return 0;
+}
+
 // Save an integer value through the Lua Interface Class
 void CLuaInterface::saveIntValue(const char* varName,
 	const int value, const bool bOverwrite)
@@ -91,6 +103,7 @@ void CLuaInterface::saveIntValue(const char* varName,
 	lua_pushinteger(theLuaState, bOverwrite);
 	lua_call(theLuaState, 2, 0); cout << "....................";
 }
+
 // Save a float value through the Lua Interface Class
 void CLuaInterface::saveFloatValue(const char* varName,
 	const float value, const bool bOverwrite)

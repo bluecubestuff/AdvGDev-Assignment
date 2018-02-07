@@ -31,6 +31,8 @@ public:
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
+	int max_enemies;
+
 	ShaderProgram* currProg;
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;

@@ -16,6 +16,7 @@
 
 // Include LuaInterface
 #include "../Lua/LuaInterface.h"
+#include "KeyManager.h"
 
 #include "SceneText.h"
 
@@ -66,8 +67,11 @@ void Application::Init()
 
 	//Lua testing stuff
 	CLuaInterface::GetInstance()->Run();
-	CLuaInterface::GetInstance()->saveFloatValue("Player1", 200.10, true);
-	CLuaInterface::GetInstance()->saveIntValue("Player2", 100);
+	//CLuaInterface::GetInstance()->saveFloatValue("Player1", 200.10, true);
+	//CLuaInterface::GetInstance()->saveIntValue("Player2", 100);
+
+	// Init keys
+	KeyManager::GetInstance()->Init();
 
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
@@ -86,7 +90,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "NYP Framework", NULL, NULL);
+	m_window = glfwCreateWindow(m_window_width, m_window_height, "GDev A2", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)

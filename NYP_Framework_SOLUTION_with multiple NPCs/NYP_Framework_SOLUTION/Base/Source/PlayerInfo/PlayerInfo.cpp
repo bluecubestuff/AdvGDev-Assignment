@@ -9,6 +9,7 @@
 #include "../WeaponInfo/LaserBlaster.h"
 #include "../WeaponInfo/GrenadeThrow.h"
 #include "..\Mech.h"
+#include "..\KeyManager.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -423,7 +424,7 @@ void CPlayerInfo::Update(double dt)
 	}
 
 	// Update the weapons
-	if (KeyboardController::GetInstance()->IsKeyReleased('R'))
+	if (KeyboardController::GetInstance()->IsKeyReleased(KeyManager::GetInstance()->GetKey("reload")))
 	{
 		if (primaryWeapon)
 			primaryWeapon->Reload();
@@ -450,7 +451,7 @@ void CPlayerInfo::Update(double dt)
 			secondaryWeapon->Discharge(position, target, this);
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('G'))
+	if (KeyboardController::GetInstance()->IsKeyPressed(KeyManager::GetInstance()->GetKey("grenade")))
 	{
 		if (grenade)
 			grenade->Discharge(position, target, this);
