@@ -2,6 +2,7 @@
 
 #include "Node.h"
 #include "Edge.h"
+#include "Vector3.h";
 
 void WaypointData::Init()
 {
@@ -29,24 +30,57 @@ void WaypointData::Init()
 			edgy = new Edge();
 			edgy->Set(nodeList[i], nodeList[i - gridCount]);
 			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
 		}
 		if (i + gridCount < gridCount * gridCount)
 		{
 			edgy = new Edge();
 			edgy->Set(nodeList[i], nodeList[i + gridCount]);
 			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
 		}
 		if (i + 1 < gridCount * gridCount)
 		{
 			edgy = new Edge();
 			edgy->Set(nodeList[i], nodeList[i + 1]);
 			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
 		}
 		if (i - 1 >= 0)
 		{
 			edgy = new Edge();
 			edgy->Set(nodeList[i], nodeList[i - 1]);
 			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
 		}
 	}
+}
+
+Node * WaypointData::GetNode(unsigned ID)
+{
+	return nodeList[ID];
+}
+
+Node * WaypointData::GetNearestNode(Vector3 pos)
+{
+	int distance = INT_MAX;
+	Node* nearestNode = nullptr;
+	for (auto it : nodeList)
+	{
+		Vector3 v = pos - Vector3(it->x, it->y);
+		if (v.Length() < distance)
+		{
+			nearestNode = it;
+		}
+	}
+	return nearestNode;
+}
+
+Edge * WaypointData::GetEdge(unsigned ID)
+{
+	return edgeList[ID];
 }

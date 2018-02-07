@@ -13,6 +13,10 @@
 #include "..\Mech.h"
 #include "..\enemygun.h"
 
+#include "../WaypointData.h"
+#include "../Node.h"
+#include "../Edge.h"
+
 #define AGRO_DIST 10000.f
 
 CEnemy::CEnemy()
@@ -154,6 +158,85 @@ void CEnemy::SetTerrain(GroundEntity* m_pTerrain)
 	}
 }
 
+bool CEnemy::AStar(Vector3 end)
+{
+	//a star open and closed list
+	std::list<PathFindNode> openList;
+	std::list<unsigned> closedList;
+	//previous vector of nodes
+	std::vector<int> previous;
+	previous.resize(WaypointData::GetInstance()->nodeList.size());
+	std::fill(previous.begin(), previous.end(), -1);
+
+	//make npc move to the nearest node
+	unsigned start = WaypointData::GetInstance()->GetNearestNode(position)->ID;
+	unsigned endNode = WaypointData::GetInstance()->GetNearestNode(end)->ID;
+
+	//push the first PathNode into the list
+	openList.push_back(PathFindNode(start, endNode, start));
+
+	while (!openList.empty())
+	{
+		Node* curr = WaypointData::GetInstance()->GetNode(openList.front().nodeID);
+		closedList.push_back(openList.front().nodeID);
+		openList.pop_front();
+
+		//check if curr is end alr
+		if (curr->ID == endNode)
+		{
+			path.clear();
+			path.push_back(curr);
+			while (curr->ID != start)
+			{
+				curr = WaypointData::GetInstance()->GetNode(previous[curr->ID]);
+				path.push_back(curr);
+			}
+			return true;
+		}
+
+
+		//push in all the surronding nodes into the open list if they not in close
+		for (auto it : curr->Edges)
+		{
+			bool visited = false;
+			//check if dst has been visited
+			for (auto visitedNode : closedList)
+			{
+				if (visitedNode == it->dst->ID)
+				{
+					visited = true;
+					break;
+				}
+			}
+			//if not visited
+			if (!visited)
+			{
+				bool inserted = false;
+				//the new node to be inserted
+				PathFindNode newPFNode(it->dst->ID, endNode, start);
+				//sort insert the nodes into open
+				for (std::list<PathFindNode>::iterator openNode = openList.begin(); openNode != openList.end(); ++openNode)
+				{
+					PathFindNode _curr = *openNode;
+					if (newPFNode.f_cost < _curr.f_cost)
+					{
+						//if the f_cost is lower, insert it infront
+						openList.insert(openNode, newPFNode);
+						inserted = true;
+						break;
+					}
+				}
+				if (!inserted)
+					openList.push_back(newPFNode);
+
+				//set the previous
+				previous[newPFNode.nodeID] = curr->ID;
+			}
+		}
+	}
+	return false;
+}
+
 // Get position
 Vector3 CEnemy::GetPos(void) const
 {
@@ -284,4 +367,18 @@ Vector3 CEnemy::GenerateTarget(void)
 void CEnemy::SetRandomSeed(const int m_iSeed)
 {
 	this->m_iSeed = m_iSeed;
+}
+
+PathFindNode::PathFindNode(unsigned _node, unsigned dstID, unsigned start)
+{
+	nodeID = _node;
+	Node* currNode = WaypointData::GetInstance()->GetNode(_node);
+	Node* dstNode = WaypointData::GetInstance()->GetNode(dstID);
+	Node* startNode = WaypointData::GetInstance()->GetNode(start);
+
+	Vector3 g(abs(currNode->x - startNode->x), abs(currNode->y - startNode->y));
+	g_cost = g.Length();
+	Vector3 h(abs(currNode->x - dstNode->x), abs(currNode->y - dstNode->y));
+	h_cost = h.Length();
+	f_cost = g_cost + h_cost;
 }

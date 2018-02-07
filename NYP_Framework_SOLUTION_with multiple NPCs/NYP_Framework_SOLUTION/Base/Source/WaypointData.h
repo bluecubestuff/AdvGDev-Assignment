@@ -6,12 +6,17 @@
 
 class Node;
 class Edge;
+class Vector3;
 class WaypointData : public Singleton<WaypointData>
 {
 public:
 	void Init();
+	Node* GetNode(unsigned ID);
+	Node* GetNearestNode(Vector3 pos);
+	Edge* GetEdge(unsigned ID);
 
 	std::vector<Node*> nodeList;
+	std::vector<Edge*> edgeList;
 };
 
 #endif

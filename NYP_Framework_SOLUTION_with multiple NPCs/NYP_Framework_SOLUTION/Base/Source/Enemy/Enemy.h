@@ -1,10 +1,21 @@
 #pragma once
 #include "../GenericEntity.h"
 #include "../GroundEntity.h"
+#include <vector>
 
 class Mesh;
 class Mech;
 class CEnemyGun;
+class Node;
+
+struct PathFindNode
+{
+	int g_cost, f_cost, h_cost;
+	unsigned nodeID;
+
+	PathFindNode(unsigned _node, unsigned dstID, unsigned start);
+	~PathFindNode() {}
+};
 
 class CEnemy :
 	public GenericEntity
@@ -24,6 +35,7 @@ protected:
 	float rotateSpeed;
 
 	CEnemyGun* gunno;
+	std::vector<Node*> path;
 
 public:
 	CEnemy(void);
@@ -46,6 +58,8 @@ public:
 	void SetBoundary(Vector3 max, Vector3 min);
 	// Set the terrain for the player info
 	void SetTerrain(GroundEntity* m_pTerrain);
+
+	bool AStar(Vector3 end);
 
 	Vector3 GetMoveDir() { return moveDir; }
 
