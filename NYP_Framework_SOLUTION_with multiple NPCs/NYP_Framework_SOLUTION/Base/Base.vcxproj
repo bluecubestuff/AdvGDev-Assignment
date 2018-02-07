@@ -22,6 +22,7 @@
     <ClCompile Include="Source\GenericEntity.cpp" />
     <ClCompile Include="Source\GroundEntity.cpp" />
     <ClCompile Include="Source\Head.cpp" />
+    <ClCompile Include="Source\KeyManager.cpp" />
     <ClCompile Include="Source\Leg.cpp" />
     <ClCompile Include="Source\LevelOfDetails\LevelOfDetails.cpp" />
     <ClCompile Include="Source\Light.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="Source\GenericEntity.h" />
     <ClInclude Include="Source\GroundEntity.h" />
     <ClInclude Include="Source\Head.h" />
+    <ClInclude Include="Source\KeyManager.h" />
     <ClInclude Include="Source\Leg.h" />
     <ClInclude Include="Source\LevelOfDetails\LevelOfDetails.h" />
     <ClInclude Include="Source\Light.h" />

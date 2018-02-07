@@ -92,6 +92,16 @@ char CLuaInterface::getCharValue(const char * varName)
 	return 0;
 }
 
+float CLuaInterface::GetField(const char * key)
+{
+	int result = 0;
+	lua_pushstring(theLuaState, key);
+	lua_gettable(theLuaState, -2);
+	result = (int)lua_tonumber(theLuaState, -1);
+	lua_pop(theLuaState, 1);
+	return result;
+}
+
 // Save an integer value through the Lua Interface Class
 void CLuaInterface::saveIntValue(const char* varName,
 	const int value, const bool bOverwrite)

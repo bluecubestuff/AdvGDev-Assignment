@@ -7,19 +7,29 @@ height = 720
 -- ENEMY
 max_enemies = 5
 
-
--- PLAYER
+-- KEY
 forward = "W"
 back = "S"
 right = "D"
 left = "A"
-
 reload = "R"
 grenade = "G"
 
+-- MECH
+legHP = 100
+torsoHP = 100
 
-Services.Input:addEventListener(nil, onMouseMoveEvent, InputEvent.EVENT_MOUSEMOVE)
-Services.Input:addEventListener(nil, onMouseDownEvent, InputEvent.EVENT_MOUSEDOWN)
+-- Weapons
+-- EG -> enemyGun
+EG_magRounds = 100000000
+EG_maxMagRounds
+
+
+
+
+
+
+
 
 --[[
 function SaveToLuaFile(outputString, overwrite)

@@ -2,12 +2,13 @@
 
 #include "MeshBuilder.h"
 #include "EntityManager.h"
+#include "LuaInterface.h"
 
 Leg::Leg()
 	:BasePart(MeshBuilder::GetInstance()->GetMesh("leg"))
 {
 	MeshBuilder::GetInstance()->GetMesh("leg");
-	hp = 100;
+	hp = CLuaInterface::GetInstance()->getIntValue("legHP");
 	size = 5;
 	scale.Set(size, size, size);
 
