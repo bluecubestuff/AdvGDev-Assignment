@@ -5,6 +5,7 @@
 
 class Edge;
 class Mesh;
+class Vector3;
 struct Node {
 	bool active;
 	unsigned ID;

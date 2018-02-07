@@ -16,6 +16,7 @@
 #include "../WaypointData.h"
 #include "../Node.h"
 #include "../Edge.h"
+#include "MeshBuilder.h"
 
 #define AGRO_DIST 10000.f
 
@@ -114,6 +115,15 @@ void CEnemy::Init(float x, float y)
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this, true);
+
+	AStar(CPlayerInfo::GetInstance()->GetPos());
+	//print the shortest path node to player
+	for (auto it : path)
+	{
+		std::cout << "path: x." << it->x << " y." << it->y << '\n';
+	}
+	playerIndexX = CPlayerInfo::GetInstance()->xIndex;
+	playerIndexZ = CPlayerInfo::GetInstance()->zIndex;
 }
 
 // Reset this player instance to default
@@ -191,6 +201,18 @@ bool CEnemy::AStar(Vector3 end)
 				curr = WaypointData::GetInstance()->GetNode(previous[curr->ID]);
 				path.push_back(curr);
 			}
+			if (path.size() >= 2)
+			{
+				Vector3 firstNode(path.back()->x, 0, path.back()->y);
+				Vector3 secondNode(path[path.size() - 2]->x, 0, path[path.size() - 2]->y);
+				if ((firstNode - CPlayerInfo::GetInstance()->GetPos()).LengthSquared() > (secondNode - CPlayerInfo::GetInstance()->GetPos()).LengthSquared())
+				{
+					path.pop_back();
+					printf("path.back() was further then the next\n");
+				}
+			}
+			if (path.size() == 1)
+				path.clear();
 			return true;
 		}
 
@@ -265,10 +287,47 @@ void CEnemy::Update(double dt)
 	if (!attached->chassis->GetMovability())
 		return;
 
+	if (playerIndexX != CPlayerInfo::GetInstance()->xIndex || playerIndexZ != CPlayerInfo::GetInstance()->zIndex)
+	{
+		AStar(CPlayerInfo::GetInstance()->GetPos());
+		playerIndexX = CPlayerInfo::GetInstance()->xIndex;
+		playerIndexZ = CPlayerInfo::GetInstance()->zIndex;
+		printf("Astar again\n");
+	}
+
 	//enemy will just chase the player
+	//target = CPlayerInfo::GetInstance()->GetPos();
+	Vector3 moveTar;
+	Vector3 viewVector;
+	if (!path.empty())
+	{
+		moveTar.x = path.back()->x;
+		moveTar.z = path.back()->y;
+		viewVector = (moveTar - position);
+	}
+
+	if (viewVector.LengthSquared() < 30.f && !path.empty())
+	{
+		path.pop_back();
+		if (path.size() != 0)
+		{
+			target.x = path.back()->x;
+			target.z = path.back()->y;
+		}
+		printf("path was popped\n");
+	}
+
+	Vector3 dstFromPlayer = CPlayerInfo::GetInstance()->GetPos() - position;
 	target = CPlayerInfo::GetInstance()->GetPos();
-	Vector3 viewVector = (target - position);
-	if (viewVector.LengthSquared() > AGRO_DIST) {
+
+	if (path.size() <= 1)
+	{
+		moveTar = CPlayerInfo::GetInstance()->GetPos();
+		viewVector = (moveTar - position);
+		printf("path is empty\n");
+	}
+
+	if (dstFromPlayer.LengthSquared() > AGRO_DIST) {
 		//if the enemy leg still can move
 		if (attached->chassis->GetLeg()->GetHP() > 0) {
 			//rotate enemy to move towards player
@@ -352,6 +411,11 @@ void CEnemy::Render(void)
 			RenderHelper::RenderMesh(GetLODMesh());
 		}
 	}
+	modelStack.PopMatrix();
+
+	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(position, Vector3(path.back()->x, 10, path.back()->y), Color(0, 0, 1));
+	modelStack.PushMatrix();
+	RenderHelper::RenderMesh(line);
 	modelStack.PopMatrix();
 }
 

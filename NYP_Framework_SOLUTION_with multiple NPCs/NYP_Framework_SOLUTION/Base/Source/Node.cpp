@@ -1,6 +1,7 @@
 #include "Node.h"
 
 #include "MeshBuilder.h"
+#include "Vector3.h"
 
 void Node::Set(float _x, float _y, float _size = 1.f)
 {

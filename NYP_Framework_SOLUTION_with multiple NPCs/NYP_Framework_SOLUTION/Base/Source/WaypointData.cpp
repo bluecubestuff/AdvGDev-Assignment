@@ -83,10 +83,11 @@ Node * WaypointData::GetNearestNode(Vector3 pos)
 	Node* nearestNode = nullptr;
 	for (auto it : nodeList)
 	{
-		Vector3 v = pos - Vector3(it->x, it->y);
+		Vector3 v = pos - Vector3(it->x, 0, it->y);
 		if (v.Length() < distance)
 		{
 			nearestNode = it;
+			distance = v.Length();
 		}
 	}
 	return nearestNode;

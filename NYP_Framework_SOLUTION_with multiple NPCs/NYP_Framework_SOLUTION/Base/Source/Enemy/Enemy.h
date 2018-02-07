@@ -37,6 +37,8 @@ protected:
 	CEnemyGun* gunno;
 	std::vector<Node*> path;
 
+	int playerIndexX, playerIndexZ;
+
 public:
 	CEnemy(void);
 	virtual ~CEnemy();
