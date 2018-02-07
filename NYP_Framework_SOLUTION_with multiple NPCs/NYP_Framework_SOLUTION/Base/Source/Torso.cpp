@@ -2,11 +2,12 @@
 
 #include "MeshBuilder.h"
 #include "EntityManager.h"
+#include "LuaInterface.h"
 
 Torso::Torso()
 	:BasePart(MeshBuilder::GetInstance()->GetMesh("torso"))
 {
-	hp = 100;
+	hp = CLuaInterface::GetInstance()->getIntValue("torsoHP");;
 	size = 10;
 	scale.Set(size, size, size);
 

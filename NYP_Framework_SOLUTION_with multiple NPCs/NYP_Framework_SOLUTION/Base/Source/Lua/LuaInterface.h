@@ -26,6 +26,8 @@ public:
 	float getFloatValue(const char* varName);
 	// Get a char value through lua interface
 	char getCharValue(const char* varName);
+	// Extract a field from table
+	float GetField(const char* key);
 
 	// Save an integer value through the Lua Interface Class
 	void saveIntValue(const char* varName, const int value, const bool bOverwrite = NULL);

@@ -135,7 +135,7 @@ void Application::Run()
 	{
 		glfwPollEvents();
 		UpdateInput();
-		
+	
 		SceneManager::GetInstance()->Update(m_timer.getElapsedTime());
 		SceneManager::GetInstance()->Render();
 
