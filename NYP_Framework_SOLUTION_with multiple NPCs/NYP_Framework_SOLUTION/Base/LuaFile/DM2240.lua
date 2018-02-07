@@ -25,7 +25,7 @@ EG_magRounds = 100000000
 EG_maxMagRounds = 100000000
 EG_totalRounds = 100000000
 EG_maxTotalRounds = 100000000
-EG_timeBetweenShots 
+EG_timeBetweenShots = 3
 
 
 
