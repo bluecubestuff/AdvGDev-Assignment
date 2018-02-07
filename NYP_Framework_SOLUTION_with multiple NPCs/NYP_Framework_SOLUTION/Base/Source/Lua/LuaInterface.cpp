@@ -70,14 +70,18 @@ void CLuaInterface::Drop()
 int CLuaInterface::getIntValue(const char* name)
 {
 	lua_getglobal(theLuaState, name);
-	return lua_tointeger(theLuaState, -1);;
+	int result = lua_tointeger(theLuaState, -1);
+	lua_pop(theLuaState, 1);
+	return result;
 }
 
 // Get a float value through the Lua Interface Class
 float CLuaInterface::getFloatValue(const char* varName)
 {
 	lua_getglobal(theLuaState, varName);
-	return (float)lua_tonumber(theLuaState, -1);
+	float result = (float)lua_tonumber(theLuaState, -1);
+	lua_pop(theLuaState, 1);
+	return result;
 }
 
 char CLuaInterface::getCharValue(const char * varName)
@@ -87,7 +91,10 @@ char CLuaInterface::getCharValue(const char * varName)
 	size_t len;
 	const char* cstr = lua_tolstring(theLuaState, -1, &len);
 	if (len > 0)
+	{
+		lua_pop(theLuaState, 1);
 		return cstr[0];
+	}
 
 	return 0;
 }

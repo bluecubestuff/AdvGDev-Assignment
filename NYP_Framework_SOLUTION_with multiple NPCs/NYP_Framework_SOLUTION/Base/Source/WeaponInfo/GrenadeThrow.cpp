@@ -1,5 +1,6 @@
 #include "GrenadeThrow.h"
 #include "../Projectile/Grenade.h"
+#include "LuaInterface.h"
 
 CGrenadeThrow::CGrenadeThrow()
 {
@@ -17,16 +18,16 @@ void CGrenadeThrow::Init(void)
 	CWeaponInfo::Init();
 
 	// The number of ammunition in a magazine for this weapon
-	magRounds = 10;
+	magRounds = CLuaInterface::GetInstance()->getIntValue("grenade_magRounds");
 	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 10;
+	maxMagRounds = CLuaInterface::GetInstance()->getIntValue("grenade_maxMagRounds");
 	// The current total number of rounds currently carried by this player
-	totalRounds = 100;
+	totalRounds = CLuaInterface::GetInstance()->getIntValue("grenade_totalRounds");
 	// The max total number of rounds currently carried by this player
-	maxTotalRounds = 100;
+	maxTotalRounds = CLuaInterface::GetInstance()->getIntValue("grenade_maxTotalRounds");
 
 	// The time between shots
-	timeBetweenShots = 0.333;
+	timeBetweenShots = CLuaInterface::GetInstance()->getFloatValue("grenade_timeBetweenShots");
 	// The elapsed time (between shots)
 	elapsedTime = 0.0;
 	// Boolean flag to indicate if weapon can fire now
