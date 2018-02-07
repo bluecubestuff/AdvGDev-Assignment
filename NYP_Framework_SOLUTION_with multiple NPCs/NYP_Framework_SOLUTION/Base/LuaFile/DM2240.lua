@@ -1,5 +1,4 @@
 title = "A2-Lua"
-
 -- APPLICATION
 width = 1024
 height = 720
@@ -45,14 +44,13 @@ pistol_totalRounds = 40
 pistol_maxTotalRounds = 40
 pistol_timeBetweenShots = 0.3333
 
---[[
 function SaveToLuaFile(outputString, overwrite)
 	print("SaveToLuaFile...")
 	local f;					-- The file
 	if overwrite == 1 then		-- Wipe the contents with new data
-		f = assert(io.open("Image/DM2240_HighScore.lua", "w"))
+		f = assert(io.open("LuaFile/Waypoint.lua", "w"))
 	elseif overwrite == 0 then 	-- Append with new data
-		f = assert(io.open("Image/DM2240_HighScore.lua", "a"))
+		f = assert(io.open("LuaFile/Waypoint.lua", "a"))
 	end
 	-- Write to the file
 	f:write(outputString)
@@ -60,4 +58,4 @@ function SaveToLuaFile(outputString, overwrite)
 	f:close()
 	print("OK")
 end
---]]
+

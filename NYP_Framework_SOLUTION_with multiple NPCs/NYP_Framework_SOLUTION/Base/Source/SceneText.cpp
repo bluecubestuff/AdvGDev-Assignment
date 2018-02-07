@@ -382,6 +382,12 @@ void SceneText::Update(double dt)
 		CSpatialPartition::GetInstance()->PrintSelf();
 	}
 
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5))
+	{
+		//for saving of node implement ltr
+	}
+
+
 	// if the left mouse button was released
 	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
 	{
