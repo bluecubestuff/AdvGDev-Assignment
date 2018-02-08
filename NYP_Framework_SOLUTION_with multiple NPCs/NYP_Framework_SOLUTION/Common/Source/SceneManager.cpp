@@ -71,6 +71,9 @@ void SceneManager::Render()
 	//if (activeScene)
 	//	activeScene->Render();
 
+	if (sceneStack.empty())
+		return;
+
 	if (sceneStack.top())
 		sceneStack.top()->Render();
 }
@@ -100,6 +103,15 @@ void SceneManager::Exit()
 		delete it->second;
 	}
 	sceneMap.clear();
+}
+
+void SceneManager::ExitAllStates()
+{
+	while (!sceneStack.empty())
+	{
+		sceneStack.top()->Exit();
+		sceneStack.pop();
+	}
 }
 
 void SceneManager::AddScene(const std::string& _name, Scene* _scene)

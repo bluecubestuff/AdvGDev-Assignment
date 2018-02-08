@@ -16,6 +16,7 @@ public:
 	void Update(double _dt);
 	void Render();
 	void Exit();
+	void ExitAllStates();
 
 	// User Interface
 	void AddScene(const std::string& _name, Scene* _scene);

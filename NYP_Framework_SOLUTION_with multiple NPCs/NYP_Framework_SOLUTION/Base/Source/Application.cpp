@@ -198,6 +198,13 @@ void Application::Run()
 		glfwPollEvents();
 		UpdateInput();
 	
+		if (IsKeyPressed(VK_F10))
+		{
+			CLuaInterface::GetInstance()->Drop();
+			CLuaInterface::GetInstance()->Init();
+			std::cout << "w:" << m_window_width << " h:" << m_window_height << "\n";
+		}
+
 		SceneManager::GetInstance()->Update(m_timer.getElapsedTime());
 		SceneManager::GetInstance()->Render();
 
