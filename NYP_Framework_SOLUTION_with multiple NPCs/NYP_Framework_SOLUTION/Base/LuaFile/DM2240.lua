@@ -16,8 +16,8 @@ grenade = "G"
 pause = "P"
 
 -- MECH
-legHP = 10000
-torsoHP = 10000
+legHP = 100
+torsoHP = 100
 
 -- Weapons
 -- EG -> enemyGun
@@ -45,6 +45,8 @@ pistol_totalRounds = 40
 pistol_maxTotalRounds = 40
 pistol_timeBetweenShots = 0.3333
 
+
+-- save waypoints
 function SaveToLuaFile(outputString, overwrite)
 	print("SaveToLuaFile...")
 	local f;					-- The file

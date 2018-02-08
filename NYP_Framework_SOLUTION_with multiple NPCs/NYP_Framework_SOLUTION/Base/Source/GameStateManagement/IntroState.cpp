@@ -39,11 +39,14 @@ void CIntroState::Init()
 													Vector3(halfWindowWidth, halfWindowHeight, 0.0f), 
 													Vector3((float)(Application::GetInstance().GetWindowWidth()), (float)(Application::GetInstance().GetWindowHeight()), 0.0f));
 
+	timer = 0.f;
 	cout << "CIntroState loaded\n" << endl;
 }
 void CIntroState::Update(double dt)
 {
-	if (KeyboardController::GetInstance()->IsKeyReleased(VK_SPACE))
+	
+	timer += dt;
+	if (KeyboardController::GetInstance()->IsKeyReleased(VK_SPACE) || timer > 3.f)
 	{
 		cout << "Loading MenuState" << endl;
 		SceneManager::GetInstance()->SetActiveScene("MenuState");
