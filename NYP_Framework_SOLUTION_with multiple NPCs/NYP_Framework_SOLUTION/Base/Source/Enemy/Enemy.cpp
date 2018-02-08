@@ -19,6 +19,7 @@
 #include "MeshBuilder.h"
 
 #define AGRO_DIST 10000.f
+#define ATTACK_DIST 50000.f
 
 CEnemy::CEnemy()
 	: GenericEntity(NULL)
@@ -124,6 +125,7 @@ void CEnemy::Init(float x, float y)
 	}
 	playerIndexX = CPlayerInfo::GetInstance()->xIndex;
 	playerIndexZ = CPlayerInfo::GetInstance()->zIndex;
+	state = S_LOITER;
 }
 
 // Reset this player instance to default
@@ -287,48 +289,110 @@ void CEnemy::Update(double dt)
 	if (!attached->chassis->GetMovability())
 		return;
 
-	if (playerIndexX != CPlayerInfo::GetInstance()->xIndex || playerIndexZ != CPlayerInfo::GetInstance()->zIndex)
+	Vector3 dstToPlayer = CPlayerInfo::GetInstance()->GetPos() - position;
+	if (dstToPlayer.LengthSquared() < ATTACK_DIST && state != S_CHASE)
 	{
+		path.clear();
+		state = S_CHASE;
 		AStar(CPlayerInfo::GetInstance()->GetPos());
-		playerIndexX = CPlayerInfo::GetInstance()->xIndex;
-		playerIndexZ = CPlayerInfo::GetInstance()->zIndex;
-		printf("Astar again\n");
+	}
+	else if (dstToPlayer.LengthSquared() > ATTACK_DIST && state != S_LOITER)
+	{
+		path.clear();
+		state = S_LOITER;
 	}
 
-	//enemy will just chase the player
-	//target = CPlayerInfo::GetInstance()->GetPos();
-	Vector3 moveTar;
-	Vector3 viewVector;
-	if (!path.empty())
+	switch (state)
 	{
-		moveTar.x = path.back()->x;
-		moveTar.z = path.back()->y;
-		viewVector = (moveTar - position);
-	}
-
-	if (viewVector.LengthSquared() < 30.f && !path.empty())
+	case S_CHASE:
 	{
-		path.pop_back();
-		if (path.size() != 0)
+		if (playerIndexX != CPlayerInfo::GetInstance()->xIndex || playerIndexZ != CPlayerInfo::GetInstance()->zIndex)
 		{
-			target.x = path.back()->x;
-			target.z = path.back()->y;
+			AStar(CPlayerInfo::GetInstance()->GetPos());
+			playerIndexX = CPlayerInfo::GetInstance()->xIndex;
+			playerIndexZ = CPlayerInfo::GetInstance()->zIndex;
+			printf("Astar again\n");
 		}
-		printf("path was popped\n");
+
+		//enemy will just chase the player
+		//target = CPlayerInfo::GetInstance()->GetPos();
+		Vector3 moveTar;
+		Vector3 viewVector;
+		if (!path.empty())
+		{
+			moveTar.x = path.back()->x;
+			moveTar.z = path.back()->y;
+			viewVector = (moveTar - position);
+		}
+
+		if (viewVector.LengthSquared() < 30.f && !path.empty())
+		{
+			path.pop_back();
+			if (path.size() != 0)
+			{
+				target.x = path.back()->x;
+				target.z = path.back()->y;
+			}
+			printf("path was popped\n");
+		}
+
+		Vector3 dstFromPlayer = CPlayerInfo::GetInstance()->GetPos() - position;
+		target = CPlayerInfo::GetInstance()->GetPos();
+
+		if (path.size() <= 1)
+		{
+			moveTar = CPlayerInfo::GetInstance()->GetPos();
+			viewVector = (moveTar - position);
+			printf("path is empty\n");
+		}
+
+		if (dstFromPlayer.LengthSquared() > AGRO_DIST) {
+			//if the enemy leg still can move
+			if (attached->chassis->GetLeg()->GetHP() > 0) {
+				//rotate enemy to move towards player
+				Mtx44 mtx;
+				//get angle between view and move
+				float dot = viewVector.x * moveDir.x + viewVector.z + moveDir.z;
+				float det = viewVector.x*moveDir.z - viewVector.z*moveDir.x;
+				float angle = Math::RadianToDegree(atan2(dot, det));
+				//positive is right
+				if (angle > -90 && angle < 90) {
+					mtx.SetToRotation(rotateSpeed * dt, 0, 1, 0);
+					moveDir = mtx * moveDir;
+				}
+				else {
+					//negative is left
+					mtx.SetToRotation(-rotateSpeed * dt, 0, 1, 0);
+					moveDir = mtx * moveDir;
+				}
+
+				position += moveDir.Normalized() * (float)m_dSpeed * (float)dt;
+				//cout << position << " - " << target << "..." << viewVector << endl;
+			}
+		}
+		//shooto
+		Vector3 shootDir = CPlayerInfo::GetInstance()->GetPos() - position;
+		shootDir.Normalize();
+		shootDir.x += Math::RandFloatMinMax(-0.1, 0.1);
+		shootDir.y += Math::RandFloatMinMax(-0.1, 0.1);
+		shootDir.z += Math::RandFloatMinMax(-0.1, 0.1);
+		gunno->Discharge(position, position + shootDir);
+		gunno->Update(dt);
 	}
-
-	Vector3 dstFromPlayer = CPlayerInfo::GetInstance()->GetPos() - position;
-	target = CPlayerInfo::GetInstance()->GetPos();
-
-	if (path.size() <= 1)
+	break;
+	case S_LOITER:
 	{
-		moveTar = CPlayerInfo::GetInstance()->GetPos();
-		viewVector = (moveTar - position);
-		printf("path is empty\n");
-	}
-
-	if (dstFromPlayer.LengthSquared() > AGRO_DIST) {
-		//if the enemy leg still can move
+		//just randomly move around
+		//move to a random adjacent tile
+		Node* curr = WaypointData::GetInstance()->GetNearestNode(position);
+		Node* randomNode = curr->Edges[Math::RandIntMinMax(0, curr->Edges.size() - 1)]->dst;
+		if (curr->x == target.x && curr->y == target.z)
+			path.clear();
+		if (path.empty())
+			path.push_back(randomNode);
+		target.x = path.back()->x;
+		target.z = path.back()->y;
+		Vector3 viewVector = target - position;
 		if (attached->chassis->GetLeg()->GetHP() > 0) {
 			//rotate enemy to move towards player
 			Mtx44 mtx;
@@ -351,14 +415,8 @@ void CEnemy::Update(double dt)
 			//cout << position << " - " << target << "..." << viewVector << endl;
 		}
 	}
-	//shooto
-	Vector3 shootDir = CPlayerInfo::GetInstance()->GetPos() - position;
-	shootDir.Normalize();
-	shootDir.x += Math::RandFloatMinMax(-0.1 , 0.1);
-	shootDir.y += Math::RandFloatMinMax(-0.1, 0.1);
-	shootDir.z += Math::RandFloatMinMax(-0.1, 0.1);
-	gunno->Discharge(position, position + shootDir);
-	gunno->Update(dt);
+	break;
+	}
 
 	// Constrain the position
 	Constrain();
@@ -413,10 +471,13 @@ void CEnemy::Render(void)
 	}
 	modelStack.PopMatrix();
 
-	Mesh* line = MeshBuilder::GetInstance()->GenerateLine(position, Vector3(path.back()->x, 10, path.back()->y), Color(0, 0, 1));
-	modelStack.PushMatrix();
-	RenderHelper::RenderMesh(line);
-	modelStack.PopMatrix();
+	if (!path.empty())
+	{
+		Mesh* line = MeshBuilder::GetInstance()->GenerateLine(position, Vector3(path.back()->x, 10, path.back()->y), Color(0, 0, 1));
+		modelStack.PushMatrix();
+		RenderHelper::RenderMesh(line);
+		modelStack.PopMatrix();
+	}
 }
 
 // Generate New Target
