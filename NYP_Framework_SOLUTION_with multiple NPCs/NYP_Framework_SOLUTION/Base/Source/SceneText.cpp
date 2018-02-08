@@ -470,6 +470,7 @@ void SceneText::Update(double dt)
 				test->Init(newPos.x, newPos.z);
 				test->SetTerrain(groundEntity);
 				test->SetTarget(test->GenerateTarget());
+				//enemyList.push_back(test);
 				Mech* mech = new Mech();
 				mech->Init(test);
 				enemyMechList.push_back(mech);
@@ -592,6 +593,21 @@ void SceneText::Exit()
 	if (prevScene != nullptr)
 		prevScene->Exit();
 
+	EntityManager::GetInstance()->RemoveAllEntity();
+	//WaypointData::GetInstance()->DeleteWaypoints();
+	//if (groundEntity)
+	//	delete groundEntity;
+
+	//std::vector<CEnemy*>::iterator it = enemyList.begin();
+	//while (it != enemyList.end())
+	//{
+	//	// Delete if done
+	//	delete *it;
+	//	it = enemyList.erase(it);
+
+	//	++it;
+	//}
+	
 	//delete lights[0];
 	//delete lights[1];
 }

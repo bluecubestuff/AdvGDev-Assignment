@@ -16,6 +16,7 @@ public:
 	Edge* GetEdge(unsigned ID);
 
 	void GenerateFromFile();
+	void DeleteWaypoints();
 
 	std::vector<Node*> nodeList;
 	std::vector<Edge*> edgeList;
