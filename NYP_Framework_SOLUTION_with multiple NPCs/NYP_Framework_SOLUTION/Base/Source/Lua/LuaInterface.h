@@ -3,6 +3,8 @@
 
 #include <lua.hpp>
 #include "SingletonTemplate.h"
+#include <map>
+#include <string>
 
 class CLuaInterface : public Singleton<CLuaInterface>
 {
@@ -21,13 +23,13 @@ public:
 
 
 	// Get int value
-	int getIntValue(const char* name);
+	int getIntValue(const char* name, std::string luaStateKey = "default");
 	// Get a float value through the Lua Interface Class
-	float getFloatValue(const char* varName);
+	float getFloatValue(const char* varName, std::string luaStateKey = "default");
 	// Get a char value through lua interface
-	char getCharValue(const char* varName);
+	char getCharValue(const char* varName, std::string luaStateKey = "default");
 	// Extract a field from table
-	float GetField(const char* key);
+	float GetField(const char* key, std::string luaStateKey = "default");
 
 	// Save an integer value through the Lua Interface Class
 	void saveIntValue(const char* varName, const int value, const bool bOverwrite = NULL);
@@ -35,7 +37,8 @@ public:
 	void saveFloatValue(const char* varName, const float value, const bool bOverwrite = NULL);
 
 	// pointer to lua state
-	lua_State* theLuaState;
+	//lua_State* theLuaState;
+	std::map<std::string, lua_State*> theLuaState;
 };
 
 

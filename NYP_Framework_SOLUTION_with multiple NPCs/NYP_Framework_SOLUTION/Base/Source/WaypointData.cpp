@@ -97,3 +97,68 @@ Edge * WaypointData::GetEdge(unsigned ID)
 {
 	return edgeList[ID];
 }
+
+void WaypointData::GenerateFromFile()
+{
+	float gridSize = 100;
+	int gridCount = 10;
+	char variableName[80] = "";
+
+	float x, z;
+	for (int j = 0; j < gridCount * gridCount; ++j)
+	{
+		sprintf(variableName, "NodeX_%d", j);
+		x = CLuaInterface::GetInstance()->getFloatValue(variableName, "waypoint");
+		sprintf(variableName, "NodeZ_%d", j);
+		z = CLuaInterface::GetInstance()->getFloatValue(variableName, "waypoint");
+
+		Node* newNode = new Node();
+		newNode->ID = j;
+		newNode->x = x;
+		newNode->y = z;
+
+		std::cout << "x:" << x << " z:" << std::endl;
+
+		newNode->active = true;
+		newNode->size = 2.f;
+		nodeList.push_back(newNode);
+	}
+
+	for (int i = 0; i < nodeList.size(); ++i)
+	{
+		Edge* edgy;
+		if (i - gridCount >= 0)
+		{
+			edgy = new Edge();
+			edgy->Set(nodeList[i], nodeList[i - gridCount]);
+			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
+		}
+		if (i + gridCount < gridCount * gridCount)
+		{
+			edgy = new Edge();
+			edgy->Set(nodeList[i], nodeList[i + gridCount]);
+			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
+		}
+		if (i + 1 < gridCount * gridCount)
+		{
+			edgy = new Edge();
+			edgy->Set(nodeList[i], nodeList[i + 1]);
+			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
+		}
+		if (i - 1 >= 0)
+		{
+			edgy = new Edge();
+			edgy->Set(nodeList[i], nodeList[i - 1]);
+			nodeList[i]->Edges.push_back(edgy);
+			edgeList.push_back(edgy);
+			edgy->ID = edgeList.size() - 1;
+		}
+	}
+
+}

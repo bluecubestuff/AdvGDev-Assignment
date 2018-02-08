@@ -284,7 +284,8 @@ void SceneText::Init()
 	}
 	textObj[0]->SetText("HELLO WORLD");
 
-	WaypointData::GetInstance()->Init();
+	//WaypointData::GetInstance()->Init();
+	WaypointData::GetInstance()->GenerateFromFile();
 	max_enemies = CLuaInterface::GetInstance()->getIntValue("max_enemies");
 
 	isPause = false;

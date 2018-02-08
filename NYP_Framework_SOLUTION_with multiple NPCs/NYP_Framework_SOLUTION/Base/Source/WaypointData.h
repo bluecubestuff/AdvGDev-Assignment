@@ -15,6 +15,8 @@ public:
 	Node* GetNearestNode(Vector3 pos);
 	Edge* GetEdge(unsigned ID);
 
+	void GenerateFromFile();
+
 	std::vector<Node*> nodeList;
 	std::vector<Edge*> edgeList;
 };
