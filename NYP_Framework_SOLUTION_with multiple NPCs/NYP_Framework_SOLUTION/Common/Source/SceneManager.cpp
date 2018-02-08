@@ -12,33 +12,87 @@ SceneManager::~SceneManager()
 void SceneManager::Update(double _dt)
 {
 	// Check for change of scene
-	if (nextScene != activeScene)
+	//if (nextScene != activeScene)
+	//{
+	//	if (activeScene)
+	//	{
+	//		// Scene is valid, need to call appropriate function to exit
+	//		activeScene->Exit();
+	//	}
+	//	
+	//	activeScene = nextScene;
+	//	activeScene->Init();
+	//}
+
+	//if (activeScene)
+	//	activeScene->Update(_dt);
+
+	// when if is stack empty(no scene)
+	if (sceneStack.empty())
 	{
-		if (activeScene)
-		{
-			// Scene is valid, need to call appropriate function to exit
-			activeScene->Exit();
-		}
-		
-		activeScene = nextScene;
-		activeScene->Init();
+		Scene* temp = nextScene;
+		sceneStack.push(temp);
+
+		sceneStack.top()->Init();
 	}
 
-	if (activeScene)
-		activeScene->Update(_dt);
+	if (nextScene != sceneStack.top())
+	{
+		if (sceneStack.top())
+		{
+			if (sceneStack.top()->GetPrevScene() == nullptr)
+			{
+				sceneStack.top()->Exit();
+				sceneStack.pop();
+			}
+		}
+
+		Scene* tempScene = nextScene;
+		bool isExist = false;
+		if (!sceneStack.empty())
+		{
+			if (sceneStack.top() == tempScene)
+				isExist = true;
+		}
+		if (!isExist)
+		{
+			sceneStack.push(tempScene);
+			sceneStack.top()->Init();
+		}
+	}
+
+	if (sceneStack.top())
+		sceneStack.top()->Update(_dt);
+
 }
 
 void SceneManager::Render()
 {
-	if (activeScene)
-		activeScene->Render();
+	//if (activeScene)
+	//	activeScene->Render();
+
+	if (sceneStack.top())
+		sceneStack.top()->Render();
 }
 
 void SceneManager::Exit()
 {
 	// Delete all scenes stored and empty the entire map
-	activeScene->Exit();
-	activeScene = nullptr;
+	//activeScene->Exit();
+	//activeScene = nullptr;
+	//std::map<std::string, Scene*>::iterator it, end;
+	//end = sceneMap.end();
+	//for (it = sceneMap.begin(); it != end; ++it)
+	//{
+	//	delete it->second;
+	//}
+	//sceneMap.clear();
+
+	while (!sceneStack.empty())
+	{
+		sceneStack.top()->Exit();
+		sceneStack.pop();
+	}
 	std::map<std::string, Scene*>::iterator it, end;
 	end = sceneMap.end();
 	for (it = sceneMap.begin(); it != end; ++it)
@@ -82,7 +136,7 @@ void SceneManager::RemoveScene(const std::string& _name)
 	sceneMap.erase(_name);
 }
 
-void SceneManager::SetActiveScene(const std::string& _name)
+void SceneManager::SetActiveScene(const std::string& _name, bool isRemove)
 {
 	if (!CheckSceneExist(_name))
 	{
@@ -92,6 +146,22 @@ void SceneManager::SetActiveScene(const std::string& _name)
 
 	// Scene exist, set the next scene pointer to that scene
 	nextScene = sceneMap[_name];
+
+	if (!isRemove) //do not delete scene
+	{
+		if (!sceneStack.empty())
+		{
+			Scene* tempScene = nextScene;
+			sceneStack.top()->SetPrevScene(tempScene);
+		}
+	}
+	else //delete the scene
+	{
+		if (!sceneStack.empty())
+		{
+			sceneStack.top()->SetPrevScene(nullptr);
+		}
+	}
 }
 
 bool SceneManager::CheckSceneExist(const std::string& _name)

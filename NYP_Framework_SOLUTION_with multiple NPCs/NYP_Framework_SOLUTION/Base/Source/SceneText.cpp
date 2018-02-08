@@ -302,7 +302,10 @@ void SceneText::Update(double dt)
 			SceneManager::GetInstance()->SetActiveScene("PauseState", false);
 		}
 		else
+		{
+
 			isPause = false;
+		}
 	}
 
 	if (!isPause)
