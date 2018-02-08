@@ -8,6 +8,8 @@
 #include "RenderHelper.h"
 #include "../SpriteEntity.h"
 #include "../EntityManager.h"
+#include "../Button.h"
+#include "MouseController.h"
 
 #include "KeyboardController.h"
 #include "SceneManager.h"
@@ -30,6 +32,13 @@ void CPauseState::Init()
 	camera.Init(CPlayerInfo::GetInstance()->GetPos(), CPlayerInfo::GetInstance()->GetTarget(), CPlayerInfo::GetInstance()->GetUp());
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
+	MeshBuilder::GetInstance()->GenerateQuad("resumeButton", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("resumeButton")->textureID = LoadTGA("Image//resumebutton.tga");
+
+	Button* newBut = new Button("resume", 0.5, 0.5, 0.4, 0.2);
+	newBut->buttonMesh = Create::Sprite2DObject("resumeButton", newBut->pos, newBut->scale);
+	buttonList.push_back(newBut);
+
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateQuad("INTROSTATE_BKGROUND", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("INTROSTATE_BKGROUND")->textureID = LoadTGA("Image//IntroState.tga");
@@ -39,6 +48,9 @@ void CPauseState::Init()
 		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
 		Vector3((float)(Application::GetInstance().GetWindowWidth() * 0.8f), (float)(Application::GetInstance().GetWindowHeight() * 0.8f), 0.0f));
 
+	MouseController::GetInstance()->SetKeepMouseCentered(false);
+	Application::SetMouseVisibilty(true);
+
 	cout << "CIntroState loaded\n" << endl;
 }
 void CPauseState::Update(double dt)
@@ -46,11 +58,26 @@ void CPauseState::Update(double dt)
 	if (prevScene)
 		prevScene->Update(dt);
 
-	//if (KeyboardController::GetInstance()->IsKeyPressed(KeyManager::GetInstance()->GetKey("pause")))
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
+	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
-		cout << "Loading GameState" << endl;
-		SceneManager::GetInstance()->SetActiveScene("GameState");
+		double x, y;
+		MouseController::GetInstance()->GetMousePosition(x, y);
+		int w = Application::GetInstance().GetWindowWidth();
+		int h = Application::GetInstance().GetWindowHeight();
+		float posX = static_cast<float>(x);
+		float posY = (h - static_cast<float>(y));
+
+		std::cout << posX << " " << posY << '\n';
+
+		for (auto it : buttonList)
+		{
+			std::cout << it->name << ": x." << it->pos.x << " y." << it->pos.y << '\n';
+			if (it->CheckOnMouse(posX, posY))
+			{
+				it->OnClick();
+				break;
+			}
+		}
 	}
 }
 void CPauseState::Render()
@@ -87,6 +114,17 @@ void CPauseState::Exit()
 
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
+
+	for (int i = 0; i < buttonList.size(); ++i)
+	{
+		EntityManager::GetInstance()->RemoveEntity(buttonList[i]->buttonMesh);
+		delete buttonList[i];
+		buttonList[i] = nullptr;
+	}
+	buttonList.clear();
+
+	MouseController::GetInstance()->SetKeepMouseCentered(true);
+	Application::SetMouseVisibilty(false);
 
 	if (prevScene != nullptr)
 		prevScene->Exit();

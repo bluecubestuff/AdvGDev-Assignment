@@ -28,11 +28,12 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	static bool isPause;
+
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
 
 	int max_enemies;
-	bool isPause;
 
 	ShaderProgram* currProg;
 	CPlayerInfo* playerInfo;

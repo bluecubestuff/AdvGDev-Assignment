@@ -38,6 +38,8 @@ using namespace std;
 
 #define DIST_BETWEEN_NODES
 
+bool SceneText::isPause = false;
+
 //SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
 SceneText::SceneText()
@@ -287,6 +289,9 @@ void SceneText::Init()
 	//WaypointData::GetInstance()->Init();
 	WaypointData::GetInstance()->GenerateFromFile();
 	max_enemies = CLuaInterface::GetInstance()->getIntValue("max_enemies");
+
+	MouseController::GetInstance()->SetKeepMouseCentered(true);
+	Application::SetMouseVisibilty(false);
 
 	isPause = false;
 

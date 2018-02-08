@@ -340,7 +340,8 @@ void EntityManager::RemoveAllEntity()
 		delete *it;
 		it = entityList.erase(it);
 
-		++it;
+		if (!entityList.empty())
+			++it;
 	}
 
 	collisionList.clear();
