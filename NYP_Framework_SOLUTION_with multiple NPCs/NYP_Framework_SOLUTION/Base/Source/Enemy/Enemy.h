@@ -43,6 +43,13 @@ public:
 	CEnemy(void);
 	virtual ~CEnemy();
 
+	enum STATE
+	{
+		S_LOITER,
+		S_CHASE,
+		S_COUNT
+	}state;
+
 	Mech* attached;
 
 	void Init(void);
