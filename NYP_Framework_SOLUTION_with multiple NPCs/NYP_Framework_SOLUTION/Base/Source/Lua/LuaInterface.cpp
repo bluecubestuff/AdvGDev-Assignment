@@ -7,6 +7,7 @@ CLuaInterface::CLuaInterface()
 {
 	theLuaState["default"] = nullptr;
 	theLuaState["waypoint"] = nullptr;
+	theLuaState["resolution"] = nullptr;
 }
 
 CLuaInterface::~CLuaInterface()
@@ -22,6 +23,17 @@ bool CLuaInterface::Init()
 	//create lua state
 	theLuaState["default"] = lua_open();
 	theLuaState["waypoint"] = lua_open();
+	theLuaState["resolution"] = lua_open();
+
+	if (theLuaState["resolution"])
+	{
+		//Load lua auxiliary libraries
+		luaL_openlibs(theLuaState["resolution"]);
+		//Load lua script
+		luaL_dofile(theLuaState["resolution"], "LuaFile//resolution.lua");
+
+		result = true;
+	}
 
 	if (theLuaState["waypoint"])
 	{
@@ -125,25 +137,27 @@ float CLuaInterface::GetField(const char * key, std::string luaStateKey)
 }
 
 // Save an integer value through the Lua Interface Class
-void CLuaInterface::saveIntValue(const char* varName,
+void CLuaInterface::saveIntValue(const char* varName, const char* fileName,
 	const int value, const bool bOverwrite)
 {
 	lua_getglobal(theLuaState["default"], "SaveToLuaFile");
 	char outputString[80];
 	sprintf(outputString, "%s = %d\n", varName, value);
 	lua_pushstring(theLuaState["default"], outputString);
+	lua_pushstring(theLuaState["default"], fileName);
 	lua_pushinteger(theLuaState["default"], bOverwrite);
-	lua_call(theLuaState["default"], 2, 0); cout << "....................";
+	lua_call(theLuaState["default"], 3, 0); cout << "....................";
 }
 
 // Save a float value through the Lua Interface Class
-void CLuaInterface::saveFloatValue(const char* varName,
+void CLuaInterface::saveFloatValue(const char* varName, const char* fileName,
 	const float value, const bool bOverwrite)
 {
 	lua_getglobal(theLuaState["default"], "SaveToLuaFile");
 	char outputString[80];
 	sprintf(outputString, "%s = %6.4f\n", varName, value);
 	lua_pushstring(theLuaState["default"], outputString);
+	lua_pushstring(theLuaState["default"], fileName);
 	lua_pushinteger(theLuaState["default"], bOverwrite);
-	lua_call(theLuaState["default"], 2, 0);
+	lua_call(theLuaState["default"], 3, 0);
 }

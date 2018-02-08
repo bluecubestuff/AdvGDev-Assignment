@@ -108,6 +108,7 @@ void WaypointData::GenerateFromFile()
 	for (int j = 0; j < gridCount * gridCount; ++j)
 	{
 		sprintf(variableName, "NodeX_%d", j);
+		std::cout << variableName << std::endl;
 		x = CLuaInterface::GetInstance()->getFloatValue(variableName, "waypoint");
 		sprintf(variableName, "NodeZ_%d", j);
 		z = CLuaInterface::GetInstance()->getFloatValue(variableName, "waypoint");
@@ -117,7 +118,7 @@ void WaypointData::GenerateFromFile()
 		newNode->x = x;
 		newNode->y = z;
 
-		std::cout << "x:" << x << " z:" << std::endl;
+		std::cout << "x:" << x << " z:" << z << std::endl;
 
 		newNode->active = true;
 		newNode->size = 2.f;

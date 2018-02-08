@@ -32,9 +32,9 @@ public:
 	float GetField(const char* key, std::string luaStateKey = "default");
 
 	// Save an integer value through the Lua Interface Class
-	void saveIntValue(const char* varName, const int value, const bool bOverwrite = NULL);
+	void saveIntValue(const char* varName, const char* fileName, const int value, const bool bOverwrite = NULL);
 	// Save a float value through the Lua Interface Class
-	void saveFloatValue(const char* varName, const float value, const bool bOverwrite = NULL);
+	void saveFloatValue(const char* varName, const char* fileName, const float value, const bool bOverwrite = NULL);
 
 	// pointer to lua state
 	//lua_State* theLuaState;

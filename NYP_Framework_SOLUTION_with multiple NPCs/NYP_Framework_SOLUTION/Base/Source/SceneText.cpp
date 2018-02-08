@@ -364,13 +364,13 @@ void SceneText::Update(double dt)
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5))
 		{
 			char variableName[80] = "";
-			CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", (int)(WaypointData::GetInstance()->nodeList.size()), true);
+			CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", "LuaFile/Waypoint.lua", (int)(WaypointData::GetInstance()->nodeList.size()), true);
 			for (auto it : WaypointData::GetInstance()->nodeList)
 			{
 				sprintf(variableName, "NodeX_%d", it->ID);
-				CLuaInterface::GetInstance()->saveFloatValue(variableName, it->x);
+				CLuaInterface::GetInstance()->saveFloatValue(variableName, "LuaFile/Waypoint.lua", it->x);
 				sprintf(variableName, "NodeZ_%d", it->ID);
-				CLuaInterface::GetInstance()->saveFloatValue(variableName, it->y);
+				CLuaInterface::GetInstance()->saveFloatValue(variableName, "LuaFile/Waypoint.lua", it->y);
 			}
 		}
 
@@ -542,11 +542,13 @@ void SceneText::Render()
 		}
 	}
 
-	//render all the path node spheres
+	//render all the path node 
 	for (auto it : WaypointData::GetInstance()->nodeList)
 	{
 		if (it->active)
 		{
+			//cout << it->x << ":" << it->y << "\n";
+
 			ms.PushMatrix();
 			ms.Translate(it->x, -10, it->y);
 			ms.Scale(it->size, it->size, it->size);

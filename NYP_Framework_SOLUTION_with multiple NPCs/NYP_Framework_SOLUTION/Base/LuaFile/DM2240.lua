@@ -47,13 +47,13 @@ pistol_timeBetweenShots = 0.3333
 
 
 -- save waypoints
-function SaveToLuaFile(outputString, overwrite)
+function SaveToLuaFile(outputString, filename, overwrite)
 	print("SaveToLuaFile...")
 	local f;					-- The file
 	if overwrite == 1 then		-- Wipe the contents with new data
-		f = assert(io.open("LuaFile/Waypoint.lua", "w"))
+		f = assert(io.open(filename, "w"))
 	elseif overwrite == 0 then 	-- Append with new data
-		f = assert(io.open("LuaFile/Waypoint.lua", "a"))
+		f = assert(io.open(filename, "a"))
 	end
 	-- Write to the file
 	f:write(outputString)
@@ -61,4 +61,6 @@ function SaveToLuaFile(outputString, overwrite)
 	f:close()
 	print("OK")
 end
+
+--"LuaFile/Waypoint.lua"
 

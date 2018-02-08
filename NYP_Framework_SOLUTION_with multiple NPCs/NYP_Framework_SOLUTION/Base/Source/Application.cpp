@@ -124,8 +124,8 @@ void Application::Init()
 	SceneManager::GetInstance()->SetActiveScene("IntroState");
 
 	// get the openGL resolution
-	m_window_width = CLuaInterface::GetInstance()->getIntValue("width");
-	m_window_height = CLuaInterface::GetInstance()->getIntValue("height");
+	m_window_width = CLuaInterface::GetInstance()->getIntValue("width", "resolution");
+	m_window_height = CLuaInterface::GetInstance()->getIntValue("height", "resolution");
 
 	//Lua testing stuff
 	CLuaInterface::GetInstance()->Run();
@@ -301,5 +301,10 @@ void Application::SetWindowSize(int x, int y)
 {
 	m_window_width = x;
 	m_window_height = y;
+
+	CLuaInterface::GetInstance()->saveIntValue("Application", "LuaFile/resolution.lua", 2, true);
+	CLuaInterface::GetInstance()->saveIntValue("width", "LuaFile/resolution.lua", m_window_width);
+	CLuaInterface::GetInstance()->saveIntValue("height", "LuaFile/resolution.lua", m_window_height);
+
 	glfwSetWindowSize(m_window, x, y);
 }
