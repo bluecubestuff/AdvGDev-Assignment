@@ -31,6 +31,7 @@
 #include "Node.h"
 #include "Edge.h"
 #include "Lua\LuaInterface.h"
+#include "KeyManager.h"
 
 #include <iostream>
 using namespace std;
@@ -41,11 +42,13 @@ using namespace std;
 
 SceneText::SceneText()
 {
+	prevScene = nullptr;
 }
 
 SceneText::SceneText(SceneManager* _sceneMgr)
 {
 	//_sceneMgr->AddScene("Start", this);
+	prevScene = nullptr;
 }
 
 SceneText::~SceneText()
@@ -56,7 +59,6 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
@@ -80,8 +82,6 @@ void SceneText::Init()
 	lights[1]->color.Set(1, 1, 0.5f);
 	lights[1]->power = 0.4f;
 	lights[1]->name = "lights[1]";
-
-
 
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
@@ -286,178 +286,197 @@ void SceneText::Init()
 
 	WaypointData::GetInstance()->Init();
 	max_enemies = CLuaInterface::GetInstance()->getIntValue("max_enemies");
+
+	isPause = false;
+
 	Math::InitRNG();
 }
 
 void SceneText::Update(double dt)
 {
-	// Update our entities
-	EntityManager::GetInstance()->Update(dt);
-
-	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
-	if(KeyboardController::GetInstance()->IsKeyDown('1'))
-		glEnable(GL_CULL_FACE);
-	if(KeyboardController::GetInstance()->IsKeyDown('2'))
-		glDisable(GL_CULL_FACE);
-	if(KeyboardController::GetInstance()->IsKeyDown('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if(KeyboardController::GetInstance()->IsKeyDown('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	
-	if(KeyboardController::GetInstance()->IsKeyDown('5'))
+	if (KeyboardController::GetInstance()->IsKeyPressed(KeyManager::GetInstance()->GetKey("pause")))
 	{
-		lights[0]->type = Light::LIGHT_POINT;
-	}
-	else if(KeyboardController::GetInstance()->IsKeyDown('6'))
-	{
-		lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	}
-	else if(KeyboardController::GetInstance()->IsKeyDown('7'))
-	{
-		lights[0]->type = Light::LIGHT_SPOT;
-	}
-
-	if(KeyboardController::GetInstance()->IsKeyDown('I'))
-		lights[0]->position.z -= (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('K'))
-		lights[0]->position.z += (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('J'))
-		lights[0]->position.x -= (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('L'))
-		lights[0]->position.x += (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('O'))
-		lights[0]->position.y -= (float)(10.f * dt);
-	if(KeyboardController::GetInstance()->IsKeyDown('P'))
-		lights[0]->position.y += (float)(10.f * dt);
-
-	if (KeyboardController::GetInstance()->IsKeyReleased('M'))
-	{
-		CSceneNode* theNode = CSceneGraph::GetInstance()->GetNode(1);
-		Vector3 pos = theNode->GetEntity()->GetPosition();
-		theNode->GetEntity()->SetPosition(Vector3(pos.x + 50.0f, pos.y, pos.z + 50.0f));
-	}
-	if (KeyboardController::GetInstance()->IsKeyReleased('N'))
-	{
-		CSpatialPartition::GetInstance()->PrintSelf();
-	}
-
-	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5))
-	{
-		char variableName[80] = "";
-		CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", (int)(WaypointData::GetInstance()->nodeList.size()), true);
-		for (auto it : WaypointData::GetInstance()->nodeList)
+		if (!isPause)
 		{
-			sprintf(variableName, "NodeX_%d", it->ID);
-			CLuaInterface::GetInstance()->saveFloatValue(variableName, it->x);
-			sprintf(variableName, "NodeZ_%d", it->ID);
-			CLuaInterface::GetInstance()->saveFloatValue(variableName, it->y);
-		}
-	}
-
-
-	// if the left mouse button was released
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-	{
-		cout << "Left Mouse Button was released!" << endl;
-	}
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-	{
-		cout << "Right Mouse Button was released!" << endl;
-	}
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-	{
-		cout << "Middle Mouse Button was released!" << endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-	{
-		cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
-	{
-		cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
-	}
-	// <THERE>
-
-	// Update the player position and other details based on keyboard and mouse inputs
-	playerInfo->Update(dt);
-
-	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
-
-	GraphicsManager::GetInstance()->UpdateLights(dt);
-
-	for (auto it : enemyMechList) {
-		it->Update(dt);
-		if (it->isDead == true)
-			it->bDelete = true;
-	}
-
-	std::vector<Mech*>::iterator it;
-	it = enemyMechList.begin();
-	while (it != enemyMechList.end()) {
-		if ((*it)->bDelete == true) {
-			it = enemyMechList.erase(it);
+			isPause = true;
+			SceneManager::GetInstance()->SetActiveScene("PauseState", false);
 		}
 		else
-			++it;
+			isPause = false;
 	}
 
-	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
-	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
-	std::ostringstream ss;
-	ss.precision(5);
-	float fps = (float)(1.f / dt);
-	ss << "FPS: " << fps;
-	textObj[0]->SetText(ss.str());
+	if (!isPause)
+	{
+		// Update our entities
+		EntityManager::GetInstance()->Update(dt);
 
-	std::ostringstream ss2;
-	if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() > 0) {
-		ss2.precision(4);
-		ss2 << "Player Leg HP:" << playerInfo->GetMech()->chassis->GetLeg()->GetHP();
-		textObj[1]->SetText(ss2.str());
-	}
-	else {
-		ss2.precision(4);
-		ss2 << "Leg Deaded";
-		textObj[1]->SetText(ss2.str());
-	}
+		// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
+		if (KeyboardController::GetInstance()->IsKeyDown('1'))
+			glEnable(GL_CULL_FACE);
+		if (KeyboardController::GetInstance()->IsKeyDown('2'))
+			glDisable(GL_CULL_FACE);
+		if (KeyboardController::GetInstance()->IsKeyDown('3'))
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (KeyboardController::GetInstance()->IsKeyDown('4'))
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
-	textObj[2]->SetText(ss1.str());
+		if (KeyboardController::GetInstance()->IsKeyDown('5'))
+		{
+			lights[0]->type = Light::LIGHT_POINT;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('6'))
+		{
+			lights[0]->type = Light::LIGHT_DIRECTIONAL;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('7'))
+		{
+			lights[0]->type = Light::LIGHT_SPOT;
+		}
 
-	if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() <= 0) {
-		std::ostringstream ss3;
-		ss3 << "Deaded";
-		textObj[2]->SetText(ss3.str());
-	}
+		if (KeyboardController::GetInstance()->IsKeyDown('I'))
+			lights[0]->position.z -= (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('K'))
+			lights[0]->position.z += (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('J'))
+			lights[0]->position.x -= (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('L'))
+			lights[0]->position.x += (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('O'))
+			lights[0]->position.y -= (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('P'))
+			lights[0]->position.y += (float)(10.f * dt);
 
-	std::ostringstream ss4;
-	ss4 << '[' << playerInfo->GetPos().x << ' ' << playerInfo->GetPos().y << ' ' << playerInfo->GetPos().z << ']';
-	textObj[3]->SetText(ss4.str());
+		if (KeyboardController::GetInstance()->IsKeyReleased('M'))
+		{
+			CSceneNode* theNode = CSceneGraph::GetInstance()->GetNode(1);
+			Vector3 pos = theNode->GetEntity()->GetPosition();
+			theNode->GetEntity()->SetPosition(Vector3(pos.x + 50.0f, pos.y, pos.z + 50.0f));
+		}
+		if (KeyboardController::GetInstance()->IsKeyReleased('N'))
+		{
+			CSpatialPartition::GetInstance()->PrintSelf();
+		}
 
-	static float timer = 0.f;
-	timer += dt;
-	if (timer > 5.f) {
-		if (enemyMechList.size() < max_enemies) {
-			//generate a random pos a certain dist away
-			float dist = Math::RandFloatMinMax(80, 100);
-			//generate a random direction;
-			Vector3 dir;
-			dir.Set(Math::RandFloatMinMax(-1, 1), 0, Math::RandFloatMinMax(-1, 1));
-			dir.Normalize();
-			Vector3 newPos = dir * dist;
-			CEnemy* test = new CEnemy();
-			test->Init(newPos.x, newPos.z);
-			test->SetTerrain(groundEntity);
-			test->SetTarget(test->GenerateTarget());
-			Mech* mech = new Mech();
-			mech->Init(test);
-			enemyMechList.push_back(mech);
-			std::cout << "spawn enemy\n";
-			timer = 0;
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5))
+		{
+			char variableName[80] = "";
+			CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", (int)(WaypointData::GetInstance()->nodeList.size()), true);
+			for (auto it : WaypointData::GetInstance()->nodeList)
+			{
+				sprintf(variableName, "NodeX_%d", it->ID);
+				CLuaInterface::GetInstance()->saveFloatValue(variableName, it->x);
+				sprintf(variableName, "NodeZ_%d", it->ID);
+				CLuaInterface::GetInstance()->saveFloatValue(variableName, it->y);
+			}
+		}
+
+		// if the left mouse button was released
+		if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
+		{
+			cout << "Left Mouse Button was released!" << endl;
+		}
+		if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+		{
+			cout << "Right Mouse Button was released!" << endl;
+		}
+		if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+		{
+			cout << "Middle Mouse Button was released!" << endl;
+		}
+		if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+		{
+			cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
+		}
+		if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+		{
+			cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
+		}
+		// <THERE>
+
+		// Update the player position and other details based on keyboard and mouse inputs
+		playerInfo->Update(dt);
+
+		//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+
+		GraphicsManager::GetInstance()->UpdateLights(dt);
+
+		for (auto it : enemyMechList) {
+			it->Update(dt);
+			if (it->isDead == true)
+				it->bDelete = true;
+		}
+
+		std::vector<Mech*>::iterator it;
+		it = enemyMechList.begin();
+		while (it != enemyMechList.end()) {
+			if ((*it)->bDelete == true) {
+				it = enemyMechList.erase(it);
+			}
+			else
+				++it;
+		}
+
+		// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
+		// Eg. FPSRenderEntity or inside RenderUI for LightEntity
+		std::ostringstream ss;
+		ss.precision(5);
+		float fps = (float)(1.f / dt);
+		ss << "FPS: " << fps;
+		textObj[0]->SetText(ss.str());
+
+		std::ostringstream ss2;
+		if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() > 0) {
+			ss2.precision(4);
+			ss2 << "Player Leg HP:" << playerInfo->GetMech()->chassis->GetLeg()->GetHP();
+			textObj[1]->SetText(ss2.str());
+		}
+		else {
+			ss2.precision(4);
+			ss2 << "Leg Deaded";
+			textObj[1]->SetText(ss2.str());
+		}
+
+		std::ostringstream ss1;
+		ss1.precision(4);
+		ss1 << "Player Torso HP:" << playerInfo->GetMech()->chassis->GetTorso()->GetHP();
+		textObj[2]->SetText(ss1.str());
+
+		if (CPlayerInfo::GetInstance()->GetMech()->chassis->GetTorso()->GetHP() <= 0) {
+			std::ostringstream ss3;
+			ss3 << "Deaded";
+			textObj[2]->SetText(ss3.str());
+		}
+
+		std::ostringstream ss4;
+		ss4 << '[' << playerInfo->GetPos().x << ' ' << playerInfo->GetPos().y << ' ' << playerInfo->GetPos().z << ']';
+		textObj[3]->SetText(ss4.str());
+
+		static float timer = 0.f;
+		timer += dt;
+		if (timer > 5.f) {
+			if (enemyMechList.size() < max_enemies) {
+				//generate a random pos a certain dist away
+				float dist = Math::RandFloatMinMax(80, 100);
+				//generate a random direction;
+				Vector3 dir;
+				dir.Set(Math::RandFloatMinMax(-1, 1), 0, Math::RandFloatMinMax(-1, 1));
+				dir.Normalize();
+				Vector3 newPos = dir * dist;
+				CEnemy* test = new CEnemy();
+				test->Init(newPos.x, newPos.z);
+				test->SetTerrain(groundEntity);
+				test->SetTarget(test->GenerateTarget());
+				Mech* mech = new Mech();
+				mech->Init(test);
+				enemyMechList.push_back(mech);
+				std::cout << "spawn enemy\n";
+				timer = 0;
+			}
 		}
 	}
+
+	if (prevScene)
+		prevScene->Update(dt);
 }
 
 void SceneText::Render()
@@ -563,6 +582,12 @@ void SceneText::Exit()
 	}
 
 	// Delete the lights
-	delete lights[0];
-	delete lights[1];
+	GraphicsManager::GetInstance()->RemoveLight("lights[0]");
+	GraphicsManager::GetInstance()->RemoveLight("lights[1]");
+
+	if (prevScene != nullptr)
+		prevScene->Exit();
+
+	//delete lights[0];
+	//delete lights[1];
 }

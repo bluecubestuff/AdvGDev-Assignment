@@ -26,6 +26,9 @@ public:
 	int GetWindowHeight();
 	int GetWindowWidth();
 	
+	inline void SetWindowHeight(int _height) { m_window_height = _height; }
+	inline void SetWindowWidth(int _width) { m_window_width = _width; }
+
 private:
 	Application();
 	~Application();

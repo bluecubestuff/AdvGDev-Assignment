@@ -9,9 +9,9 @@ void WaypointData::Init()
 {
 	float gridSize = 100;
 	int gridCount = 10;
-	char variableName[80] = "";
+	//char variableName[80] = "";
 
-	CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", gridCount * gridCount, true);
+	//CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", gridCount * gridCount, true);
 
 	for (int i = -gridCount / 2; i < gridCount / 2; ++i)
 	{
@@ -24,10 +24,10 @@ void WaypointData::Init()
 			newNode->y = j * gridSize + gridSize / 2;
 
 			//temp method
-			sprintf(variableName, "Node_%d", newNode->ID);
+			/*sprintf(variableName, "NodeX_%d", newNode->ID);
 			CLuaInterface::GetInstance()->saveFloatValue(variableName, newNode->x);
-			sprintf(variableName, "Node_%d", newNode->ID);
-			CLuaInterface::GetInstance()->saveFloatValue(variableName, newNode->y);
+			sprintf(variableName, "NodeZ_%d", newNode->ID);
+			CLuaInterface::GetInstance()->saveFloatValue(variableName, newNode->y);*/
 
 			newNode->active = true;
 			newNode->size = 2.f;

@@ -9,4 +9,5 @@ void KeyManager::Init()
 	keyMap["left"] = CLuaInterface::GetInstance()->getCharValue("left");
 	keyMap["reload"] = CLuaInterface::GetInstance()->getCharValue("reload");
 	keyMap["grenade"] = CLuaInterface::GetInstance()->getCharValue("grenade");
+	keyMap["pause"] = CLuaInterface::GetInstance()->getCharValue("pause");
 }

@@ -343,7 +343,7 @@ void CEnemy::Update(double dt)
 		{
 			moveTar = CPlayerInfo::GetInstance()->GetPos();
 			viewVector = (moveTar - position);
-			printf("path is empty\n");
+			//printf("path is empty\n");
 		}
 
 		if (dstFromPlayer.LengthSquared() > AGRO_DIST) {

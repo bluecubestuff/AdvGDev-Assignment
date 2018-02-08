@@ -13,6 +13,7 @@ right = "D"
 left = "A"
 reload = "R"
 grenade = "G"
+pause = "P"
 
 -- MECH
 legHP = 10000

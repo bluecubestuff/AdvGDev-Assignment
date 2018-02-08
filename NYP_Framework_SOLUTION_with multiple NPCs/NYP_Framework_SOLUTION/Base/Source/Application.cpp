@@ -21,6 +21,8 @@
 #include "SceneText.h"
 #include "GameStateManagement\IntroState.h"
 #include "GameStateManagement\MenuState.h"
+#include "GameStateManagement\PauseState.h"
+
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -114,6 +116,7 @@ void Application::Init()
 	SceneManager::GetInstance()->AddScene("IntroState", new CIntroState());
 	SceneManager::GetInstance()->AddScene("MenuState", new CMenuState());
 	SceneManager::GetInstance()->AddScene("GameState", new SceneText());
+	SceneManager::GetInstance()->AddScene("PauseState", new CPauseState());
 
 	//set active scene
 	SceneManager::GetInstance()->SetActiveScene("IntroState");
@@ -148,7 +151,7 @@ void Application::Init()
 
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(m_window_width, m_window_height, "GDev A2", NULL, NULL);
-
+	
 	//If the window couldn't be created
 	if (!m_window)
 	{

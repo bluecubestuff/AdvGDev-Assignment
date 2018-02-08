@@ -17,7 +17,7 @@ using namespace std;
 
 CIntroState::CIntroState()
 {
-
+	prevScene = nullptr;
 }
 CIntroState::~CIntroState()
 {
@@ -37,7 +37,7 @@ void CIntroState::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	IntroStateBackground = Create::Sprite2DObject("INTROSTATE_BKGROUND", 
 													Vector3(halfWindowWidth, halfWindowHeight, 0.0f), 
-													Vector3(800.0f, 600.0f, 0.0f));
+													Vector3((float)(Application::GetInstance().GetWindowWidth()), (float)(Application::GetInstance().GetWindowHeight()), 0.0f));
 
 	cout << "CIntroState loaded\n" << endl;
 }
@@ -48,6 +48,9 @@ void CIntroState::Update(double dt)
 		cout << "Loading MenuState" << endl;
 		SceneManager::GetInstance()->SetActiveScene("MenuState");
 	}
+
+	if (prevScene)
+		prevScene->Update(dt);
 }
 void CIntroState::Render()
 {
@@ -83,4 +86,7 @@ void CIntroState::Exit()
 
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
+
+	if (prevScene != nullptr)
+		prevScene->Exit();
 }
