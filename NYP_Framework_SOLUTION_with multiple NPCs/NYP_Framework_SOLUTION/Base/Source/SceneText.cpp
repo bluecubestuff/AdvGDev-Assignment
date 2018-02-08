@@ -303,7 +303,7 @@ void SceneText::Update(double dt)
 		}
 		else
 		{
-
+			camera.Init(CPlayerInfo::GetInstance()->GetPos(), CPlayerInfo::GetInstance()->GetTarget(), CPlayerInfo::GetInstance()->GetUp());
 			isPause = false;
 		}
 	}

@@ -12,6 +12,7 @@
 #include "KeyboardController.h"
 #include "SceneManager.h"
 #include "../KeyManager.h"
+#include "../PlayerInfo/PlayerInfo.h"
 
 CPauseState::CPauseState()
 {
@@ -25,7 +26,8 @@ CPauseState::~CPauseState()
 void CPauseState::Init()
 {
 	// Create and attach the camera to the scene
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	//camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(CPlayerInfo::GetInstance()->GetPos(), CPlayerInfo::GetInstance()->GetTarget(), CPlayerInfo::GetInstance()->GetUp());
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
 	// Load all the meshes
