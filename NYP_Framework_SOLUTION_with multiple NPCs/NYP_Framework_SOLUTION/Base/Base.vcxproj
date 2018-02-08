@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Arm.cpp" />
+    <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\Chassis.cpp" />
     <ClCompile Include="Source\Edge.cpp" />
     <ClCompile Include="Source\enemygun.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Arm.h" />
     <ClInclude Include="Source\BasePart.h" />
+    <ClInclude Include="Source\Button.h" />
     <ClInclude Include="Source\Chassis.h" />
     <ClInclude Include="Source\Edge.h" />
     <ClInclude Include="Source\enemygun.h" />
