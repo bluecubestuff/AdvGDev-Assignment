@@ -2,7 +2,7 @@
 #define APPLICATION_H
 
 #include "timer.h"
-
+#include "ShaderProgram.h"
 struct GLFWwindow;
 
 class Application
@@ -31,7 +31,7 @@ private:
 	~Application();
 
 	static bool IsKeyPressed(unsigned short key);
-
+	void InitDisplay(void);
 	// Should make these not hard-coded :P
 	//const static int m_window_width = 800;
 	//const static int m_window_height = 600;
@@ -41,6 +41,10 @@ private:
 
 	//Declare a window object
 	StopWatch m_timer;
+
+	// Pointer to shader program
+	ShaderProgram* currProg;
+
 };
 
 #endif

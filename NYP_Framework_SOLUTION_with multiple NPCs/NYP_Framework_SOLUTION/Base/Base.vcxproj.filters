@@ -46,15 +46,15 @@
     <Filter Include="Waypoint">
       <UniqueIdentifier>{7d428b4a-8db8-4f63-8575-1e1b1e49f8d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{e11732d2-ea09-4549-9c61-065b4015f89e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\FPSCamera.cpp">
@@ -168,12 +168,18 @@
     <ClCompile Include="Source\KeyManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneText.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameStateManagement\IntroState.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameStateManagement\MenuState.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\FPSCamera.h">
@@ -301,6 +307,15 @@
     </ClInclude>
     <ClInclude Include="Source\KeyManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameStateManagement\IntroState.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameStateManagement\MenuState.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneText.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -37,7 +37,7 @@ using namespace std;
 
 #define DIST_BETWEEN_NODES
 
-SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
+//SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
 SceneText::SceneText()
 {
@@ -45,7 +45,7 @@ SceneText::SceneText()
 
 SceneText::SceneText(SceneManager* _sceneMgr)
 {
-	_sceneMgr->AddScene("Start", this);
+	//_sceneMgr->AddScene("Start", this);
 }
 
 SceneText::~SceneText()
@@ -56,47 +56,7 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
 	
-	// Tell the shader program to store these uniform locations
-	currProg->AddUniform("MVP");
-	currProg->AddUniform("MV");
-	currProg->AddUniform("MV_inverse_transpose");
-	currProg->AddUniform("material.kAmbient");
-	currProg->AddUniform("material.kDiffuse");
-	currProg->AddUniform("material.kSpecular");
-	currProg->AddUniform("material.kShininess");
-	currProg->AddUniform("lightEnabled");
-	currProg->AddUniform("numLights");
-	currProg->AddUniform("lights[0].type");
-	currProg->AddUniform("lights[0].position_cameraspace");
-	currProg->AddUniform("lights[0].color");
-	currProg->AddUniform("lights[0].power");
-	currProg->AddUniform("lights[0].kC");
-	currProg->AddUniform("lights[0].kL");
-	currProg->AddUniform("lights[0].kQ");
-	currProg->AddUniform("lights[0].spotDirection");
-	currProg->AddUniform("lights[0].cosCutoff");
-	currProg->AddUniform("lights[0].cosInner");
-	currProg->AddUniform("lights[0].exponent");
-	currProg->AddUniform("lights[1].type");
-	currProg->AddUniform("lights[1].position_cameraspace");
-	currProg->AddUniform("lights[1].color");
-	currProg->AddUniform("lights[1].power");
-	currProg->AddUniform("lights[1].kC");
-	currProg->AddUniform("lights[1].kL");
-	currProg->AddUniform("lights[1].kQ");
-	currProg->AddUniform("lights[1].spotDirection");
-	currProg->AddUniform("lights[1].cosCutoff");
-	currProg->AddUniform("lights[1].cosInner");
-	currProg->AddUniform("lights[1].exponent");
-	currProg->AddUniform("colorTextureEnabled");
-	currProg->AddUniform("colorTexture");
-	currProg->AddUniform("textEnabled");
-	currProg->AddUniform("textColor");
-	
-	// Tell the graphics manager to use the shader we just loaded
-	GraphicsManager::GetInstance()->SetActiveShader("default");
 
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
@@ -121,8 +81,7 @@ void SceneText::Init()
 	lights[1]->power = 0.4f;
 	lights[1]->name = "lights[1]";
 
-	currProg->UpdateInt("numLights", 1);
-	currProg->UpdateInt("textEnabled", 0);
+
 
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateAxes("reference");
@@ -384,7 +343,15 @@ void SceneText::Update(double dt)
 
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_F5))
 	{
-		//for saving of node implement ltr
+		char variableName[80] = "";
+		CLuaInterface::GetInstance()->saveIntValue("WAYPOINTS", (int)(WaypointData::GetInstance()->nodeList.size()), true);
+		for (auto it : WaypointData::GetInstance()->nodeList)
+		{
+			sprintf(variableName, "NodeX_%d", it->ID);
+			CLuaInterface::GetInstance()->saveFloatValue(variableName, it->x);
+			sprintf(variableName, "NodeZ_%d", it->ID);
+			CLuaInterface::GetInstance()->saveFloatValue(variableName, it->y);
+		}
 	}
 
 
