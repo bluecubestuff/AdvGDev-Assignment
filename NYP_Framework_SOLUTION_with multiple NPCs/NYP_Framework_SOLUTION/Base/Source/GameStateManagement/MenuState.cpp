@@ -48,6 +48,11 @@ void CMenuState::Update(double dt)
 		cout << "Loading CMenuState" << endl;
 		SceneManager::GetInstance()->SetActiveScene("GameState");
 	}
+	if (KeyboardController::GetInstance()->IsKeyReleased('O'))
+	{
+		cout << "Loading OptionState" << endl;
+		SceneManager::GetInstance()->SetActiveScene("OptionState");
+	}
 
 	if (prevScene)
 		prevScene->Update(dt);

@@ -22,6 +22,7 @@
 #include "GameStateManagement\IntroState.h"
 #include "GameStateManagement\MenuState.h"
 #include "GameStateManagement\PauseState.h"
+#include "GameStateManagement\Option.h"
 
 
 GLFWwindow* m_window;
@@ -117,6 +118,7 @@ void Application::Init()
 	SceneManager::GetInstance()->AddScene("MenuState", new CMenuState());
 	SceneManager::GetInstance()->AddScene("GameState", new SceneText());
 	SceneManager::GetInstance()->AddScene("PauseState", new CPauseState());
+	SceneManager::GetInstance()->AddScene("OptionState", new OptionState());
 
 	//set active scene
 	SceneManager::GetInstance()->SetActiveScene("IntroState");
@@ -273,4 +275,24 @@ int Application::GetWindowHeight()
 int Application::GetWindowWidth()
 {
 	return m_window_width;
+}
+
+void Application::GetCursorPos(double *xpos, double *ypos)
+{
+	glfwGetCursorPos(m_window, xpos, ypos);
+}
+
+void Application::SetMouseVisibilty(bool _value)
+{
+	if (true)
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	else
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void Application::SetWindowSize(int x, int y)
+{
+	m_window_width = x;
+	m_window_height = y;
+	glfwSetWindowSize(m_window, x, y);
 }

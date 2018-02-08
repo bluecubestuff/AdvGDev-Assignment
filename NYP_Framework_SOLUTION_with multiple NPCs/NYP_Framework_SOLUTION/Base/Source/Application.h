@@ -25,7 +25,10 @@ public:
 
 	int GetWindowHeight();
 	int GetWindowWidth();
-	
+	static void GetCursorPos(double *xpos, double *ypos);
+	static void SetMouseVisibilty(bool _value);
+	void SetWindowSize(int x, int y);
+
 	inline void SetWindowHeight(int _height) { m_window_height = _height; }
 	inline void SetWindowWidth(int _width) { m_window_width = _width; }
 
@@ -35,9 +38,6 @@ private:
 
 	static bool IsKeyPressed(unsigned short key);
 	void InitDisplay(void);
-	// Should make these not hard-coded :P
-	//const static int m_window_width = 800;
-	//const static int m_window_height = 600;
 	int m_window_width;
 	int m_window_height;
 
