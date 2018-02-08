@@ -45,6 +45,7 @@ private:
 	CEnemy* theEnemy;
 
 	std::vector<Mech*> enemyMechList;
+	//std::vector<CEnemy*> enemyList;
 
 	static SceneText* sInstance; // The pointer to the object that gets registered
 };

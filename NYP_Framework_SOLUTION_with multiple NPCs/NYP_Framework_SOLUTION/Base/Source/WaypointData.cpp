@@ -162,3 +162,27 @@ void WaypointData::GenerateFromFile()
 	}
 
 }
+
+void WaypointData::DeleteWaypoints()
+{
+	//std::vector<Node*> nodeList;
+	std::vector<Node*>::iterator it = nodeList.begin();
+	while (it != nodeList.end())
+	{
+		// Delete if done
+		delete *it;
+		it = nodeList.erase(it);
+
+		++it;
+	}
+
+	std::vector<Edge*>::iterator it2 = edgeList.begin();
+	while (it2 != edgeList.end())
+	{
+		// Delete if done
+		delete *it2;
+		it2 = edgeList.erase(it2);
+
+		++it2;
+	}
+}

@@ -50,7 +50,6 @@ void CPauseState::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
 	{
 		cout << "Loading GameState" << endl;
-		//SceneManager::GetInstance()->ExitAllStates();
 		SceneManager::GetInstance()->SetActiveScene("GameState");
 	}
 }

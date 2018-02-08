@@ -325,6 +325,27 @@ bool EntityManager::CheckCollisionInPartition(void)
 	return false;
 }
 
+void EntityManager::RemoveAllEntity()
+{
+
+	std::list<EntityBase*>::iterator it = entityList.begin();
+	while (it != entityList.end())
+	{
+		// Remove the node
+		CSceneGraph::GetInstance()->DeleteNode((*it));
+		// Remove from partition
+		CSpatialPartition::GetInstance()->Remove((*it));
+
+		// Delete if done
+		delete *it;
+		it = entityList.erase(it);
+
+		++it;
+	}
+
+	collisionList.clear();
+}
+
 bool EntityManager::CheckLaserCollision(EntityBase* _entity)
 {
 	//cast it to CLaser

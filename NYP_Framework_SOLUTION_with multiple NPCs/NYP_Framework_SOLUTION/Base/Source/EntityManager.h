@@ -43,6 +43,9 @@ public:
 	//check collision within spatial partition
 	bool CheckCollisionInPartition(void);
 
+	//delete all entity in list
+	void RemoveAllEntity();
+
 private:
 	EntityManager();
 	virtual ~EntityManager();
