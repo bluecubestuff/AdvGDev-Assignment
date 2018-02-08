@@ -11,6 +11,8 @@ using namespace std;
 #include "RenderHelper.h"
 #include "../SpriteEntity.h"
 #include "../EntityManager.h"
+#include "../Button.h"
+#include "MouseController.h"
 
 #include "KeyboardController.h"
 #include "SceneManager.h"
@@ -30,6 +32,21 @@ void CMenuState::Init()
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 
+
+	MeshBuilder::GetInstance()->GenerateQuad("startButton", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("startButton")->textureID = LoadTGA("Image//startbutton.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("option", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("option")->textureID = LoadTGA("Image//optionbutton.tga");
+
+	Button* newBut = new Button("startButton", 0.25, 0.75, 0.2, 0.1);
+	newBut->buttonMesh = Create::Sprite2DObject("startButton", newBut->pos, newBut->scale);
+	buttonList.push_back(newBut);
+
+	newBut = new Button("option", 0.75, 0.75, 0.2, 0.1);
+	newBut->buttonMesh = Create::Sprite2DObject("option", newBut->pos, newBut->scale);
+	buttonList.push_back(newBut);
+
 	// Load all the meshes
 	MeshBuilder::GetInstance()->GenerateQuad("MENUSTATE_BKGROUND", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("MENUSTATE_BKGROUND")->textureID = LoadTGA("Image//MenuState.tga");
@@ -39,19 +56,33 @@ void CMenuState::Init()
 												 Vector3(halfWindowWidth, halfWindowHeight, 0.0f), 
 												 Vector3((float)(Application::GetInstance().GetWindowWidth()), (float)(Application::GetInstance().GetWindowHeight()), 0.0f));
 
+	MouseController::GetInstance()->SetKeepMouseCentered(false);
+	Application::SetMouseVisibilty(true);
+
 	cout << "CMenuState loaded\n" << endl;
 }
 void CMenuState::Update(double dt)
 {
-	if (KeyboardController::GetInstance()->IsKeyReleased(VK_SPACE))
+	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
-		cout << "Loading CMenuState" << endl;
-		SceneManager::GetInstance()->SetActiveScene("GameState");
-	}
-	if (KeyboardController::GetInstance()->IsKeyReleased('O'))
-	{
-		cout << "Loading OptionState" << endl;
-		SceneManager::GetInstance()->SetActiveScene("OptionState");
+		double x, y;
+		MouseController::GetInstance()->GetMousePosition(x, y);
+		int w = Application::GetInstance().GetWindowWidth();
+		int h = Application::GetInstance().GetWindowHeight();
+		float posX = static_cast<float>(x);
+		float posY = (h - static_cast<float>(y));
+
+		std::cout << posX << " " << posY << '\n';
+
+		for (auto it : buttonList)
+		{
+			std::cout << it->name << ": x." << it->pos.x << " y." << it->pos.y << '\n';
+			if (it->CheckOnMouse(posX, posY))
+			{
+				it->OnClick();
+				break;
+			}
+		}
 	}
 
 	if (prevScene)
@@ -90,9 +121,20 @@ void CMenuState::Exit()
 	// Remove the meshes which are specific to CMenuState
 	MeshBuilder::GetInstance()->RemoveMesh("MENUSTATE_BKGROUND");
 
+	for (int i = 0; i < buttonList.size(); ++i)
+	{
+		EntityManager::GetInstance()->RemoveEntity(buttonList[i]->buttonMesh);
+		delete buttonList[i];
+		buttonList[i] = nullptr;
+	}
+	buttonList.clear();
+
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 
 	if (prevScene != nullptr)
 		prevScene->Exit();
+
+	MouseController::GetInstance()->SetKeepMouseCentered(false);
+	Application::SetMouseVisibilty(true);
 }

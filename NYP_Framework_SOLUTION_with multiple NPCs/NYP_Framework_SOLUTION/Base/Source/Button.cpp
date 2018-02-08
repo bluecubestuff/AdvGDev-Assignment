@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "GameStateManagement\Option.h"
 #include "SceneManager.h"
+#include "SceneText.h"
+#include "MouseController.h"
 
 Button::Button(std::string _name, float posX, float posY, float sizeX, float sizeY)
 {
@@ -68,5 +70,21 @@ void Button::OnClick()
 	{
 		std::cout << "Loading MenuState" << std::endl;
 		SceneManager::GetInstance()->SetActiveScene("MenuState");
+	}
+	else if (name == "startButton")
+	{
+		std::cout << "Loading GameState" << std::endl;
+		SceneManager::GetInstance()->SetActiveScene("GameState");
+	}
+	else if (name == "option")
+	{
+		std::cout << "Loading OptionState" << std::endl;
+		SceneManager::GetInstance()->SetActiveScene("OptionState");
+	}
+	else if (name == "resume")
+	{
+		std::cout << "Loading GameState" << std::endl;
+		SceneManager::GetInstance()->SetActiveScene("GameState");
+		SceneText::isPause = false;
 	}
 }

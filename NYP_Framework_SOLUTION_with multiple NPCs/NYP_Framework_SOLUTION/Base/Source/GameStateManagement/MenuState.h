@@ -4,10 +4,12 @@
 #include "Mtx44.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
+#include <vector>
 #include "../FPSCamera.h"
 #include "../SpriteEntity.h"
 
 class SceneManager;
+class Button;
 class CMenuState : public Scene
 {
 public:
@@ -20,6 +22,7 @@ public:
 	virtual void Exit();
 
 private:
+	std::vector<Button*> buttonList;
 	FPSCamera camera;
 	SpriteEntity* MenuStateBackground;
 	//	TextEntity* textObj[3];
