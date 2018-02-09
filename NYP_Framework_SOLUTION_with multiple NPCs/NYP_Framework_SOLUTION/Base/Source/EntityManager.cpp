@@ -327,6 +327,7 @@ bool EntityManager::CheckCollisionInPartition(void)
 
 void EntityManager::RemoveAllEntity()
 {
+	collisionList.clear();
 
 	std::list<EntityBase*>::iterator it = entityList.begin();
 	while (it != entityList.end())
@@ -343,8 +344,6 @@ void EntityManager::RemoveAllEntity()
 		if (!entityList.empty())
 			++it;
 	}
-
-	collisionList.clear();
 }
 
 bool EntityManager::CheckLaserCollision(EntityBase* _entity)
