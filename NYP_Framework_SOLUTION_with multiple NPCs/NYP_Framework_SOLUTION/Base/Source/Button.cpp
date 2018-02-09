@@ -133,4 +133,9 @@ void Button::OnClick()
 		SceneManager::GetInstance()->SetActiveScene("MenuState");
 		SceneText::isPause = false;
 	}
+	else if (name == "quitGame")
+	{
+		std::cout << "Closing Game" << std::endl;
+		Application::quitGame = true;
+	}
 }

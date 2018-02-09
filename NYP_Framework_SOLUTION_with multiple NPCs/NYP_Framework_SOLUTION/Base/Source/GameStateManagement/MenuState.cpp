@@ -39,12 +39,19 @@ void CMenuState::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("option", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("option")->textureID = LoadTGA("Image//optionbutton.tga");
 
-	Button* newBut = new Button("startButton", 0.25, 0.75, 0.2, 0.1);
+	MeshBuilder::GetInstance()->GenerateQuad("quitButton", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("quitButton")->textureID = LoadTGA("Image//quitButton.tga");
+
+	Button* newBut = new Button("startButton", 0.25, 0.5, 0.4, 0.2);
 	newBut->buttonMesh = Create::Sprite2DObject("startButton", newBut->pos, newBut->scale);
 	buttonList.push_back(newBut);
 
-	newBut = new Button("option", 0.75, 0.75, 0.2, 0.1);
+	newBut = new Button("option", 0.75, 0.5, 0.4, 0.2);
 	newBut->buttonMesh = Create::Sprite2DObject("option", newBut->pos, newBut->scale);
+	buttonList.push_back(newBut);
+
+	newBut = new Button("quitGame", 0.5, 0.25, 0.4, 0.2);
+	newBut->buttonMesh = Create::Sprite2DObject("quitButton", newBut->pos, newBut->scale);
 	buttonList.push_back(newBut);
 
 	// Load all the meshes
