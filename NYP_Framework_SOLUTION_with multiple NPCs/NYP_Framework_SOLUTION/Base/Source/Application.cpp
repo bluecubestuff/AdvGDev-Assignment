@@ -291,7 +291,7 @@ void Application::GetCursorPos(double *xpos, double *ypos)
 
 void Application::SetMouseVisibilty(bool _value)
 {
-	if (true)
+	if (_value)
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	else
 		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

@@ -39,6 +39,7 @@ using namespace std;
 #define DIST_BETWEEN_NODES
 
 bool SceneText::isPause = false;
+TextEntity* SceneText::textObj[] = {};
 
 //SceneText* SceneText::sInstance = new SceneText(SceneManager::GetInstance());
 
@@ -300,6 +301,8 @@ void SceneText::Init()
 
 void SceneText::Update(double dt)
 {
+	MouseController::GetInstance()->SetKeepMouseCentered(true);
+	Application::SetMouseVisibilty(false);
 	if (KeyboardController::GetInstance()->IsKeyPressed(KeyManager::GetInstance()->GetKey("pause")))
 	{
 		if (!isPause)
@@ -600,7 +603,7 @@ void SceneText::Exit()
 	if (prevScene != nullptr)
 		prevScene->Exit();
 
-	EntityManager::GetInstance()->RemoveAllEntity();
+	//EntityManager::GetInstance()->RemoveAllEntity();
 	//WaypointData::GetInstance()->DeleteWaypoints();
 	//if (groundEntity)
 	//	delete groundEntity;

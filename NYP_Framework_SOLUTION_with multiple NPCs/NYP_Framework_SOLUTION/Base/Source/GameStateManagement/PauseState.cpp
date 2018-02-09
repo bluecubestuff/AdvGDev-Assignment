@@ -35,8 +35,14 @@ void CPauseState::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("resumeButton", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("resumeButton")->textureID = LoadTGA("Image//resumebutton.tga");
 
-	Button* newBut = new Button("resume", 0.5, 0.5, 0.4, 0.2);
+	MeshBuilder::GetInstance()->GenerateQuad("quitButton", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("quitButton")->textureID = LoadTGA("Image//quitButton.tga");
+
+	Button* newBut = new Button("resume", 0.5, 0.5, 0.3, 0.2);
 	newBut->buttonMesh = Create::Sprite2DObject("resumeButton", newBut->pos, newBut->scale);
+	buttonList.push_back(newBut);
+	newBut = new Button("quit", 0.5, 0.25, 0.3, 0.2);
+	newBut->buttonMesh = Create::Sprite2DObject("quitButton", newBut->pos, newBut->scale);
 	buttonList.push_back(newBut);
 
 	// Load all the meshes

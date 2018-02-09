@@ -4,6 +4,8 @@
 #include "SceneManager.h"
 #include "SceneText.h"
 #include "MouseController.h"
+#include "TextEntity.h"
+#include "EntityManager.h"
 
 Button::Button(std::string _name, float posX, float posY, float sizeX, float sizeY)
 {
@@ -50,6 +52,18 @@ void Button::OnClick()
 		Application::GetInstance().SetWindowSize(1200, 900);
 		OptionState::me->Exit();
 		OptionState::me->Init();
+		for (int i = 0; i < 4; ++i)
+		{
+			EntityManager::GetInstance()->RemoveEntity(SceneText::textObj[i]);
+		}
+		float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+		float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+		float fontSize = 25.0f;
+		float halfFontSize = fontSize / 2.0f;
+		for (int i = 0; i < 4; ++i)
+		{
+			SceneText::textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
+		}
 		printf("1200x900 was selected\n");
 	}
 	else if (name == "1024x720")
@@ -57,6 +71,18 @@ void Button::OnClick()
 		Application::GetInstance().SetWindowSize(1024, 720);
 		OptionState::me->Exit();
 		OptionState::me->Init();
+		for (int i = 0; i < 4; ++i)
+		{
+			EntityManager::GetInstance()->RemoveEntity(SceneText::textObj[i]);
+		}
+		float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+		float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+		float fontSize = 25.0f;
+		float halfFontSize = fontSize / 2.0f;
+		for (int i = 0; i < 4; ++i)
+		{
+			SceneText::textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
+		}
 		printf("1024x720 was selected\n");
 	}
 	else if (name == "800x600")
@@ -64,6 +90,18 @@ void Button::OnClick()
 		Application::GetInstance().SetWindowSize(800, 600);
 		OptionState::me->Exit();
 		OptionState::me->Init();
+		for (int i = 0; i < 4; ++i)
+		{
+			EntityManager::GetInstance()->RemoveEntity(SceneText::textObj[i]);
+		}
+		float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+		float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
+		float fontSize = 25.0f;
+		float halfFontSize = fontSize / 2.0f;
+		for (int i = 0; i < 4; ++i)
+		{
+			SceneText::textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
+		}
 		printf("800x600 was selected\n");
 	}
 	else if (name == "back")
@@ -75,6 +113,8 @@ void Button::OnClick()
 	{
 		std::cout << "Loading GameState" << std::endl;
 		SceneManager::GetInstance()->SetActiveScene("GameState");
+		MouseController::GetInstance()->SetKeepMouseCentered(true);
+		Application::SetMouseVisibilty(false);
 	}
 	else if (name == "option")
 	{
@@ -85,6 +125,12 @@ void Button::OnClick()
 	{
 		std::cout << "Loading GameState" << std::endl;
 		SceneManager::GetInstance()->SetActiveScene("GameState");
+		SceneText::isPause = false;
+	}
+	else if (name == "quit")
+	{
+		std::cout << "Loading MenuState" << std::endl;
+		SceneManager::GetInstance()->SetActiveScene("MenuState");
 		SceneText::isPause = false;
 	}
 }

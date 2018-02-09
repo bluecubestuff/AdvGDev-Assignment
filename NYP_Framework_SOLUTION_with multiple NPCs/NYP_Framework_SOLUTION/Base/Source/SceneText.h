@@ -29,6 +29,7 @@ public:
 	virtual void Exit();
 
 	static bool isPause;
+	static TextEntity* textObj[4];
 
 private:
 	SceneText(SceneManager* _sceneMgr); // This is used to register to SceneManager
@@ -39,7 +40,6 @@ private:
 	CPlayerInfo* playerInfo;
 	GroundEntity* groundEntity;
 	FPSCamera camera;
-	TextEntity* textObj[4];
 	Light* lights[2];
 
 	GenericEntity* theCube;
