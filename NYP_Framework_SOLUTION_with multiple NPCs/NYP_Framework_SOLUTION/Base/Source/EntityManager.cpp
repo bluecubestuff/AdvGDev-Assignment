@@ -327,24 +327,46 @@ bool EntityManager::CheckCollisionInPartition(void)
 
 void EntityManager::RemoveAllEntity()
 {
+	collisionList.clear();
+
 
 	std::list<EntityBase*>::iterator it = entityList.begin();
-	while (it != entityList.end())
+
+	for (it; it != entityList.end(); ++it)
 	{
-		// Remove the node
-		CSceneGraph::GetInstance()->DeleteNode((*it));
-		// Remove from partition
-		CSpatialPartition::GetInstance()->Remove((*it));
-
-		// Delete if done
-		delete *it;
-		it = entityList.erase(it);
-
-		if (!entityList.empty())
-			++it;
+		MarkForDeletion(*it);
 	}
 
-	collisionList.clear();
+	while (it != entityList.end())
+	{
+		if ((*it)->IsDone())
+		{
+			// Remove the node
+			CSceneGraph::GetInstance()->DeleteNode((*it));
+			// Remove from partition
+			CSpatialPartition::GetInstance()->Remove((*it));
+
+			// Delete if done
+			delete *it;
+			it = entityList.erase(it);
+		}
+		else // Move on otherwise
+			++it;
+	}
+	//while (it != entityList.end())
+	//{
+	//	// Remove the node
+	//	CSceneGraph::GetInstance()->DeleteNode((*it));
+	//	// Remove from partition
+	//	CSpatialPartition::GetInstance()->Remove((*it));
+
+	//	// Delete if done
+	//	delete *it;
+	//	it = entityList.erase(it);
+
+	//	if (!entityList.empty())
+	//		++it;
+	//}
 }
 
 bool EntityManager::CheckLaserCollision(EntityBase* _entity)
